@@ -1,0 +1,26 @@
+# macOS & Finder
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Xcode & SwiftPM
+.build/
+.swiftpm/
+/.build
+/.swiftpm
+.module-cache/
+
+# Local Build Artifacts
+build/
+.tmp-*/
+.tmp-build.*
+.tmp-dmg.*
+tmp_dmg_folder/
+*.dmg
+*.app
+debug.log
+
+# User Specific Settings
+*.xcuserdata/
+*.xcworkspace/
