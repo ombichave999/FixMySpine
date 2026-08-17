@@ -9,7 +9,7 @@ import CoreBluetooth
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "3.4"
+    static let version = "3.5"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 

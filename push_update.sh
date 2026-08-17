@@ -58,7 +58,7 @@ cat > appcast.xml <<APPCAST
         <p>$NOTES</p>
       ]]></description>
       <pubDate>$PUBDATE</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v$VERSION/FixMySpine.dmg"
+      <enclosure url="https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg"
                  sparkle:version="$VERSION"
                  sparkle:shortVersionString="$VERSION"
                  length="$FILESIZE"

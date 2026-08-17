@@ -29,9 +29,9 @@ cat > "$OUT/Info.plist" <<'PLIST'
     <key>CFBundleExecutable</key>
     <string>FixMySpine</string>
     <key>CFBundleVersion</key>
-    <string>3.1</string>
+    <string>3.3</string>
     <key>CFBundleShortVersionString</key>
-    <string>3.1</string>
+    <string>3.3</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
