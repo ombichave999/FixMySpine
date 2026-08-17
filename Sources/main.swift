@@ -9,7 +9,7 @@ import CoreBluetooth
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "3.6"
+    static let version = "3.7"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -48,57 +48,289 @@ final class AppcastParser: NSObject, XMLParserDelegate {
     }
 }
 
-enum UpdateChecker {
-    static func check(silentIfLatest: Bool = false) {
+// MARK: - Native In-App Sparkle Auto-Updater Engine
+
+final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate {
+    static let shared = InAppUpdater()
+
+    @Published var isDownloading = false
+    @Published var progress: Double = 0.0
+    @Published var statusText: String = ""
+    @Published var updateAvailable: String? = nil
+    @Published var releaseNotes: String? = nil
+    @Published var showUpdateModal: Bool = false
+    private var downloadURL: URL?
+
+    private var downloadSession: URLSession?
+
+    override init() {
+        super.init()
+    }
+
+    func check(silentIfLatest: Bool = false) {
         let cacheBuster = Int(Date().timeIntervalSince1970)
         guard let url = URL(string: "\(AppInfo.appcastURL)?t=\(cacheBuster)") else { return }
         var req = URLRequest(url: url)
         req.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        URLSession.shared.dataTask(with: req) { data, _, _ in
-            DispatchQueue.main.async {
-                guard let data = data else {
-                    if !silentIfLatest {
-                        show(title: "Check Failed", text: "Unable to reach update server. Please check your connection.")
+
+        URLSession.shared.dataTask(with: req) { [weak self] data, _, _ in
+            guard let self = self, let data = data else {
+                if !silentIfLatest {
+                    DispatchQueue.main.async {
+                        self?.showUpToDateAlert(title: "Check Failed", text: "Unable to reach update server. Please check your connection.")
                     }
-                    return
                 }
+                return
+            }
 
-                let parser = AppcastParser(xmlData: data)
-                if let latest = parser.latestVersion, isNewer(latest, than: AppInfo.version) {
-                    let alert = NSAlert()
-                    alert.messageText = "FixMySpine Update Available: v\(latest)"
-                    alert.informativeText = "You currently have v\(AppInfo.version). Would you like to download and install v\(latest)?"
-                    alert.addButton(withTitle: "Download Update")
-                    alert.addButton(withTitle: "Later")
-                    alert.alertStyle = .informational
-                    NSApp.activate(ignoringOtherApps: true)
-                    alert.window.level = .floating
-
-                    if alert.runModal() == .alertFirstButtonReturn {
-                        if let s = parser.downloadURL, let u = URL(string: s) {
-                            NSWorkspace.shared.open(u)
-                        } else if let u = URL(string: "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg") {
-                            NSWorkspace.shared.open(u)
-                        }
+            let parser = AppcastParser(xmlData: data)
+            DispatchQueue.main.async {
+                if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
+                    self.updateAvailable = latest
+                    self.releaseNotes = parser.releaseTitle
+                    if let s = parser.downloadURL, let u = URL(string: s) {
+                        self.downloadURL = u
+                    } else {
+                        self.downloadURL = URL(string: "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg")
+                    }
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                        self.showUpdateModal = true
                     }
                 } else if !silentIfLatest {
-                    show(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
+                    self.showUpToDateAlert(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
                 }
             }
         }.resume()
     }
 
-    private static func isNewer(_ latest: String, than current: String) -> Bool {
+    func startDownloadAndInstall() {
+        guard let url = downloadURL ?? URL(string: "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg") else { return }
+        isDownloading = true
+        progress = 0.0
+        statusText = "Downloading update…"
+
+        let config = URLSessionConfiguration.default
+        downloadSession = URLSession(configuration: config, delegate: self, delegateQueue: .main)
+        let task = downloadSession?.downloadTask(with: url)
+        task?.resume()
+    }
+
+    // URLSessionDownloadDelegate
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        if totalBytesExpectedToWrite > 0 {
+            let p = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+            DispatchQueue.main.async {
+                self.progress = p
+                self.statusText = "Downloading v\(self.updateAvailable ?? "")… \(Int(p * 100))%"
+            }
+        }
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        DispatchQueue.main.async {
+            self.statusText = "Installing & Relaunching…"
+            self.progress = 1.0
+        }
+
+        let tempDMG = NSTemporaryDirectory() + "FixMySpine_update_\(UUID().uuidString).dmg"
+        let tempDMGURL = URL(fileURLWithPath: tempDMG)
+        try? FileManager.default.removeItem(at: tempDMGURL)
+        do {
+            try FileManager.default.copyItem(at: location, to: tempDMGURL)
+        } catch {
+            DispatchQueue.main.async {
+                self.statusText = "Installation failed: \(error.localizedDescription)"
+                self.isDownloading = false
+            }
+            return
+        }
+
+        // Background mount, swap & relaunch script
+        let currentAppPath = Bundle.main.bundlePath
+        let mountPoint = "/tmp/FixMySpine_Mount_\(UUID().uuidString)"
+
+        let updateScript = """
+        #!/bin/bash
+        sleep 0.5
+        mkdir -p "\(mountPoint)"
+        hdiutil attach -nobrowse -readonly "\(tempDMG)" -mountpoint "\(mountPoint)"
+        if [ -d "\(mountPoint)/FixMySpine.app" ]; then
+            rm -rf "\(currentAppPath)"
+            cp -R "\(mountPoint)/FixMySpine.app" "\(currentAppPath)"
+            hdiutil detach "\(mountPoint)" -force
+            rm -f "\(tempDMG)"
+            open "\(currentAppPath)"
+        else
+            hdiutil detach "\(mountPoint)" -force
+            rm -f "\(tempDMG)"
+        fi
+        """
+
+        let scriptPath = NSTemporaryDirectory() + "fixmyspine_relaunch.sh"
+        try? updateScript.write(toFile: scriptPath, atomically: true, encoding: .utf8)
+        chmod(scriptPath, 0o755)
+
+        let proc = Process()
+        proc.executableURL = URL(fileURLWithPath: "/bin/bash")
+        proc.arguments = [scriptPath]
+        try? proc.run()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            NSApp.terminate(nil)
+        }
+    }
+
+    private func isNewer(_ latest: String, than current: String) -> Bool {
         latest.compare(current, options: .numeric) == .orderedDescending
     }
 
-    private static func show(title: String, text: String) {
+    private func showUpToDateAlert(title: String, text: String) {
         let alert = NSAlert()
         alert.messageText = title
         alert.informativeText = text
         NSApp.activate(ignoringOtherApps: true)
         alert.window.level = .floating
         alert.runModal()
+    }
+}
+
+// MARK: - In-App Update Modal View
+
+struct InAppUpdateModal: View {
+    @ObservedObject var updater = InAppUpdater.shared
+    @ObservedObject var monitor = PostureMonitor.shared
+    @State private var btnHovered = false
+    @State private var laterHovered = false
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.55)
+                .ignoresSafeArea()
+
+            VStack(spacing: 12) {
+                // Sparkle Badge Icon
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [monitor.accentColor.opacity(0.25), monitor.accentColor.opacity(0.10)],
+                                startPoint: .topLeading, endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 46, height: 46)
+                        .overlay(Circle().strokeBorder(monitor.accentColor.opacity(0.35), lineWidth: 0.8))
+
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(monitor.accentColor)
+                }
+                .padding(.top, 2)
+
+                VStack(spacing: 4) {
+                    Text("Update Available: v\(updater.updateAvailable ?? "")")
+                        .font(.system(size: 13.5, weight: .bold))
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+
+                    Text(updater.releaseNotes ?? "A new version of FixMySpine is ready to install.")
+                        .font(.system(size: 10.5, weight: .regular))
+                        .foregroundStyle(.white.opacity(0.75))
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.horizontal, 6)
+
+                if updater.isDownloading {
+                    VStack(spacing: 6) {
+                        GeometryReader { g in
+                            ZStack(alignment: .leading) {
+                                Capsule()
+                                    .fill(Color.white.opacity(0.12))
+                                Capsule()
+                                    .fill(monitor.accentColor)
+                                    .frame(width: max(8, g.size.width * CGFloat(updater.progress)))
+                                    .animation(.easeInOut(duration: 0.2), value: updater.progress)
+                            }
+                        }
+                        .frame(height: 6)
+                        .padding(.horizontal, 4)
+
+                        Text(updater.statusText)
+                            .font(.system(size: 9.5, weight: .semibold))
+                            .foregroundStyle(monitor.accentColor)
+                    }
+                    .padding(.vertical, 4)
+                } else {
+                    VStack(spacing: 6) {
+                        Button {
+                            updater.startDownloadAndInstall()
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "bolt.fill")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text("Install & Relaunch")
+                                    .font(.system(size: 11.5, weight: .bold))
+                            }
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 32)
+                            .background(
+                                LinearGradient(
+                                    colors: [monitor.accentColor.opacity(0.95), monitor.accentColor],
+                                    startPoint: .top, endPoint: .bottom
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 9, style: .continuous)
+                                    .strokeBorder(Color.white.opacity(0.35), lineWidth: 0.5)
+                            )
+                            .shadow(color: monitor.accentColor.opacity(0.35), radius: 4, y: 2)
+                            .scaleEffect(btnHovered ? 1.02 : 1.0)
+                        }
+                        .buttonStyle(.plain)
+                        .onHover { h in withAnimation(.easeInOut(duration: 0.15)) { btnHovered = h } }
+
+                        Button {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                updater.showUpdateModal = false
+                            }
+                        } label: {
+                            Text("Remind Me Later")
+                                .font(.system(size: 10.5, weight: .medium))
+                                .foregroundStyle(.white.opacity(0.55))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 26)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                        .fill(Color.white.opacity(laterHovered ? 0.08 : 0.03))
+                                )
+                                .scaleEffect(laterHovered ? 1.01 : 1.0)
+                        }
+                        .buttonStyle(.plain)
+                        .onHover { h in withAnimation(.easeInOut(duration: 0.15)) { laterHovered = h } }
+                    }
+                }
+            }
+            .padding(14)
+            .frame(width: 254)
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(Color(hex: "#1A1A1E").opacity(0.95))
+                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(Color.white.opacity(0.16), lineWidth: 0.8)
+            )
+            .shadow(color: Color.black.opacity(0.55), radius: 20, y: 10)
+        }
+        .transition(.opacity.combined(with: .scale(scale: 0.94)))
     }
 }
 
@@ -2698,6 +2930,7 @@ struct AppleWatchLiveView: View {
 
 struct PostureView: View {
     @ObservedObject private var monitor = PostureMonitor.shared
+    @ObservedObject private var updater = InAppUpdater.shared
     @State private var currentTab: AppTab = .monitor
     @State private var settingsHovered = false
     @State private var backHovered = false
@@ -2751,12 +2984,17 @@ struct PostureView: View {
             if !monitor.hasAskedAppleWatch && currentTab != .onboarding {
                 AppleWatchPromptModal(monitor: monitor)
             }
+
+            if InAppUpdater.shared.showUpdateModal {
+                InAppUpdateModal()
+            }
         }
         .fixedSize(horizontal: true, vertical: true)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: currentTab)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: monitor.slouching)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: monitor.calibrated)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: monitor.hasAskedAppleWatch)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: InAppUpdater.shared.showUpdateModal)
         .onAppear {
             if !UserDefaults.standard.bool(forKey: "hasCompletedOnboarding") {
                 currentTab = .onboarding
@@ -3031,7 +3269,7 @@ struct AppleWatchSettingsCard: View {
                     Divider().opacity(0.18)
 
                     Button {
-                        UpdateChecker.check(silentIfLatest: false)
+                        InAppUpdater.shared.check(silentIfLatest: false)
                     } label: {
                         HStack(spacing: 5) {
                             Image(systemName: "arrow.triangle.2.circlepath")
@@ -3352,7 +3590,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Silently check for app updates via Sparkle appcast feed
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-            UpdateChecker.check(silentIfLatest: true)
+            InAppUpdater.shared.check(silentIfLatest: true)
         }
     }
 
