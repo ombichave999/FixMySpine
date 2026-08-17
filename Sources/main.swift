@@ -9,7 +9,7 @@ import CoreBluetooth
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "3.1"
+    static let version = "3.2"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -1752,29 +1752,45 @@ struct WeeklyReportView: View {
     }
 
     private func insightCard(_ a: WeeklyAnalytics) -> some View {
-        let text: String
+        let insight: String
         if a.currentScore >= 85 {
-            text = "Excellent posture consistency this week!"
-        } else if a.totalHoursTracked > 3.0 {
-            text = "You maintained good posture for \(String(format: "%.1f", a.totalHoursTracked))h this week."
+            insight = "Excellent posture consistency across your sessions."
+        } else if a.totalHoursTracked > 1.0 {
+            insight = "Maintained optimal alignment for \(String(format: "%.1f", a.totalHoursTracked))h this week."
+        } else if a.streakDays >= 2 {
+            insight = "\(a.streakDays)-day streak active. Keep sitting tall!"
         } else {
-            text = "Forward head posture alignment improved. Keep sitting tall!"
+            insight = "Align your ears over your shoulders for optimal spine health."
         }
 
-        return HStack(spacing: 8) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 10))
-                .foregroundStyle(monitor.accentColor)
+        return HStack(alignment: .center, spacing: 8) {
+            ZStack {
+                Circle()
+                    .fill(monitor.accentColor.opacity(0.18))
+                    .frame(width: 20, height: 20)
+                Image(systemName: "sparkles")
+                    .font(.system(size: 9.5, weight: .bold))
+                    .foregroundStyle(monitor.accentColor)
+            }
 
-            Text(text)
-                .font(.system(size: 9.5, weight: .medium))
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
+            VStack(alignment: .leading, spacing: 1.5) {
+                Text("ERGONOMIC TIP")
+                    .font(.system(size: 7.5, weight: .bold))
+                    .foregroundStyle(.secondary.opacity(0.6))
+                    .tracking(0.5)
+
+                Text(insight)
+                    .font(.system(size: 9.5, weight: .medium))
+                    .foregroundStyle(Color.primary.opacity(0.90))
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(2)
+            }
+            Spacer(minLength: 0)
         }
         .padding(.horizontal, 10)
-        .padding(.vertical, 6)
+        .padding(.vertical, 7)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassPill(10)
+        .glassPill(12)
     }
 }
 

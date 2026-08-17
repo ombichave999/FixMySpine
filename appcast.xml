@@ -6,16 +6,16 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v3.1</title>
+      <title>FixMySpine v3.2</title>
       <description><![CDATA[
-        <h2>FixMySpine v3.1 Release Notes</h2>
-        <p>Apple Watch & Smartwatch sync, dynamic accent color synchronization, and precision posture calibration.</p>
+        <h2>FixMySpine v3.2 Release Notes</h2>
+        <p>Fixed Ergonomic Tip text wrapping in Weekly Report and improved layout.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 02:10:16 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v3.1/FixMySpine.dmg"
-                 sparkle:version="3.1"
-                 sparkle:shortVersionString="3.1"
-                 length="1549453"
+      <pubDate>Tue, 18 Aug 2026 02:16:27 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v3.2/FixMySpine.dmg"
+                 sparkle:version="3.2"
+                 sparkle:shortVersionString="3.2"
+                 length="1553330"
                  type="application/x-apple-diskimage" />
     </item>
   </channel>
