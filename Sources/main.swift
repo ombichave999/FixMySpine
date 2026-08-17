@@ -32,7 +32,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "1.0"
+    static let version = "4.0"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 

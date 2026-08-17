@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v1.0</title>
+      <title>FixMySpine v4.0</title>
       <description><![CDATA[
-        <h2>FixMySpine v1.0 Release Notes</h2>
-        <p>FixMySpine 1.0 Stable: Real-time AirPods posture tracking, Apple Watch & Smartwatch sync, daily analytics, and production Sparkle 2 auto-updates.</p>
+        <h2>FixMySpine v4.0 Release Notes</h2>
+        <p>FixMySpine 4.0 (Stable 1.0): Complete Sparkle 2 auto-update pipeline with Ed25519 signatures.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 02:42:38 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v1.0/FixMySpine.dmg"
-                 sparkle:version="1.0"
-                 sparkle:shortVersionString="1.0"
-                 length="2642516"
+      <pubDate>Tue, 18 Aug 2026 02:44:56 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.0/FixMySpine.dmg"
+                 sparkle:version="4.0"
+                 sparkle:shortVersionString="4.0"
+                 length="2642446"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="O0a+ZhSk8CUHW1NkwmgKBIvk06HzvpCcEB4nY9YmH0Dlj8rZmlhUiennj/sq1fUj0gSlml4tLXVu5TU6RQgECg==" />
+                 sparkle:edSignature="pTUWaTlJSpD55+90xyd53EhHdItIGUC2i2+6LCp3Io3P1Q6X1QZ7BVl7KAuGXSGFXshagA9fw84wJvmicObnDw==" />
     </item>
   </channel>
 </rss>
