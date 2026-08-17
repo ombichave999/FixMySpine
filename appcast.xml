@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v4.1</title>
+      <title>FixMySpine v4.2</title>
       <description><![CDATA[
-        <h2>FixMySpine v4.1 Release Notes</h2>
-        <p>FixMySpine 4.1: Instant launch background checks, 10-minute auto-polling, and live Menu Bar update dot indicator.</p>
+        <h2>FixMySpine v4.2 Release Notes</h2>
+        <p>FixMySpine 4.2: Stability enhancements and refined posture tracking precision.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 02:51:57 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.1/FixMySpine.dmg"
-                 sparkle:version="4.1"
-                 sparkle:shortVersionString="4.1"
-                 length="2667142"
+      <pubDate>Tue, 18 Aug 2026 03:00:12 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.2/FixMySpine.dmg"
+                 sparkle:version="4.2"
+                 sparkle:shortVersionString="4.2"
+                 length="2667823"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="k3MfiAYLDYOHLUFuxXc8G6/xexFeyVryOpAjvznC9w2gFgyjVzQWBjwbKespxYplcblBqFoIox5uZyOoOi5fDw==" />
+                 sparkle:edSignature="Q+V2NPVsgpsgGvoUdmuWFvTYLlhi6aMlOdVEmpiWmE8QsqXJ0Dxl7MYMeSqr1qo9T+YO7zuHtvcjsY7UCmHEAQ==" />
     </item>
   </channel>
 </rss>

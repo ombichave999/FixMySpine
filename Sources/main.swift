@@ -39,6 +39,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
     }
 
     func checkForUpdates() {
+        NSApp.activate(ignoringOtherApps: true)
         updaterController?.checkForUpdates(nil)
     }
 
@@ -71,7 +72,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.1"
+    static let version = "4.2"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -166,7 +167,9 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     }
 
     func startDownloadAndInstall() {
-        guard let url = downloadURL ?? URL(string: "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg") else { return }
+        let ver = updateAvailable ?? "4.1"
+        let fallbackURL = "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(ver)/FixMySpine.dmg"
+        guard let url = downloadURL ?? URL(string: fallbackURL) else { return }
         isDownloading = true
         progress = 0.0
         statusText = "Downloading update…"
@@ -3017,17 +3020,18 @@ struct PostureView: View {
             VStack(spacing: 9) {
                 header
 
-                if sparkle.hasUpdatePending {
+                if sparkle.hasUpdatePending || updater.showUpdateModal {
                     Button {
-                        withAnimation(.spring(response: 0.28, dampingFraction: 0.78)) {
-                            currentTab = .settings
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            updater.updateAvailable = sparkle.updateAvailableVersion ?? "4.1"
+                            updater.releaseNotes = "FixMySpine 4.1: Instant launch background checks, 10-minute auto-polling, and live Menu Bar update dot indicator."
+                            updater.showUpdateModal = true
                         }
-                        sparkle.checkForUpdates()
                     } label: {
                         HStack(spacing: 6) {
                             ZStack {
                                 Circle()
-                                    .fill(Color.white.opacity(0.20))
+                                    .fill(Color.white.opacity(0.25))
                                     .frame(width: 18, height: 18)
                                 Image(systemName: "sparkles")
                                     .font(.system(size: 9.5, weight: .bold))
@@ -3039,13 +3043,13 @@ struct PostureView: View {
                             Spacer()
                             Text("Install Now →")
                                 .font(.system(size: 9.5, weight: .bold))
-                                .foregroundStyle(.white.opacity(0.92))
+                                .foregroundStyle(.white.opacity(0.95))
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
                         .background(
                             LinearGradient(
-                                colors: [Color(hex: "#0A84FF"), Color(hex: "#5E5CE6")],
+                                colors: [monitor.accentColor.opacity(0.95), monitor.accentColor],
                                 startPoint: .leading, endPoint: .trailing
                             )
                         )
@@ -3054,7 +3058,7 @@ struct PostureView: View {
                             RoundedRectangle(cornerRadius: 9, style: .continuous)
                                 .strokeBorder(Color.white.opacity(0.35), lineWidth: 0.6)
                         )
-                        .shadow(color: Color(hex: "#0A84FF").opacity(0.35), radius: 5, y: 2)
+                        .shadow(color: monitor.accentColor.opacity(0.35), radius: 5, y: 2)
                     }
                     .buttonStyle(.plain)
                     .transition(.opacity.combined(with: .scale(scale: 0.96)))
@@ -3174,7 +3178,7 @@ struct PostureView: View {
 
                                 if sparkle.hasUpdatePending {
                                     Circle()
-                                        .fill(Color(hex: "#0A84FF"))
+                                        .fill(monitor.accentColor)
                                         .frame(width: 6, height: 6)
                                         .overlay(Circle().strokeBorder(Color.black, lineWidth: 1.0))
                                         .offset(x: 3, y: -3)
@@ -3386,7 +3390,9 @@ struct AppleWatchSettingsCard: View {
                     Divider().opacity(0.18)
 
                     Button {
-                        SparkleUpdaterViewModel.shared.checkForUpdates()
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            updater.check(silentIfLatest: false)
+                        }
                     } label: {
                         HStack(spacing: 5) {
                             Image(systemName: "arrow.triangle.2.circlepath")
@@ -3400,8 +3406,6 @@ struct AppleWatchSettingsCard: View {
                         .glassPill(8)
                     }
                     .buttonStyle(.plain)
-                    .disabled(!SparkleUpdaterViewModel.shared.canCheckForUpdates)
-                    .opacity(SparkleUpdaterViewModel.shared.canCheckForUpdates ? 1.0 : 0.5)
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
@@ -3639,7 +3643,7 @@ func createSpineMenuIcon(effectiveDeg: Double, nodDeg: Double, sideDeg: Double, 
         // 3. Glowing Update Indicator Badge Dot (Top-Left corner)
         if hasUpdatePending {
             let dotRect = CGRect(x: 1.0, y: 12.5, width: 5.0, height: 5.0)
-            ctx.setFillColor(NSColor(srgbRed: 0.04, green: 0.52, blue: 1.0, alpha: 1.0).cgColor)
+            ctx.setFillColor(color.cgColor)
             ctx.addEllipse(in: dotRect)
             ctx.fillPath()
 
@@ -3737,6 +3741,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         showPopover(nil)
         return true
+    }
+
+    func closePopover() {
+        if let popover = popover, popover.isShown {
+            popover.performClose(nil)
+        }
     }
 
     func refreshButton() {
