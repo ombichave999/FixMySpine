@@ -1,0 +1,6 @@
+.DS_Store
+.module-cache/
+debug.log
+build/stage/
+build/intermediate/
+scratch/
