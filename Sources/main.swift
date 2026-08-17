@@ -9,7 +9,7 @@ import CoreBluetooth
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "3.5"
+    static let version = "3.6"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -71,11 +71,13 @@ enum UpdateChecker {
                     alert.addButton(withTitle: "Download Update")
                     alert.addButton(withTitle: "Later")
                     alert.alertStyle = .informational
+                    NSApp.activate(ignoringOtherApps: true)
+                    alert.window.level = .floating
 
                     if alert.runModal() == .alertFirstButtonReturn {
                         if let s = parser.downloadURL, let u = URL(string: s) {
                             NSWorkspace.shared.open(u)
-                        } else if let u = URL(string: "https://github.com/ombichave999/FixMySpine") {
+                        } else if let u = URL(string: "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg") {
                             NSWorkspace.shared.open(u)
                         }
                     }
@@ -94,6 +96,8 @@ enum UpdateChecker {
         let alert = NSAlert()
         alert.messageText = title
         alert.informativeText = text
+        NSApp.activate(ignoringOtherApps: true)
+        alert.window.level = .floating
         alert.runModal()
     }
 }
