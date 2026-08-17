@@ -6,16 +6,16 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v3.3</title>
+      <title>FixMySpine v3.4</title>
       <description><![CDATA[
-        <h2>FixMySpine v3.3 Release Notes</h2>
+        <h2>FixMySpine v3.4 Release Notes</h2>
         <p>Performance optimizations, memory footprint reduction, and posture stability improvements.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 02:19:35 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v3.3/FixMySpine.dmg"
-                 sparkle:version="3.3"
-                 sparkle:shortVersionString="3.3"
-                 length="1553333"
+      <pubDate>Tue, 18 Aug 2026 02:22:02 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v3.4/FixMySpine.dmg"
+                 sparkle:version="3.4"
+                 sparkle:shortVersionString="3.4"
+                 length="1550029"
                  type="application/x-apple-diskimage" />
     </item>
   </channel>

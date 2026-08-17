@@ -9,7 +9,7 @@ import CoreBluetooth
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "3.3"
+    static let version = "3.4"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -50,9 +50,10 @@ final class AppcastParser: NSObject, XMLParserDelegate {
 
 enum UpdateChecker {
     static func check(silentIfLatest: Bool = false) {
-        guard let url = URL(string: AppInfo.appcastURL) else { return }
+        let cacheBuster = Int(Date().timeIntervalSince1970)
+        guard let url = URL(string: "\(AppInfo.appcastURL)?t=\(cacheBuster)") else { return }
         var req = URLRequest(url: url)
-        req.cachePolicy = .reloadIgnoringLocalCacheData
+        req.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         URLSession.shared.dataTask(with: req) { data, _, _ in
             DispatchQueue.main.async {
                 guard let data = data else {
