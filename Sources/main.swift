@@ -14,6 +14,10 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
 
     private(set) var updaterController: SPUStandardUpdaterController?
     @Published var canCheckForUpdates: Bool = false
+    @Published var hasUpdatePending: Bool = false
+    @Published var updateAvailableVersion: String? = nil
+
+    private var checkTimer: Timer?
 
     override init() {
         super.init()
@@ -22,17 +26,52 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
 
         controller.updater.publisher(for: \.canCheckForUpdates)
             .assign(to: &$canCheckForUpdates)
+
+        // Immediate background update check on app launch (1.5s delay)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            self?.updaterController?.updater.checkForUpdatesInBackground()
+        }
+
+        // Periodic background update check every 10 minutes (600s)
+        checkTimer = Timer.scheduledTimer(withTimeInterval: 600, repeats: true) { [weak self] _ in
+            self?.updaterController?.updater.checkForUpdatesInBackground()
+        }
     }
 
     func checkForUpdates() {
         updaterController?.checkForUpdates(nil)
+    }
+
+    // MARK: - SPUUpdaterDelegate Callbacks
+    func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
+        DispatchQueue.main.async {
+            self.updateAvailableVersion = item.displayVersionString
+            self.hasUpdatePending = true
+            AppDelegate.shared?.refreshButton()
+        }
+    }
+
+    func updaterDidNotFindUpdate(_ updater: SPUUpdater, error: Error) {
+        DispatchQueue.main.async {
+            self.hasUpdatePending = false
+            self.updateAvailableVersion = nil
+            AppDelegate.shared?.refreshButton()
+        }
+    }
+
+    func updater(_ updater: SPUUpdater, willInstallUpdateOnQuit item: SUAppcastItem, immediateInstallationBlock immediateInstallHandler: @escaping () -> Void) -> Bool {
+        DispatchQueue.main.async {
+            self.hasUpdatePending = true
+            AppDelegate.shared?.refreshButton()
+        }
+        return true
     }
 }
 
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.0"
+    static let version = "4.1"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -2954,6 +2993,7 @@ struct AppleWatchLiveView: View {
 struct PostureView: View {
     @ObservedObject private var monitor = PostureMonitor.shared
     @ObservedObject private var updater = InAppUpdater.shared
+    @ObservedObject private var sparkle = SparkleUpdaterViewModel.shared
     @State private var currentTab: AppTab = .monitor
     @State private var settingsHovered = false
     @State private var backHovered = false
@@ -2976,6 +3016,50 @@ struct PostureView: View {
         ZStack {
             VStack(spacing: 9) {
                 header
+
+                if sparkle.hasUpdatePending {
+                    Button {
+                        withAnimation(.spring(response: 0.28, dampingFraction: 0.78)) {
+                            currentTab = .settings
+                        }
+                        sparkle.checkForUpdates()
+                    } label: {
+                        HStack(spacing: 6) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white.opacity(0.20))
+                                    .frame(width: 18, height: 18)
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 9.5, weight: .bold))
+                                    .foregroundStyle(.white)
+                            }
+                            Text("Update \(sparkle.updateAvailableVersion.map { "v\($0)" } ?? "Ready")")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.white)
+                            Spacer()
+                            Text("Install Now →")
+                                .font(.system(size: 9.5, weight: .bold))
+                                .foregroundStyle(.white.opacity(0.92))
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(
+                            LinearGradient(
+                                colors: [Color(hex: "#0A84FF"), Color(hex: "#5E5CE6")],
+                                startPoint: .leading, endPoint: .trailing
+                            )
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 9, style: .continuous)
+                                .strokeBorder(Color.white.opacity(0.35), lineWidth: 0.6)
+                        )
+                        .shadow(color: Color(hex: "#0A84FF").opacity(0.35), radius: 5, y: 2)
+                    }
+                    .buttonStyle(.plain)
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                }
+
                 switch currentTab {
                 case .monitor:
                     VStack(spacing: 9) {
@@ -3082,10 +3166,20 @@ struct PostureView: View {
                                 currentTab = .settings
                             }
                         } label: {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 11, weight: .semibold))
-                                .foregroundStyle(Color.primary.opacity(settingsHovered ? 1.0 : 0.80))
-                                .scaleEffect(settingsHovered ? 1.03 : 1.0)
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "gearshape.fill")
+                                    .font(.system(size: 11, weight: .semibold))
+                                    .foregroundStyle(Color.primary.opacity(settingsHovered ? 1.0 : 0.80))
+                                    .scaleEffect(settingsHovered ? 1.03 : 1.0)
+
+                                if sparkle.hasUpdatePending {
+                                    Circle()
+                                        .fill(Color(hex: "#0A84FF"))
+                                        .frame(width: 6, height: 6)
+                                        .overlay(Circle().strokeBorder(Color.black, lineWidth: 1.0))
+                                        .offset(x: 3, y: -3)
+                                }
+                            }
                         }
                         .buttonStyle(.plain)
                         .onHover { h in withAnimation(.easeInOut(duration: 0.18)) { settingsHovered = h } }
@@ -3501,7 +3595,7 @@ func interpolatePostureColor(effectiveDeg: Double, thresholdDeg: Double, isSlouc
     }
 }
 
-func createSpineMenuIcon(effectiveDeg: Double, nodDeg: Double, sideDeg: Double, isSlouching: Bool, isReceiving: Bool, isCalibrated: Bool, color: NSColor) -> NSImage {
+func createSpineMenuIcon(effectiveDeg: Double, nodDeg: Double, sideDeg: Double, isSlouching: Bool, isReceiving: Bool, isCalibrated: Bool, hasUpdatePending: Bool = false, color: NSColor) -> NSImage {
     let pointSize: CGFloat = 18.0
     let isTemplate = (color == .labelColor || color == .controlTextColor || color == .textColor)
     let drawColor = isTemplate ? NSColor.black : color
@@ -3542,6 +3636,19 @@ func createSpineMenuIcon(effectiveDeg: Double, nodDeg: Double, sideDeg: Double, 
         ctx.addPath(path)
         ctx.strokePath()
 
+        // 3. Glowing Update Indicator Badge Dot (Top-Left corner)
+        if hasUpdatePending {
+            let dotRect = CGRect(x: 1.0, y: 12.5, width: 5.0, height: 5.0)
+            ctx.setFillColor(NSColor(srgbRed: 0.04, green: 0.52, blue: 1.0, alpha: 1.0).cgColor)
+            ctx.addEllipse(in: dotRect)
+            ctx.fillPath()
+
+            ctx.setStrokeColor(NSColor.white.cgColor)
+            ctx.setLineWidth(0.8)
+            ctx.addEllipse(in: dotRect)
+            ctx.strokePath()
+        }
+
         return true
     }
 
@@ -3570,6 +3677,8 @@ struct VisualEffectBackground: NSViewRepresentable {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    static weak var shared: AppDelegate?
+
     private var statusItem: NSStatusItem!
     private var popover: NSPopover!
     private var standaloneWindow: NSWindow?
@@ -3577,6 +3686,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var bag = Set<AnyCancellable>()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        AppDelegate.shared = self
+
         if Bundle.main.bundleIdentifier != nil {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
         }
@@ -3604,6 +3715,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             .throttle(for: .milliseconds(33), scheduler: RunLoop.main, latest: true)
             .sink { [weak self] _ in self?.refreshButton() }
             .store(in: &bag)
+
+        SparkleUpdaterViewModel.shared.$hasUpdatePending
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in self?.refreshButton() }
+            .store(in: &bag)
+
         refreshButton()
 
         if monitor.available { monitor.start() }
@@ -3622,7 +3739,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 
-    private func refreshButton() {
+    func refreshButton() {
         guard let button = statusItem.button else { return }
 
         let color = interpolatePostureColor(
@@ -3633,6 +3750,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             isReceiving: monitor.receiving
         )
 
+        let hasUpdate = SparkleUpdaterViewModel.shared.hasUpdatePending
         let spineIcon = createSpineMenuIcon(
             effectiveDeg: monitor.effectiveDeg,
             nodDeg: monitor.nodDeg,
@@ -3640,13 +3758,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             isSlouching: monitor.slouching,
             isReceiving: monitor.receiving,
             isCalibrated: monitor.calibrated,
+            hasUpdatePending: hasUpdate,
             color: color
         )
         spineIcon.size = NSSize(width: 18, height: 18)
 
         button.image = spineIcon
         button.imagePosition = .imageLeading
-        button.toolTip = "FixMySpine - AirPods Posture Monitor"
+        button.toolTip = hasUpdate ? "FixMySpine - ⚡ Update Available! (Click to Install)" : "FixMySpine - AirPods Posture Monitor"
 
         if monitor.calibrated {
             let degInt = Int(monitor.effectiveDeg.rounded())
