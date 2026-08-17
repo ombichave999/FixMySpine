@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>FixMySpine Beta Updates</title>
+    <link>https://github.com/ombichave999/FixMySpine-Releases</link>
+    <description>Beta and early access updates to FixMySpine</description>
+    <language>en</language>
+    <item>
+      <title>FixMySpine v3.7-beta1</title>
+      <sparkle:channel>beta</sparkle:channel>
+      <description><![CDATA[
+        <h2>FixMySpine v3.7 Beta Release</h2>
+        <p>Early preview release for testing bleeding edge posture features and smartwatch telemetry.</p>
+      ]]></description>
+      <pubDate>Tue, 18 Aug 2026 02:30:00 +0530</pubDate>
+      <enclosure url="https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine-Beta.dmg"
+                 sparkle:version="3.7"
+                 sparkle:shortVersionString="3.7-beta1"
+                 length="1609336"
+                 type="application/x-apple-diskimage"
+                 sparkle:edSignature="xnwcpfrv02ljGgepxMXdiNuVWyJKgDf96rug3yBtarkF3+CzZnTfk4pm3vl9b6BA4atoLfPCqIX1pjOiy10SAw==" />
+    </item>
+  </channel>
+</rss>

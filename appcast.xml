@@ -6,17 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v3.7</title>
+      <title>FixMySpine v1.0</title>
       <description><![CDATA[
-        <h2>FixMySpine v3.7 Release Notes</h2>
-        <p>Seamless native in-app auto-updater with live progress and zero-browser instant relaunch.</p>
+        <h2>FixMySpine v1.0 Release Notes</h2>
+        <p>FixMySpine 1.0 Stable Release: Real-time AirPods posture tracking, Apple Watch & Smartwatch sync, daily analytics, and production Sparkle 2 auto-updates.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 02:33:25 +0530</pubDate>
+      <pubDate>Tue, 18 Aug 2026 02:40:07 +0530</pubDate>
       <enclosure url="https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg"
-                 sparkle:version="3.7"
-                 sparkle:shortVersionString="3.7"
-                 length="1609336"
-                 type="application/x-apple-diskimage" />
+                 sparkle:version="1.0"
+                 sparkle:shortVersionString="1.0"
+                 length="2642062"
+                 type="application/x-apple-diskimage"
+                 sparkle:edSignature="fDT6D9fo5hyX6q81agEEt2e7f8TkusBBfY2piWHRhvX2eMrbSKEPL18BvsXEzHyMZv6XEVyeaPUSB7RXs1omBA==" />
     </item>
   </channel>
 </rss>

@@ -5,11 +5,34 @@ import CoreMotion
 import AVFoundation
 import UserNotifications
 import CoreBluetooth
+import Sparkle
+
+// MARK: - Sparkle 2 Auto-Updater Controller & Delegate
+
+final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDelegate {
+    static let shared = SparkleUpdaterViewModel()
+
+    private(set) var updaterController: SPUStandardUpdaterController?
+    @Published var canCheckForUpdates: Bool = false
+
+    override init() {
+        super.init()
+        let controller = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: nil)
+        self.updaterController = controller
+
+        controller.updater.publisher(for: \.canCheckForUpdates)
+            .assign(to: &$canCheckForUpdates)
+    }
+
+    func checkForUpdates() {
+        updaterController?.checkForUpdates(nil)
+    }
+}
 
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "3.7"
+    static let version = "1.0"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -3269,7 +3292,7 @@ struct AppleWatchSettingsCard: View {
                     Divider().opacity(0.18)
 
                     Button {
-                        InAppUpdater.shared.check(silentIfLatest: false)
+                        SparkleUpdaterViewModel.shared.checkForUpdates()
                     } label: {
                         HStack(spacing: 5) {
                             Image(systemName: "arrow.triangle.2.circlepath")
@@ -3283,6 +3306,8 @@ struct AppleWatchSettingsCard: View {
                         .glassPill(8)
                     }
                     .buttonStyle(.plain)
+                    .disabled(!SparkleUpdaterViewModel.shared.canCheckForUpdates)
+                    .opacity(SparkleUpdaterViewModel.shared.canCheckForUpdates ? 1.0 : 0.5)
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
@@ -3588,10 +3613,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.showPopover(nil)
         }
 
-        // Silently check for app updates via Sparkle appcast feed
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-            InAppUpdater.shared.check(silentIfLatest: true)
-        }
+        // Initialize Sparkle 2 Updater Controller
+        _ = SparkleUpdaterViewModel.shared
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

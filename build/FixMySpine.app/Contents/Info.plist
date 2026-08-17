@@ -11,9 +11,9 @@
     <key>CFBundleExecutable</key>
     <string>FixMySpine</string>
     <key>CFBundleVersion</key>
-    <string>3.3</string>
+    <string>1.0</string>
     <key>CFBundleShortVersionString</key>
-    <string>3.3</string>
+    <string>1.0</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
@@ -29,10 +29,14 @@
     <key>NSBluetoothPeripheralUsageDescription</key>
     <string>FixMySpine connects to your Apple Watch over Bluetooth to display live heart rate and deliver posture haptics.</string>
     <key>SUFeedURL</key>
-    <string>https://raw.githubusercontent.com/ombichave999/FixMySpine/main/appcast.xml</string>
+    <string>https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>2RMO0xofZCoqUThQl+sGUs/989frROgegntI4gU8VR8=</string>
     <key>SUEnableAutomaticChecks</key>
     <true/>
     <key>SUScheduledCheckInterval</key>
     <integer>86400</integer>
+    <key>SUAllowsAutomaticUpdates</key>
+    <true/>
 </dict>
 </plist>

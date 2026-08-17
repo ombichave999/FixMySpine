@@ -1,10 +1,12 @@
 #!/bin/bash
 # Builds FixMySpine.app then packages it into a shareable FixMySpine.dmg.
-# Run from the FixMySpine folder:  bash make_dmg.sh
 set -e
 cd "$(dirname "$0")"
 
-bash build.sh
+VERSION="${1:-3.7}"
+CHANNEL="${2:-main}"
+
+bash build.sh "$VERSION" "$CHANNEL"
 
 echo "Packaging DMG…"
 STAGE="tmp_dmg_folder"
@@ -18,8 +20,4 @@ hdiutil create -volname "FixMySpine" -srcfolder "$STAGE" -ov -format UDZO FixMyS
 rm -rf "$STAGE"
 
 echo ""
-echo "Created build/FixMySpine.dmg!"
-
-echo ""
-echo "Created FixMySpine.dmg in this folder. Send it to your brother!"
-echo 'First open on his Mac: RIGHT CLICK the app > Open (it is self signed, macOS asks once).'
+echo "Created FixMySpine.dmg successfully!"
