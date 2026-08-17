@@ -64,7 +64,7 @@ cat > appcast-beta.xml <<APPCAST
         <p>$NOTES</p>
       ]]></description>
       <pubDate>$PUBDATE</pubDate>
-      <enclosure url="https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine-Beta.dmg"
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v$VERSION/FixMySpine-Beta.dmg"
                  sparkle:version="$VERSION"
                  sparkle:shortVersionString="$VERSION"
                  length="$FILESIZE"

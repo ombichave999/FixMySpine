@@ -14,7 +14,7 @@ if [ -z "$VERSION" ]; then
     VERSION="${INPUT_VER:-$CURRENT_VER}"
 fi
 
-NOTES="${2:-"FixMySpine 1.0 Stable: Real-time AirPods posture tracking, Apple Watch & Smartwatch sync, daily analytics, and production Sparkle 2 auto-updates."}"
+NOTES="${2:-"FixMySpine $VERSION Stable: Real-time AirPods posture tracking, Apple Watch & Smartwatch sync, daily analytics, and production Sparkle 2 auto-updates."}"
 PUBDATE=$(date -R)
 CHANNEL="main"
 
@@ -45,7 +45,7 @@ FILESIZE=$(stat -f%z FixMySpine.dmg 2>/dev/null || stat -c%s FixMySpine.dmg)
 echo "   Ed25519 Signature: $SIGNATURE"
 echo "   File Size: $FILESIZE bytes"
 
-# 4. Generate appcast.xml RSS feed
+# 4. Generate appcast.xml RSS feed with immutable release download URL
 echo "Step 4: Generating production appcast.xml..."
 cat > appcast.xml <<APPCAST
 <?xml version="1.0" encoding="utf-8"?>
@@ -62,7 +62,7 @@ cat > appcast.xml <<APPCAST
         <p>$NOTES</p>
       ]]></description>
       <pubDate>$PUBDATE</pubDate>
-      <enclosure url="https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg"
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v$VERSION/FixMySpine.dmg"
                  sparkle:version="$VERSION"
                  sparkle:shortVersionString="$VERSION"
                  length="$FILESIZE"
@@ -109,5 +109,6 @@ echo "✅ SUCCESS! FixMySpine v$VERSION Production Release Published!"
 echo "========================================================"
 echo "• Private Codebase: ombichave999/FixMySpine"
 echo "• Public Feed URL: https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
-echo "• Signed DMG: FixMySpine.dmg ($FILESIZE bytes)"
+echo "• Release Download: https://github.com/ombichave999/FixMySpine-Releases/releases/download/v$VERSION/FixMySpine.dmg"
+echo "• Signed DMG Size: $FILESIZE bytes"
 echo "• Ed25519 Signature Verified"
