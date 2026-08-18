@@ -3267,7 +3267,7 @@ struct PostureView: View {
 
     private var headerSubtitle: String {
         switch currentTab {
-        case .monitor: return "AirPods Posture Intelligence"
+        case .monitor: return "Realign. Redefine."
         case .report: return "Weekly Posture Analytics"
         case .watch: return "Apple Watch Live Telemetry"
         case .settings: return "Settings & Customization"
