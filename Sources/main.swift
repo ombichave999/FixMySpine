@@ -21,7 +21,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.3.4"
+    static let version = "4.3.5"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -1532,10 +1532,10 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
     // Voice Reminder Cycling
     private var reminderIndex = 0
     private let voiceReminders = [
-        "Straighten up a little.",
-        "Relax your shoulders.",
-        "Lift your head slightly.",
-        "Take a deep breath and sit tall."
+        "Time to reset your posture.",
+        "Roll your shoulders back and lengthen your spine.",
+        "Lift your chin slightly and align your neck.",
+        "Take a deep breath and check your posture."
     ]
 
     // Internals
@@ -1658,7 +1658,7 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         isExcellentPosture = false
         showGreatPostureBanner = false
         saveBaseline()
-        speak("Calibrated. I will remind you to sit tall.")
+        speak("Calibrated. I will monitor your posture and keep you aligned.")
     }
 
     private var lastUIUpdateTime: Date = .distantPast
@@ -1808,13 +1808,29 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         speak(reminder)
     }
 
+    private static func bestVoice() -> AVSpeechSynthesisVoice? {
+        let voices = AVSpeechSynthesisVoice.speechVoices()
+        // Prioritize natural premium or enhanced voices (Samantha Premium, Zoe, Daniel Premium, Siri)
+        if let premium = voices.first(where: { $0.language.starts(with: "en") && $0.quality == .premium }) {
+            return premium
+        }
+        if let enhanced = voices.first(where: { $0.language.starts(with: "en") && $0.quality == .enhanced }) {
+            return enhanced
+        }
+        return AVSpeechSynthesisVoice(identifier: "com.apple.speech.synthesis.voice.samantha")
+            ?? AVSpeechSynthesisVoice(language: "en-US")
+    }
+
     private func speak(_ text: String) {
         if speech.isSpeaking {
             speech.stopSpeaking(at: .immediate)
         }
         let u = AVSpeechUtterance(string: text)
-        u.rate = 0.48
-        u.volume = 1.0
+        u.voice = PostureMonitor.bestVoice()
+        u.rate = 0.49
+        u.pitchMultiplier = 1.04
+        u.volume = 0.95
+        u.preUtteranceDelay = 0.05
         speech.speak(u)
     }
 
@@ -1822,7 +1838,7 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         guard Bundle.main.bundleIdentifier != nil else { return }
         let content = UNMutableNotificationContent()
         content.title = "FixMySpine"
-        content.body = "You have been slouching for a bit. Roll your shoulders back and sit tall."
+        content.body = "Slouch detected. Roll your shoulders back and align your posture."
         content.sound = .default
         UNUserNotificationCenter.current().add(
             UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil))

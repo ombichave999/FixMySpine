@@ -11,9 +11,9 @@
     <key>CFBundleExecutable</key>
     <string>FixMySpine</string>
     <key>CFBundleVersion</key>
-    <string>4.3.4</string>
+    <string>4.3.5</string>
     <key>CFBundleShortVersionString</key>
-    <string>4.3.4</string>
+    <string>4.3.5</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
