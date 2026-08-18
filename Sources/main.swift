@@ -21,41 +21,78 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.3.2"
+    static let version = "4.3.3"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
 final class AppcastParser: NSObject, XMLParserDelegate {
+    private struct FeedItem {
+        var version: String?
+        var downloadURL: String?
+        var title: String?
+    }
+
+    private var items: [FeedItem] = []
+    private var currentItem: FeedItem?
+    private var currentElement = ""
+    private var currentText = ""
+
     var latestVersion: String?
     var downloadURL: String?
     var releaseTitle: String?
-
-    private var currentElement = ""
 
     init(xmlData: Data) {
         super.init()
         let parser = XMLParser(data: xmlData)
         parser.delegate = self
         parser.parse()
+        selectHighestVersionItem()
     }
 
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         currentElement = elementName
-        if elementName == "enclosure" {
+        currentText = ""
+        if elementName == "item" {
+            currentItem = FeedItem()
+        } else if elementName == "enclosure" {
             if let url = attributeDict["url"] {
-                downloadURL = url
+                currentItem?.downloadURL = url
             }
-            if let ver = attributeDict["sparkle:version"] ?? attributeDict["sparkle:shortVersionString"] {
-                latestVersion = ver
+            if let ver = attributeDict["sparkle:shortVersionString"] ?? attributeDict["sparkle:version"] {
+                currentItem?.version = ver
             }
         }
     }
 
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-        if currentElement == "title" && releaseTitle == nil {
-            releaseTitle = trimmed
+        currentText += string
+    }
+
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        if elementName == "title" && currentItem != nil {
+            let trimmed = currentText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty {
+                currentItem?.title = trimmed
+            }
+        } else if elementName == "item" {
+            if let item = currentItem {
+                items.append(item)
+            }
+            currentItem = nil
+        }
+    }
+
+    private func selectHighestVersionItem() {
+        guard !items.isEmpty else { return }
+        // Sort items by numeric SemVer descending so the app ALWAYS grabs the absolute latest release
+        let sorted = items.sorted { a, b in
+            guard let va = a.version, let vb = b.version else { return false }
+            return va.compare(vb, options: .numeric) == .orderedDescending
+        }
+        if let newest = sorted.first {
+            self.latestVersion = newest.version
+            self.downloadURL = newest.downloadURL
+            self.releaseTitle = newest.title
         }
     }
 }
@@ -1673,7 +1710,9 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         let sideShare = (1.0 - nodShare * nodShare).squareRoot()
 
         // Forward (+ Fwd) vs Backward (- Back) nod sign:
-        let nodSign: Double = (bnz - nz) >= 0 ? 1.0 : -1.0
+        // When pitching head forward/down, calculatedNod is positive (+), moving gauge downwards
+        // When pitching head backward/up, calculatedNod is negative (-), moving gauge upwards
+        let nodSign: Double = (nz - bnz) >= 0 ? 1.0 : -1.0
         let calculatedNod = total * nodShare * nodSign
 
         // Right (+ Right) vs Left (- Left) side-lean sign:
