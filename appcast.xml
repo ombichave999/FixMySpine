@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v4.3.3</title>
+      <title>FixMySpine v4.3.4</title>
       <description><![CDATA[
-        <h2>FixMySpine v4.3.3 Release Notes</h2>
-        <p>FixMySpine 4.3.3: Direct-to-latest 1-step auto updater, corrected forward/backward head pitch direction, and zero-idle CPU.</p>
+        <h2>FixMySpine v4.3.4 Release Notes</h2>
+        <p>FixMySpine 4.3.4: Updated posture direction terminology to Forward and Backward.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 11:53:10 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.3.3/FixMySpine.dmg"
-                 sparkle:version="4.3.3"
-                 sparkle:shortVersionString="4.3.3"
-                 length="2672367"
+      <pubDate>Tue, 18 Aug 2026 11:54:46 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.3.4/FixMySpine.dmg"
+                 sparkle:version="4.3.4"
+                 sparkle:shortVersionString="4.3.4"
+                 length="2672489"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="nKYYLK9orzJJhfSlNF0X6TYZe7q62FQLz/4xupRwC66SoZKEjlHf68orwhjwpPnsI+22O9HgmM5YTyDejSFKCw==" />
+                 sparkle:edSignature="ErvFkrg2nVY42vyrsLcShHaD5lcaKOIPEFB3ZIvB0UvhyEuvcw6WAREuMe5dHaCcUqtrFgoeskJttAQnNjZ/Bg==" />
     </item>
   </channel>
 </rss>

@@ -21,7 +21,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.3.3"
+    static let version = "4.3.4"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -683,9 +683,9 @@ struct LiveSpineGauge: View {
         if !monitor.calibrated { return "Standby" }
         if monitor.slouching {
             if monitor.nodDeg < -3 {
-                return abs(monitor.sideDeg) > 3 ? (monitor.sideDeg > 0 ? "Back & Right Lean" : "Back & Left Lean") : "Backward Lean"
+                return abs(monitor.sideDeg) > 3 ? (monitor.sideDeg > 0 ? "Backward & Right Lean" : "Backward & Left Lean") : "Backward Lean"
             } else if monitor.nodDeg > 3 {
-                return abs(monitor.sideDeg) > 3 ? (monitor.sideDeg > 0 ? "Slump & Right Lean" : "Slump & Left Lean") : "Downward Slouch"
+                return abs(monitor.sideDeg) > 3 ? (monitor.sideDeg > 0 ? "Forward & Right Lean" : "Forward & Left Lean") : "Forward Lean"
             } else if abs(monitor.sideDeg) > 3 {
                 return monitor.sideDeg > 0 ? "Right Side Lean" : "Left Side Lean"
             } else {
@@ -694,9 +694,9 @@ struct LiveSpineGauge: View {
         }
         if monitor.effectiveDeg > monitor.thresholdDeg * 0.7 {
             if monitor.nodDeg < -3 { return "Backward Lean" }
-            if monitor.nodDeg > 3 { return "Downward Slouch" }
+            if monitor.nodDeg > 3 { return "Forward Lean" }
             if abs(monitor.sideDeg) > 3 { return monitor.sideDeg > 0 ? "Right Side Lean" : "Left Side Lean" }
-            return "Downward Slouch"
+            return "Forward Lean"
         }
         if monitor.effectiveDeg <= 2.5 { return "Perfect Alignment" }
         return "Good Posture"
@@ -3504,7 +3504,7 @@ struct AppleWatchSettingsCard: View {
                 displayVal = "0° Perfect"
                 isZeroPerfect = true
             } else if isNod {
-                displayVal = String(format: "%.0f° %@", rounded, value >= 0 ? "Down" : "Up")
+                displayVal = String(format: "%.0f° %@", rounded, value >= 0 ? "Forward" : "Backward")
                 isZeroPerfect = false
             } else {
                 displayVal = String(format: "%.0f° %@", rounded, value >= 0 ? "Right" : "Left")
