@@ -1665,29 +1665,58 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
 
     private var lastSampleDate: Date?
     private var connectionWatchdogTimer: Timer?
+    private var isReconnecting = false
 
     func start() {
         guard headphoneMgr.isDeviceMotionAvailable, !monitoring else { return }
         monitoring = true
         slouchSince = nil
+        beginMotionUpdates()
+        armWatchdog()
+    }
+
+    private func beginMotionUpdates() {
+        guard headphoneMgr.isDeviceMotionAvailable else { return }
+        headphoneMgr.stopDeviceMotionUpdates()
         headphoneMgr.startDeviceMotionUpdates(to: .main) { [weak self] motion, err in
-            guard let self, let motion else { return }
+            guard let self = self, let motion = motion else { return }
             self.receiving = true
             self.lastSampleDate = Date()
             self.ingest(gravity: motion.gravity)
         }
+    }
 
+    private func armWatchdog() {
         connectionWatchdogTimer?.invalidate()
         connectionWatchdogTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            if let last = self.lastSampleDate, Date().timeIntervalSince(last) > 3.0 {
-                if self.receiving {
-                    self.receiving = false
-                    self.slouching = false
+            guard let self = self, self.monitoring else { return }
+            let now = Date()
+            if let last = self.lastSampleDate {
+                let elapsed = now.timeIntervalSince(last)
+                if elapsed > 3.0 {
+                    if self.receiving {
+                        self.receiving = false
+                        self.slouching = false
+                    }
+                    // Auto-rearm CoreMotion stream if stalled (e.g. after mic usage or audio interruption)
+                    if elapsed > 4.5 && !self.isReconnecting {
+                        self.isReconnecting = true
+                        self.beginMotionUpdates()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            self.isReconnecting = false
+                        }
+                    }
                 }
-            } else if self.lastSampleDate == nil {
+            } else {
                 if self.receiving {
                     self.receiving = false
+                }
+                if !self.isReconnecting {
+                    self.isReconnecting = true
+                    self.beginMotionUpdates()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        self.isReconnecting = false
+                    }
                 }
             }
         }

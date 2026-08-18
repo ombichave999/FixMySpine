@@ -1,3 +1,4 @@
 #!/bin/bash
-# Convenient alias for push_update.sh
-bash push_update.sh "$@"
+# Convenient alias for production release automation with Sparkle Ed25519 signing
+bash build_main.sh "$@"
+
