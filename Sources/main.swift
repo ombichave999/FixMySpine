@@ -17,8 +17,6 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
     @Published var hasUpdatePending: Bool = false
     @Published var updateAvailableVersion: String? = nil
 
-    private var checkTimer: Timer?
-
     override init() {
         super.init()
         let controller = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: nil)
@@ -26,21 +24,10 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
 
         controller.updater.publisher(for: \.canCheckForUpdates)
             .assign(to: &$canCheckForUpdates)
-
-        // Immediate background update check on app launch (1.5s delay)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            self?.updaterController?.updater.checkForUpdatesInBackground()
-        }
-
-        // Periodic background update check every 10 minutes (600s)
-        checkTimer = Timer.scheduledTimer(withTimeInterval: 600, repeats: true) { [weak self] _ in
-            self?.updaterController?.updater.checkForUpdatesInBackground()
-        }
     }
 
     func checkForUpdates() {
-        NSApp.activate(ignoringOtherApps: true)
-        updaterController?.checkForUpdates(nil)
+        InAppUpdater.shared.check(silentIfLatest: false)
     }
 
     // MARK: - SPUUpdaterDelegate Callbacks
@@ -72,7 +59,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDeleg
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.2"
+    static let version = "4.3"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -125,9 +112,20 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     private var downloadURL: URL?
 
     private var downloadSession: URLSession?
+    private var pollTimer: Timer?
 
     override init() {
         super.init()
+
+        // Immediate check on startup (1s delay)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.check(silentIfLatest: true)
+        }
+
+        // Fast auto-polling every 30 seconds (1KB lightweight HTTP check with cache buster)
+        pollTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+            self?.check(silentIfLatest: true)
+        }
     }
 
     func check(silentIfLatest: Bool = false) {
@@ -135,6 +133,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
         guard let url = URL(string: "\(AppInfo.appcastURL)?t=\(cacheBuster)") else { return }
         var req = URLRequest(url: url)
         req.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        req.timeoutInterval = 8.0
 
         URLSession.shared.dataTask(with: req) { [weak self] data, _, _ in
             guard let self = self, let data = data else {
@@ -154,13 +153,25 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                     if let s = parser.downloadURL, let u = URL(string: s) {
                         self.downloadURL = u
                     } else {
-                        self.downloadURL = URL(string: "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/FixMySpine.dmg")
+                        self.downloadURL = URL(string: "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(latest)/FixMySpine.dmg")
                     }
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                        self.showUpdateModal = true
+
+                    // Synchronize state across entire app & Menu Bar
+                    SparkleUpdaterViewModel.shared.updateAvailableVersion = latest
+                    SparkleUpdaterViewModel.shared.hasUpdatePending = true
+                    AppDelegate.shared?.refreshButton()
+
+                    if !silentIfLatest {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            self.showUpdateModal = true
+                        }
                     }
-                } else if !silentIfLatest {
-                    self.showUpToDateAlert(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
+                } else {
+                    SparkleUpdaterViewModel.shared.hasUpdatePending = false
+                    AppDelegate.shared?.refreshButton()
+                    if !silentIfLatest {
+                        self.showUpToDateAlert(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
+                    }
                 }
             }
         }.resume()
@@ -1581,6 +1592,9 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         WatchBLEManager.shared.stopScan()
     }
 
+    private var lastSampleDate: Date?
+    private var connectionWatchdogTimer: Timer?
+
     func start() {
         guard headphoneMgr.isDeviceMotionAvailable, !monitoring else { return }
         monitoring = true
@@ -1588,12 +1602,30 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         headphoneMgr.startDeviceMotionUpdates(to: .main) { [weak self] motion, err in
             guard let self, let motion else { return }
             self.receiving = true
+            self.lastSampleDate = Date()
             self.ingest(gravity: motion.gravity)
+        }
+
+        connectionWatchdogTimer?.invalidate()
+        connectionWatchdogTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            if let last = self.lastSampleDate, Date().timeIntervalSince(last) > 3.0 {
+                if self.receiving {
+                    self.receiving = false
+                    self.slouching = false
+                }
+            } else if self.lastSampleDate == nil {
+                if self.receiving {
+                    self.receiving = false
+                }
+            }
         }
     }
 
     func stop() {
         headphoneMgr.stopDeviceMotionUpdates()
+        connectionWatchdogTimer?.invalidate()
+        connectionWatchdogTimer = nil
         monitoring = false
         receiving = false
         slouching = false
@@ -1620,8 +1652,6 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         saveBaseline()
         speak("Calibrated. I will remind you to sit tall.")
     }
-
-    private var lastSampleDate: Date?
 
     private func ingest(gravity: CMAcceleration) {
         let now = Date()
@@ -3774,10 +3804,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         spineIcon.size = NSSize(width: 18, height: 18)
 
         button.image = spineIcon
-        button.imagePosition = .imageLeading
         button.toolTip = hasUpdate ? "FixMySpine - ⚡ Update Available! (Click to Install)" : "FixMySpine - AirPods Posture Monitor"
 
-        if monitor.calibrated {
+        if monitor.receiving && monitor.calibrated {
+            button.imagePosition = .imageLeading
             let degInt = Int(monitor.effectiveDeg.rounded())
             let formattedStr: String = degInt < 10 ? "\(degInt)°\u{2007}" : "\(degInt)°"
             button.attributedTitle = NSAttributedString(
@@ -3787,12 +3817,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     .font: NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .semibold)
                 ])
         } else {
-            button.attributedTitle = NSAttributedString(
-                string: "Spine",
-                attributes: [
-                    .foregroundColor: NSColor.labelColor,
-                    .font: NSFont.systemFont(ofSize: 12, weight: .semibold)
-                ])
+            button.imagePosition = .imageOnly
+            button.attributedTitle = NSAttributedString(string: "")
         }
     }
 

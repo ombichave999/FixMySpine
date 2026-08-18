@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v4.2</title>
+      <title>FixMySpine v4.3</title>
       <description><![CDATA[
-        <h2>FixMySpine v4.2 Release Notes</h2>
-        <p>FixMySpine 4.2: Stability enhancements and refined posture tracking precision.</p>
+        <h2>FixMySpine v4.3 Release Notes</h2>
+        <p>FixMySpine 4.3: Menu bar automatically hides degree readout when AirPods are disconnected and displays degrees only when active.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 03:00:12 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.2/FixMySpine.dmg"
-                 sparkle:version="4.2"
-                 sparkle:shortVersionString="4.2"
-                 length="2667823"
+      <pubDate>Tue, 18 Aug 2026 11:15:46 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.3/FixMySpine.dmg"
+                 sparkle:version="4.3"
+                 sparkle:shortVersionString="4.3"
+                 length="2667832"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="Q+V2NPVsgpsgGvoUdmuWFvTYLlhi6aMlOdVEmpiWmE8QsqXJ0Dxl7MYMeSqr1qo9T+YO7zuHtvcjsY7UCmHEAQ==" />
+                 sparkle:edSignature="WjB7qUIef/Vrgrm7pc/OOaN2DXC6J+rAVS3K+0Ukstajw9P5dw2z90LBpNrvyMvkyS9/vPhdY5I48uW/4mq6CA==" />
     </item>
   </channel>
 </rss>
