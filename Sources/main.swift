@@ -22,7 +22,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 
 enum AppInfo {
     static var version: String {
-        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "5.0.0"
+        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "5.0.1"
     }
     static let apiLatestURL = "https://api.github.com/repos/ombichave999/FixMySpine-Releases/releases/latest"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
@@ -147,7 +147,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                let tagName = json["tag_name"] as? String {
 
                 let latestVersion = tagName.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
-                let title = json["name"] as? String ?? "5.0.0"
+                let title = json["name"] as? String ?? "5.0.1"
                 var dmgURLString: String? = nil
 
                 if let assets = json["assets"] as? [[String: Any]] {
@@ -208,7 +208,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                 DispatchQueue.main.async {
                     if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
                         self.updateAvailable = latest
-                        self.releaseNotes = parser.releaseTitle ?? "5.0.0"
+                        self.releaseNotes = parser.releaseTitle ?? "5.0.1"
                         if let s = parser.downloadURL, let u = URL(string: s) {
                             self.downloadURL = u
                         } else {
@@ -236,7 +236,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     }
 
     func startDownloadAndInstall() {
-        let ver = updateAvailable ?? "5.0.0"
+        let ver = updateAvailable ?? "5.0.1"
         let fallbackURL = "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(ver)/FixMySpine.dmg"
         guard let url = downloadURL ?? URL(string: fallbackURL) else { return }
         isDownloading = true
@@ -366,7 +366,7 @@ struct InAppUpdateModal: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
 
-                    Text(updater.releaseNotes ?? "5.0.0")
+                    Text(updater.releaseNotes ?? "5.0.1")
                         .font(.system(size: 10.5, weight: .regular))
                         .foregroundStyle(.white.opacity(0.75))
                         .multilineTextAlignment(.center)
@@ -1473,7 +1473,7 @@ final class WatchBLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         isConnected = false
         isScanning = false
-        let msg = "Failed to connect to \(peripheral.name ?? "5.0.0"): \(error?.localizedDescription ?? "5.0.0")"
+        let msg = "Failed to connect to \(peripheral.name ?? "5.0.1"): \(error?.localizedDescription ?? "5.0.1")"
         errorMessage = msg
         PostureMonitor.shared.watchError = msg
         PostureMonitor.shared.watchConnected = false
@@ -1601,10 +1601,14 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         "Take a deep breath and check your posture."
     ]
 
-    // Internals
+    // High-Precision Filtering & Sensor State
     private var gx = 0.0, gy = 0.0, gz = 0.0
     private var bx = 0.0, by = 0.0, bz = 0.0
     private var hasSample = false
+    private var recentGravitySamples: [(x: Double, y: Double, z: Double)] = []
+    private let calibrationBufferSize = 25
+    private var smoothNod = 0.0
+    private var smoothSide = 0.0
     private var slouchSince: Date?
     var lastAlert: Date = .distantPast
     private var goodStreakTimer: Double = 0.0
@@ -1682,7 +1686,7 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
             guard let self = self, let motion = motion else { return }
             self.receiving = true
             self.lastSampleDate = Date()
-            self.ingest(gravity: motion.gravity)
+            self.ingest(motion: motion)
         }
     }
 
@@ -1740,10 +1744,37 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
             speak("I am not getting motion data yet. Put your AirPods in and play some audio first.")
             return
         }
-        let m = (gx * gx + gy * gy + gz * gz).squareRoot()
-        guard m > 0 else { return }
-        bx = gx / m; by = gy / m; bz = gz / m
+
+        // Multi-sample baseline rolling average for sub-degree neutral baseline accuracy
+        if !recentGravitySamples.isEmpty {
+            var sumX = 0.0, sumY = 0.0, sumZ = 0.0
+            for s in recentGravitySamples {
+                sumX += s.x
+                sumY += s.y
+                sumZ += s.z
+            }
+            let count = Double(recentGravitySamples.count)
+            let avgX = sumX / count
+            let avgY = sumY / count
+            let avgZ = sumZ / count
+            let m = sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ)
+            if m > 0 {
+                bx = avgX / m
+                by = avgY / m
+                bz = avgZ / m
+            }
+        } else {
+            let m = (gx * gx + gy * gy + gz * gz).squareRoot()
+            guard m > 0 else { return }
+            bx = gx / m; by = gy / m; bz = gz / m
+        }
+
         calibrated = true
+        smoothNod = 0.0
+        smoothSide = 0.0
+        tiltDeg = 0.0
+        nodDeg = 0.0
+        sideDeg = 0.0
         slouching = false
         slouchSince = nil
         goodStreakTimer = 0.0
@@ -1755,19 +1786,33 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
 
     private var lastUIUpdateTime: Date = .distantPast
 
-    private func ingest(gravity: CMAcceleration) {
+    private func ingest(motion: CMDeviceMotion) {
         let now = Date()
         let delta = lastSampleDate != nil ? min(2.0, now.timeIntervalSince(lastSampleDate!)) : 0.25
         lastSampleDate = now
 
+        let gravity = motion.gravity
+        let uAcc = motion.userAcceleration
+        let userMotionMag = sqrt(uAcc.x * uAcc.x + uAcc.y * uAcc.y + uAcc.z * uAcc.z)
+
+        // Dynamic motion-adaptive low pass filter (rejects abrupt jerks / coughs)
+        let alpha = max(0.12, min(0.35, 0.25 / (1.0 + userMotionMag * 2.5)))
+
         if hasSample {
-            gx = gx * 0.75 + gravity.x * 0.25
-            gy = gy * 0.75 + gravity.y * 0.25
-            gz = gz * 0.75 + gravity.z * 0.25
+            gx = gx * (1.0 - alpha) + gravity.x * alpha
+            gy = gy * (1.0 - alpha) + gravity.y * alpha
+            gz = gz * (1.0 - alpha) + gravity.z * alpha
         } else {
             gx = gravity.x; gy = gravity.y; gz = gravity.z
             hasSample = true
         }
+
+        // Maintain calibration buffer
+        recentGravitySamples.append((x: gravity.x, y: gravity.y, z: gravity.z))
+        if recentGravitySamples.count > calibrationBufferSize {
+            recentGravitySamples.removeFirst()
+        }
+
         computeAngles(now: now)
         evaluate(delta: delta)
 
@@ -1790,31 +1835,29 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         let nx = gx / mg, ny = gy / mg, nz = gz / mg
         let bnx = bx / mb, bny = by / mb, bnz = bz / mb
 
-        let dot = nx * bnx + ny * bny + nz * bnz
-        let total = acos(min(1.0, max(-1.0, dot))) * 180.0 / .pi
+        // 1. Total 3D Spherical Angular Deviation
+        let dot = min(1.0, max(-1.0, nx * bnx + ny * bny + nz * bnz))
+        let total = acos(dot) * 180.0 / .pi
 
-        let ax = bny * nz - bnz * ny
-        let ay = bnz * nx - bnx * nz
-        let az = bnx * ny - bny * nx
-        let am = (ax * ax + ay * ay + az * az).squareRoot()
+        // 2. Exact Anatomical Pitch (Sagittal Plane: Forward (+) / Backward (-))
+        let pitchRad = atan2(ny * bnz - nz * bny, ny * bny + nz * bnz)
+        let rawNod = pitchRad * 180.0 / .pi
 
-        let nodShare = am > 0 ? (abs(ax) / am) : 0.0
-        let sideShare = (1.0 - nodShare * nodShare).squareRoot()
+        // 3. Exact Anatomical Roll (Coronal Plane: Right (+) / Left (-))
+        let rollRad = atan2(ny * bnx - nx * bny, ny * bny + nx * bnx)
+        let rawSide = rollRad * 180.0 / .pi
 
-        // Forward (+ Fwd) vs Backward (- Back) nod sign:
-        // When pitching head forward/down, calculatedNod is positive (+), moving gauge downwards
-        // When pitching head backward/up, calculatedNod is negative (-), moving gauge upwards
-        let nodSign: Double = (nz - bnz) >= 0 ? 1.0 : -1.0
-        let calculatedNod = total * nodShare * nodSign
+        // 4. Subtle Ergonomic Deadband (Smooth 0.35° neutral zone to prevent breathing micro-flicker)
+        let deadbandNod = abs(rawNod) < 0.35 ? 0.0 : rawNod
+        let deadbandSide = abs(rawSide) < 0.35 ? 0.0 : rawSide
 
-        // Right (+ Right) vs Left (- Left) side-lean sign:
-        let sideSign: Double = (nx - bnx) >= 0 ? 1.0 : -1.0
-        let calculatedSide = total * sideShare * sideSign
+        // 5. Responsive 60 FPS Exponential Filter
+        smoothNod = smoothNod * 0.75 + deadbandNod * 0.25
+        smoothSide = smoothSide * 0.75 + deadbandSide * 0.25
 
-        // Real-time instantaneous angle publishing for butter-smooth 60fps gauge response
         tiltDeg = total
-        nodDeg = calculatedNod
-        sideDeg = calculatedSide
+        nodDeg = smoothNod
+        sideDeg = smoothSide
     }
 
     private func evaluate(delta: Double) {
@@ -3108,7 +3151,7 @@ struct PostureView: View {
                                     .font(.system(size: 9.5, weight: .bold))
                                     .foregroundStyle(.white)
                             }
-                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "5.0.0")")
+                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "5.0.1")")
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                             Spacer()
