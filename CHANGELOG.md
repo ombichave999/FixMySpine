@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [5.0.0] - 2026-08-18
+
+### Added
+- **Auto-Recovering CoreMotion Watchdog**: Continuous health monitoring for AirPods telemetry with instant automatic reconnection after voice calls, meetings, or microphone interruptions.
+- **Sparkle 2 Direct In-App Updater**: Cryptographically verified Ed25519 updates with immediate delivery and silent background check support.
+- **Repository Optimization & Pre-Push Cleanup**: 100% clean architecture with zero binary repo bloat and production hardened runtime flags.
+
+### Changed
+- Streamlined release deployment pipeline with automatic signed DMG generation and immutable GitHub release distribution.
+- Enhanced memory footprint and battery efficiency for all-day posture tracking.
+
+---
+
 ## [4.4.0] - 2026-08-18
 
 ### Added

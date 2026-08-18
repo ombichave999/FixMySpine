@@ -9,7 +9,7 @@ cd "$(dirname "$0")"
 
 VERSION="${1:-}"
 if [ -z "$VERSION" ]; then
-    CURRENT_VER=$(grep 'static let version =' Sources/main.swift | sed -E 's/.*"([^"]+)".*/\1/')
+    CURRENT_VER=$(grep -A 1 'CFBundleShortVersionString' Info.plist | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -n 1 || echo "5.0.0")
     read -p "Enter production release version [current: $CURRENT_VER]: " INPUT_VER
     VERSION="${INPUT_VER:-$CURRENT_VER}"
 fi
@@ -24,9 +24,10 @@ echo "   Channel: $CHANNEL"
 echo "   Release Notes: $NOTES"
 echo "========================================================"
 
-# 1. Update Version in Sources/main.swift
+# 1. Update Version in Sources/main.swift and Info.plist
 echo "Step 1: Updating version to $VERSION in code..."
-sed -i '' "s/static let version = \"[^\"]*\"/static let version = \"$VERSION\"/g" Sources/main.swift
+sed -i '' -E "s/\\?\\? \"[^\"]+\"/\\?\\? \"$VERSION\"/g" Sources/main.swift
+sed -i '' -E "s/<string>[0-9]+\\.[0-9]+(\\.[0-9]+)?<\\/string>/<string>$VERSION<\\/string>/g" Info.plist 2>/dev/null || true
 
 # 2. Build FixMySpine.app and Package DMG
 echo "Step 2: Building app and packaging DMG installer..."

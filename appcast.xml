@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v4.4.1</title>
+      <title>FixMySpine v5.0.0</title>
       <description><![CDATA[
-        <h2>FixMySpine v4.4.1 Release Notes</h2>
-        <p>FixMySpine 4.4.1: Added auto-recovering CoreMotion watchdog for seamless post-microphone and audio call tracking.</p>
+        <h2>FixMySpine v5.0.0 Release Notes</h2>
+        <p>FixMySpine 5.0.0: CoreMotion auto-recovering watchdog, verified Sparkle 2 Ed25519 in-app updates, and zero-bloat production build.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 15:43:03 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.4.1/FixMySpine.dmg"
-                 sparkle:version="4.4.1"
-                 sparkle:shortVersionString="4.4.1"
-                 length="2662233"
+      <pubDate>Tue, 18 Aug 2026 15:48:32 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v5.0.0/FixMySpine.dmg"
+                 sparkle:version="5.0.0"
+                 sparkle:shortVersionString="5.0.0"
+                 length="2659559"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="l2d0c9PcH+xoWCvRK8IlBXnRkkpK9U6MdEJb1EG87SYOP16FgXZVVq2eHh5GqUaiHcr04xWooDtywA4VMAkBAw==" />
+                 sparkle:edSignature="lJSiz9vtx2CZCnaglEcuC1Nbj98O2IC4uTY/CBGkUumEfc+Ly67LVZ/sZjSBEP4C6Ig0DIF2XLom9SXolaf4Aw==" />
     </item>
   </channel>
 </rss>

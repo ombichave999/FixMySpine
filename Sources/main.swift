@@ -22,7 +22,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 
 enum AppInfo {
     static var version: String {
-        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "4.3.5"
+        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "5.0.0"
     }
     static let apiLatestURL = "https://api.github.com/repos/ombichave999/FixMySpine-Releases/releases/latest"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
@@ -147,7 +147,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                let tagName = json["tag_name"] as? String {
 
                 let latestVersion = tagName.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
-                let title = json["name"] as? String ?? "FixMySpine v\(latestVersion)"
+                let title = json["name"] as? String ?? "5.0.0"
                 var dmgURLString: String? = nil
 
                 if let assets = json["assets"] as? [[String: Any]] {
@@ -208,7 +208,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                 DispatchQueue.main.async {
                     if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
                         self.updateAvailable = latest
-                        self.releaseNotes = parser.releaseTitle ?? "FixMySpine v\(latest) is ready to install."
+                        self.releaseNotes = parser.releaseTitle ?? "5.0.0"
                         if let s = parser.downloadURL, let u = URL(string: s) {
                             self.downloadURL = u
                         } else {
@@ -236,7 +236,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     }
 
     func startDownloadAndInstall() {
-        let ver = updateAvailable ?? "4.1"
+        let ver = updateAvailable ?? "5.0.0"
         let fallbackURL = "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(ver)/FixMySpine.dmg"
         guard let url = downloadURL ?? URL(string: fallbackURL) else { return }
         isDownloading = true
@@ -366,7 +366,7 @@ struct InAppUpdateModal: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
 
-                    Text(updater.releaseNotes ?? "A new version of FixMySpine is ready to install.")
+                    Text(updater.releaseNotes ?? "5.0.0")
                         .font(.system(size: 10.5, weight: .regular))
                         .foregroundStyle(.white.opacity(0.75))
                         .multilineTextAlignment(.center)
@@ -1473,7 +1473,7 @@ final class WatchBLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         isConnected = false
         isScanning = false
-        let msg = "Failed to connect to \(peripheral.name ?? "device"): \(error?.localizedDescription ?? "Connection timed out")"
+        let msg = "Failed to connect to \(peripheral.name ?? "5.0.0"): \(error?.localizedDescription ?? "5.0.0")"
         errorMessage = msg
         PostureMonitor.shared.watchError = msg
         PostureMonitor.shared.watchConnected = false
@@ -3108,7 +3108,7 @@ struct PostureView: View {
                                     .font(.system(size: 9.5, weight: .bold))
                                     .foregroundStyle(.white)
                             }
-                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "Ready")")
+                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "5.0.0")")
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                             Spacer()
