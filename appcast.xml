@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v5.0.2</title>
+      <title>FixMySpine v5.0.3</title>
       <description><![CDATA[
-        <h2>FixMySpine v5.0.2 Release Notes</h2>
-        <p>FixMySpine 5.0.2: Corrected forward/backward and left/right orientation signs for accurate spatial alignment.</p>
+        <h2>FixMySpine v5.0.3 Release Notes</h2>
+        <p>FixMySpine 5.0.3: Restored instantaneous zero-delay motion processing and ultra-smooth spine gauge response.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 15:58:23 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v5.0.2/FixMySpine.dmg"
-                 sparkle:version="5.0.2"
-                 sparkle:shortVersionString="5.0.2"
-                 length="2663609"
+      <pubDate>Tue, 18 Aug 2026 16:01:22 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v5.0.3/FixMySpine.dmg"
+                 sparkle:version="5.0.3"
+                 sparkle:shortVersionString="5.0.3"
+                 length="2662067"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="+TGAbd9Ib+3H41e9MR0JLLP4zmH2I7dyMciGsMSPFm9gtNlpOsQ1U/lUtmBaUzXDgUima/35jL7AVQIEiBboAQ==" />
+                 sparkle:edSignature="OlnHTlCGsEx3MVnS87vKS994Az4mAs1rHlrD9txJv6CaIxreQoJcuJ/JA3hZSflHxy3hdkByJwsBorQiq2ZWAA==" />
     </item>
   </channel>
 </rss>
