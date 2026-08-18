@@ -2307,11 +2307,14 @@ struct NativeColorCustomizationCard: View {
                 } label: {
                     HStack(spacing: 3) {
                         Image(systemName: "arrow.counterclockwise")
-                            .font(.system(size: 8, weight: .bold))
+                            .font(.system(size: 7.5, weight: .bold))
                         Text("Reset to Default")
-                            .font(.system(size: 8.5, weight: .medium))
+                            .font(.system(size: 8.5, weight: .semibold))
                     }
-                    .foregroundStyle(.secondary.opacity(isHoveredReset ? 0.9 : 0.6))
+                    .foregroundStyle(Color.primary.opacity(isHoveredReset ? 0.95 : 0.75))
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 3)
+                    .glassPill(6)
                 }
                 .buttonStyle(.plain)
                 .onHover { h in withAnimation(.easeInOut(duration: 0.15)) { isHoveredReset = h } }
@@ -2815,7 +2818,7 @@ struct AppleWatchLiveView: View {
                     .padding(.top, 4)
 
                     VStack(spacing: 5) {
-                        Text("Apple Watch & Smartwatch Sync")
+                        Text("Watch Sync")
                             .font(.system(size: 14, weight: .bold))
                             .foregroundStyle(.white)
 
@@ -3368,7 +3371,7 @@ struct AppleWatchSettingsCard: View {
                     .foregroundStyle(monitor.appleWatchEnabled ? monitor.accentColor : .secondary)
                     .frame(width: 14)
 
-                Text("Apple Watch Sync")
+                Text("Watch Sync")
                     .font(.system(size: 11.5, weight: .semibold))
 
                 Spacer()
@@ -3447,13 +3450,13 @@ struct AppleWatchSettingsCard: View {
 
                 HStack(spacing: 7) {
                     CompactToggleTile(icon: "speaker.wave.2.fill", label: "Voice", isOn: $monitor.voiceEnabled)
-                    CompactToggleTile(icon: "bell.badge.fill", label: "Notifications", isOn: $monitor.notificationsEnabled)
+                    CompactToggleTile(icon: "bell.badge.fill", label: "Alerts", isOn: $monitor.notificationsEnabled)
                 }
             }
 
-            // 2. Dedicated Apple Watch Haptic Section (Collapsible when Off)
+            // 2. Dedicated Watch Haptic Section (Collapsible when Off)
             VStack(alignment: .leading, spacing: 5) {
-                Text("APPLE WATCH HAPTICS")
+                Text("WATCH SYNC")
                     .font(.system(size: 8.5, weight: .semibold))
                     .foregroundStyle(.secondary.opacity(0.58))
                     .tracking(0.6)
