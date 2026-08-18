@@ -21,7 +21,10 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.3.5"
+    static var version: String {
+        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "4.3.5"
+    }
+    static let apiLatestURL = "https://api.github.com/repos/ombichave999/FixMySpine-Releases/releases/latest"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -129,49 +132,106 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     }
 
     func check(silentIfLatest: Bool = false) {
-        let cacheBuster = Int(Date().timeIntervalSince1970)
-        guard let url = URL(string: "\(AppInfo.appcastURL)?t=\(cacheBuster)") else { return }
-        var req = URLRequest(url: url)
+        // 1. Primary: Direct 0-second cache GitHub Releases API
+        guard let apiURL = URL(string: AppInfo.apiLatestURL) else { return }
+        var req = URLRequest(url: apiURL)
         req.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        req.timeoutInterval = 10.0
+        req.timeoutInterval = 8.0
+        req.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
 
         URLSession.shared.dataTask(with: req) { [weak self] data, resp, err in
-            guard let self = self, let data = data else {
-                if !silentIfLatest {
-                    DispatchQueue.main.async {
-                        self?.showUpToDateAlert(title: "Check Failed", text: "Unable to reach update server. Please check your internet connection.")
+            guard let self = self else { return }
+
+            if let data = data,
+               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let tagName = json["tag_name"] as? String {
+
+                let latestVersion = tagName.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
+                let title = json["name"] as? String ?? "FixMySpine v\(latestVersion)"
+                var dmgURLString: String? = nil
+
+                if let assets = json["assets"] as? [[String: Any]] {
+                    for asset in assets {
+                        if let name = asset["name"] as? String, name.hasSuffix(".dmg"),
+                           let dl = asset["browser_download_url"] as? String {
+                            dmgURLString = dl
+                            break
+                        }
+                    }
+                }
+                if dmgURLString == nil {
+                    dmgURLString = "https://github.com/ombichave999/FixMySpine-Releases/releases/download/\(tagName)/FixMySpine.dmg"
+                }
+
+                DispatchQueue.main.async {
+                    if self.isNewer(latestVersion, than: AppInfo.version) {
+                        self.updateAvailable = latestVersion
+                        self.releaseNotes = title
+                        self.downloadURL = URL(string: dmgURLString!)
+                        self.hasUpdatePending = true
+                        AppDelegate.shared?.refreshButton()
+
+                        if !silentIfLatest {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                self.showUpdateModal = true
+                            }
+                        }
+                    } else {
+                        self.hasUpdatePending = false
+                        AppDelegate.shared?.refreshButton()
+                        if !silentIfLatest {
+                            self.showUpToDateAlert(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
+                        }
                     }
                 }
                 return
             }
 
-            let parser = AppcastParser(xmlData: data)
-            DispatchQueue.main.async {
-                if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
-                    self.updateAvailable = latest
-                    self.releaseNotes = parser.releaseTitle ?? "FixMySpine v\(latest) is ready to install."
-                    if let s = parser.downloadURL, let u = URL(string: s) {
-                        self.downloadURL = u
-                    } else {
-                        self.downloadURL = URL(string: "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(latest)/FixMySpine.dmg")
-                    }
+            // 2. Fallback: appcast.xml with cache-busting timestamp
+            let cacheBuster = Int(Date().timeIntervalSince1970)
+            guard let url = URL(string: "\(AppInfo.appcastURL)?t=\(cacheBuster)") else { return }
+            var xmlReq = URLRequest(url: url)
+            xmlReq.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+            xmlReq.timeoutInterval = 8.0
 
-                    self.hasUpdatePending = true
-                    AppDelegate.shared?.refreshButton()
-
+            URLSession.shared.dataTask(with: xmlReq) { data, _, _ in
+                guard let data = data else {
                     if !silentIfLatest {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                            self.showUpdateModal = true
+                        DispatchQueue.main.async {
+                            self.showUpToDateAlert(title: "Check Failed", text: "Unable to reach update server. Please check your internet connection.")
                         }
                     }
-                } else {
-                    self.hasUpdatePending = false
-                    AppDelegate.shared?.refreshButton()
-                    if !silentIfLatest {
-                        self.showUpToDateAlert(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
+                    return
+                }
+
+                let parser = AppcastParser(xmlData: data)
+                DispatchQueue.main.async {
+                    if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
+                        self.updateAvailable = latest
+                        self.releaseNotes = parser.releaseTitle ?? "FixMySpine v\(latest) is ready to install."
+                        if let s = parser.downloadURL, let u = URL(string: s) {
+                            self.downloadURL = u
+                        } else {
+                            self.downloadURL = URL(string: "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(latest)/FixMySpine.dmg")
+                        }
+
+                        self.hasUpdatePending = true
+                        AppDelegate.shared?.refreshButton()
+
+                        if !silentIfLatest {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                self.showUpdateModal = true
+                            }
+                        }
+                    } else {
+                        self.hasUpdatePending = false
+                        AppDelegate.shared?.refreshButton()
+                        if !silentIfLatest {
+                            self.showUpToDateAlert(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
+                        }
                     }
                 }
-            }
+            }.resume()
         }.resume()
     }
 
@@ -855,6 +915,9 @@ struct LiveSpineGauge: View {
             auraPulse = false
             idleBreathing = false
         }
+        .animation(.spring(response: 0.28, dampingFraction: 0.78), value: monitor.effectiveDeg)
+        .animation(.spring(response: 0.28, dampingFraction: 0.78), value: monitor.sideDeg)
+        .animation(.spring(response: 0.28, dampingFraction: 0.78), value: monitor.nodDeg)
         .drawingGroup()
     }
 }
@@ -1719,13 +1782,10 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         let sideSign: Double = (nx - bnx) >= 0 ? 1.0 : -1.0
         let calculatedSide = total * sideShare * sideSign
 
-        // Only publish changes to SwiftUI every 100ms (10 Hz) or if angle changed significantly (> 0.5°)
-        if now.timeIntervalSince(lastUIUpdateTime) >= 0.10 || abs(total - tiltDeg) > 0.5 {
-            lastUIUpdateTime = now
-            tiltDeg = total
-            nodDeg = calculatedNod
-            sideDeg = calculatedSide
-        }
+        // Real-time instantaneous angle publishing for butter-smooth 60fps gauge response
+        tiltDeg = total
+        nodDeg = calculatedNod
+        sideDeg = calculatedSide
     }
 
     private func evaluate(delta: Double) {
