@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v4.3.6</title>
+      <title>FixMySpine v4.3.7</title>
       <description><![CDATA[
-        <h2>FixMySpine v4.3.6 Release Notes</h2>
-        <p>FixMySpine 4.3.6: Instant GitHub API update checks and butter-smooth 60fps spine gauge physics.</p>
+        <h2>FixMySpine v4.3.7 Release Notes</h2>
+        <p>FixMySpine 4.3.7: Added persistent status item autosaveName for stable menu bar layout & repositioning.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 12:00:37 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.3.6/FixMySpine.dmg"
-                 sparkle:version="4.3.6"
-                 sparkle:shortVersionString="4.3.6"
-                 length="2679171"
+      <pubDate>Tue, 18 Aug 2026 12:04:24 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.3.7/FixMySpine.dmg"
+                 sparkle:version="4.3.7"
+                 sparkle:shortVersionString="4.3.7"
+                 length="2679272"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="+BdeIBJQD80q0YoXvvRoCqAp0aAvaCIgsg65AOXRsv1U35gEw3/FMJgaOF/fodkF7gkn3JGXjuZeqmxoPfufCA==" />
+                 sparkle:edSignature="Z9MbCD0b/4RNXhvwfvwsBZfU+Qjjw9NOXeQahni+P4ToVT1FOFS9xCuWNlO20cGhfDvpfYQe/OwEHb5tfVfGDA==" />
     </item>
   </channel>
 </rss>

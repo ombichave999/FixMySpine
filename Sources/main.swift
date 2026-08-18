@@ -3843,6 +3843,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.popover = popover
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        statusItem.autosaveName = "FixMySpineStatusItem"
         statusItem.isVisible = true
         if let button = statusItem.button {
             button.imagePosition = .imageLeading
