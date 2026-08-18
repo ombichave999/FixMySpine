@@ -22,7 +22,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 
 enum AppInfo {
     static var version: String {
-        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "5.0.1"
+        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "5.0.2"
     }
     static let apiLatestURL = "https://api.github.com/repos/ombichave999/FixMySpine-Releases/releases/latest"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
@@ -147,7 +147,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                let tagName = json["tag_name"] as? String {
 
                 let latestVersion = tagName.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
-                let title = json["name"] as? String ?? "5.0.1"
+                let title = json["name"] as? String ?? "5.0.2"
                 var dmgURLString: String? = nil
 
                 if let assets = json["assets"] as? [[String: Any]] {
@@ -208,7 +208,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                 DispatchQueue.main.async {
                     if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
                         self.updateAvailable = latest
-                        self.releaseNotes = parser.releaseTitle ?? "5.0.1"
+                        self.releaseNotes = parser.releaseTitle ?? "5.0.2"
                         if let s = parser.downloadURL, let u = URL(string: s) {
                             self.downloadURL = u
                         } else {
@@ -236,7 +236,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     }
 
     func startDownloadAndInstall() {
-        let ver = updateAvailable ?? "5.0.1"
+        let ver = updateAvailable ?? "5.0.2"
         let fallbackURL = "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(ver)/FixMySpine.dmg"
         guard let url = downloadURL ?? URL(string: fallbackURL) else { return }
         isDownloading = true
@@ -366,7 +366,7 @@ struct InAppUpdateModal: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
 
-                    Text(updater.releaseNotes ?? "5.0.1")
+                    Text(updater.releaseNotes ?? "5.0.2")
                         .font(.system(size: 10.5, weight: .regular))
                         .foregroundStyle(.white.opacity(0.75))
                         .multilineTextAlignment(.center)
@@ -1473,7 +1473,7 @@ final class WatchBLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         isConnected = false
         isScanning = false
-        let msg = "Failed to connect to \(peripheral.name ?? "5.0.1"): \(error?.localizedDescription ?? "5.0.1")"
+        let msg = "Failed to connect to \(peripheral.name ?? "5.0.2"): \(error?.localizedDescription ?? "5.0.2")"
         errorMessage = msg
         PostureMonitor.shared.watchError = msg
         PostureMonitor.shared.watchConnected = false
@@ -1840,11 +1840,11 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         let total = acos(dot) * 180.0 / .pi
 
         // 2. Exact Anatomical Pitch (Sagittal Plane: Forward (+) / Backward (-))
-        let pitchRad = atan2(ny * bnz - nz * bny, ny * bny + nz * bnz)
+        let pitchRad = atan2(nz * bny - ny * bnz, ny * bny + nz * bnz)
         let rawNod = pitchRad * 180.0 / .pi
 
         // 3. Exact Anatomical Roll (Coronal Plane: Right (+) / Left (-))
-        let rollRad = atan2(ny * bnx - nx * bny, ny * bny + nx * bnx)
+        let rollRad = atan2(nx * bny - ny * bnx, ny * bny + nx * bnx)
         let rawSide = rollRad * 180.0 / .pi
 
         // 4. Subtle Ergonomic Deadband (Smooth 0.35° neutral zone to prevent breathing micro-flicker)
@@ -3151,7 +3151,7 @@ struct PostureView: View {
                                     .font(.system(size: 9.5, weight: .bold))
                                     .foregroundStyle(.white)
                             }
-                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "5.0.1")")
+                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "5.0.2")")
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                             Spacer()
