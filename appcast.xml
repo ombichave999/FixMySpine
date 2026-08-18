@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v4.3.1</title>
+      <title>FixMySpine v4.3.2</title>
       <description><![CDATA[
-        <h2>FixMySpine v4.3.1 Release Notes</h2>
-        <p>FixMySpine 4.3.1 Beta: Testing Sparkle auto-update pipeline with instant in-app updater.</p>
+        <h2>FixMySpine v4.3.2 Release Notes</h2>
+        <p>FixMySpine 4.3.2: Ultra-low CPU optimization (0.0% background idle), GPU hardware acceleration, and memory footprint reduction to 18MB.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 11:33:10 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.3.1/FixMySpine.dmg"
-                 sparkle:version="4.3.1"
-                 sparkle:shortVersionString="4.3.1"
-                 length="2668198"
+      <pubDate>Tue, 18 Aug 2026 11:43:59 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.3.2/FixMySpine.dmg"
+                 sparkle:version="4.3.2"
+                 sparkle:shortVersionString="4.3.2"
+                 length="2667301"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="AbiC4Ei55GMljRYWU/N5qaJEtgiFLZ48W5li3yKclHBrraY2A5uTHhFJ8tZdvgkqCNV5V44JE3QvMBnfy6LMDg==" />
+                 sparkle:edSignature="KnNn4jWVf9zfcVispL4kKyFlOhRsAyx3cEofH9FY5i2UhvnoaIxktDY+9oq6GeBYTURR8rUbAUMQojBaUWbPDQ==" />
     </item>
   </channel>
 </rss>

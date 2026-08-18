@@ -7,59 +7,21 @@ import UserNotifications
 import CoreBluetooth
 import Sparkle
 
-// MARK: - Sparkle 2 Auto-Updater Controller & Delegate
+// MARK: - Sparkle & Native Update Controller
 
-final class SparkleUpdaterViewModel: NSObject, ObservableObject, SPUUpdaterDelegate {
+final class SparkleUpdaterViewModel: NSObject, ObservableObject {
     static let shared = SparkleUpdaterViewModel()
-
-    private(set) var updaterController: SPUStandardUpdaterController?
-    @Published var canCheckForUpdates: Bool = false
-    @Published var hasUpdatePending: Bool = false
-    @Published var updateAvailableVersion: String? = nil
-
-    override init() {
-        super.init()
-        let controller = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: self, userDriverDelegate: nil)
-        self.updaterController = controller
-
-        controller.updater.publisher(for: \.canCheckForUpdates)
-            .assign(to: &$canCheckForUpdates)
-    }
+    @Published var canCheckForUpdates: Bool = true
 
     func checkForUpdates() {
         InAppUpdater.shared.check(silentIfLatest: false)
-    }
-
-    // MARK: - SPUUpdaterDelegate Callbacks
-    func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
-        DispatchQueue.main.async {
-            self.updateAvailableVersion = item.displayVersionString
-            self.hasUpdatePending = true
-            AppDelegate.shared?.refreshButton()
-        }
-    }
-
-    func updaterDidNotFindUpdate(_ updater: SPUUpdater, error: Error) {
-        DispatchQueue.main.async {
-            self.hasUpdatePending = false
-            self.updateAvailableVersion = nil
-            AppDelegate.shared?.refreshButton()
-        }
-    }
-
-    func updater(_ updater: SPUUpdater, willInstallUpdateOnQuit item: SUAppcastItem, immediateInstallationBlock immediateInstallHandler: @escaping () -> Void) -> Bool {
-        DispatchQueue.main.async {
-            self.hasUpdatePending = true
-            AppDelegate.shared?.refreshButton()
-        }
-        return true
     }
 }
 
 // MARK: - App Info & Updates
 
 enum AppInfo {
-    static let version = "4.3.1"
+    static let version = "4.3.2"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
 }
 
@@ -106,6 +68,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     @Published var isDownloading = false
     @Published var progress: Double = 0.0
     @Published var statusText: String = ""
+    @Published var hasUpdatePending: Bool = false
     @Published var updateAvailable: String? = nil
     @Published var releaseNotes: String? = nil
     @Published var showUpdateModal: Bool = false
@@ -117,13 +80,13 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     override init() {
         super.init()
 
-        // Immediate check on startup (1s delay)
+        // Immediate check on startup (1.0s delay)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             self?.check(silentIfLatest: true)
         }
 
-        // Fast auto-polling every 30 seconds (1KB lightweight HTTP check with cache buster)
-        pollTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+        // Energy-efficient auto-polling every 5 minutes (300s)
+        pollTimer = Timer.scheduledTimer(withTimeInterval: 300.0, repeats: true) { [weak self] _ in
             self?.check(silentIfLatest: true)
         }
     }
@@ -133,13 +96,13 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
         guard let url = URL(string: "\(AppInfo.appcastURL)?t=\(cacheBuster)") else { return }
         var req = URLRequest(url: url)
         req.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        req.timeoutInterval = 8.0
+        req.timeoutInterval = 10.0
 
-        URLSession.shared.dataTask(with: req) { [weak self] data, _, _ in
+        URLSession.shared.dataTask(with: req) { [weak self] data, resp, err in
             guard let self = self, let data = data else {
                 if !silentIfLatest {
                     DispatchQueue.main.async {
-                        self?.showUpToDateAlert(title: "Check Failed", text: "Unable to reach update server. Please check your connection.")
+                        self?.showUpToDateAlert(title: "Check Failed", text: "Unable to reach update server. Please check your internet connection.")
                     }
                 }
                 return
@@ -149,16 +112,14 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
             DispatchQueue.main.async {
                 if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
                     self.updateAvailable = latest
-                    self.releaseNotes = parser.releaseTitle
+                    self.releaseNotes = parser.releaseTitle ?? "FixMySpine v\(latest) is ready to install."
                     if let s = parser.downloadURL, let u = URL(string: s) {
                         self.downloadURL = u
                     } else {
                         self.downloadURL = URL(string: "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(latest)/FixMySpine.dmg")
                     }
 
-                    // Synchronize state across entire app & Menu Bar
-                    SparkleUpdaterViewModel.shared.updateAvailableVersion = latest
-                    SparkleUpdaterViewModel.shared.hasUpdatePending = true
+                    self.hasUpdatePending = true
                     AppDelegate.shared?.refreshButton()
 
                     if !silentIfLatest {
@@ -167,7 +128,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                         }
                     }
                 } else {
-                    SparkleUpdaterViewModel.shared.hasUpdatePending = false
+                    self.hasUpdatePending = false
                     AppDelegate.shared?.refreshButton()
                     if !silentIfLatest {
                         self.showUpToDateAlert(title: "You're Up to Date!", text: "FixMySpine v\(AppInfo.version) is currently the latest version.")
@@ -586,6 +547,9 @@ struct PulsingStatusIcon: View {
                     }
                 }
             }
+            .onDisappear {
+                pulse = false
+            }
             .onChange(of: isPulsing) { _, newValue in
                 if newValue {
                     withAnimation(.easeInOut(duration: 0.85).repeatForever(autoreverses: true)) {
@@ -643,6 +607,11 @@ struct MotionSensorPulse: View {
         }
         .onAppear {
             startAnimations()
+        }
+        .onDisappear {
+            pulseScale = 1.0
+            pulseOpacity = 0.25
+            glowOpacity = 0.85
         }
         .onChange(of: monitor.receiving) { _, _ in startAnimations() }
         .onChange(of: monitor.slouching) { _, _ in startAnimations() }
@@ -845,9 +814,11 @@ struct LiveSpineGauge: View {
                 idleBreathing = true
             }
         }
-        .animation(.spring(response: 0.28, dampingFraction: 0.78), value: monitor.effectiveDeg)
-        .animation(.spring(response: 0.28, dampingFraction: 0.78), value: monitor.sideDeg)
-        .animation(.spring(response: 0.28, dampingFraction: 0.78), value: monitor.nodDeg)
+        .onDisappear {
+            auraPulse = false
+            idleBreathing = false
+        }
+        .drawingGroup()
     }
 }
 
@@ -1653,6 +1624,8 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         speak("Calibrated. I will remind you to sit tall.")
     }
 
+    private var lastUIUpdateTime: Date = .distantPast
+
     private func ingest(gravity: CMAcceleration) {
         let now = Date()
         let delta = lastSampleDate != nil ? min(2.0, now.timeIntervalSince(lastSampleDate!)) : 0.25
@@ -1666,7 +1639,7 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
             gx = gravity.x; gy = gravity.y; gz = gravity.z
             hasSample = true
         }
-        computeAngles()
+        computeAngles(now: now)
         evaluate(delta: delta)
 
         if calibrated && monitoring {
@@ -1674,8 +1647,13 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         }
     }
 
-    private func computeAngles() {
-        guard calibrated else { tiltDeg = 0; nodDeg = 0; sideDeg = 0; return }
+    private func computeAngles(now: Date) {
+        guard calibrated else {
+            if tiltDeg != 0 || nodDeg != 0 || sideDeg != 0 {
+                tiltDeg = 0; nodDeg = 0; sideDeg = 0
+            }
+            return
+        }
         let mg = (gx * gx + gy * gy + gz * gz).squareRoot()
         let mb = (bx * bx + by * by + bz * bz).squareRoot()
         guard mg > 0, mb > 0 else { return }
@@ -1696,13 +1674,19 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
 
         // Forward (+ Fwd) vs Backward (- Back) nod sign:
         let nodSign: Double = (bnz - nz) >= 0 ? 1.0 : -1.0
-        nodDeg = total * nodShare * nodSign
+        let calculatedNod = total * nodShare * nodSign
 
         // Right (+ Right) vs Left (- Left) side-lean sign:
         let sideSign: Double = (nx - bnx) >= 0 ? 1.0 : -1.0
-        sideDeg = total * sideShare * sideSign
+        let calculatedSide = total * sideShare * sideSign
 
-        tiltDeg = total
+        // Only publish changes to SwiftUI every 100ms (10 Hz) or if angle changed significantly (> 0.5°)
+        if now.timeIntervalSince(lastUIUpdateTime) >= 0.10 || abs(total - tiltDeg) > 0.5 {
+            lastUIUpdateTime = now
+            tiltDeg = total
+            nodDeg = calculatedNod
+            sideDeg = calculatedSide
+        }
     }
 
     private func evaluate(delta: Double) {
@@ -3050,11 +3034,9 @@ struct PostureView: View {
             VStack(spacing: 9) {
                 header
 
-                if sparkle.hasUpdatePending || updater.showUpdateModal {
+                if updater.hasUpdatePending || updater.showUpdateModal {
                     Button {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                            updater.updateAvailable = sparkle.updateAvailableVersion ?? "4.1"
-                            updater.releaseNotes = "FixMySpine 4.1: Instant launch background checks, 10-minute auto-polling, and live Menu Bar update dot indicator."
                             updater.showUpdateModal = true
                         }
                     } label: {
@@ -3067,7 +3049,7 @@ struct PostureView: View {
                                     .font(.system(size: 9.5, weight: .bold))
                                     .foregroundStyle(.white)
                             }
-                            Text("Update \(sparkle.updateAvailableVersion.map { "v\($0)" } ?? "Ready")")
+                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "Ready")")
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                             Spacer()
@@ -3206,7 +3188,7 @@ struct PostureView: View {
                                     .foregroundStyle(Color.primary.opacity(settingsHovered ? 1.0 : 0.80))
                                     .scaleEffect(settingsHovered ? 1.03 : 1.0)
 
-                                if sparkle.hasUpdatePending {
+                                if updater.hasUpdatePending {
                                     Circle()
                                         .fill(monitor.accentColor)
                                         .frame(width: 6, height: 6)
@@ -3719,6 +3701,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let monitor = PostureMonitor.shared
     private var bag = Set<AnyCancellable>()
 
+    // Render cache to eliminate unnecessary WindowServer redraws & CPU load
+    private var lastRenderedDeg: Int?
+    private var lastRenderedReceiving: Bool?
+    private var lastRenderedCalibrated: Bool?
+    private var lastRenderedSlouching: Bool?
+    private var lastRenderedUpdate: Bool?
+    private var lastRenderedColor: NSColor?
+    private var lastNodBucket: Int?
+    private var lastSideBucket: Int?
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppDelegate.shared = self
 
@@ -3746,11 +3738,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         monitor.objectWillChange
-            .throttle(for: .milliseconds(33), scheduler: RunLoop.main, latest: true)
+            .throttle(for: .milliseconds(100), scheduler: RunLoop.main, latest: true)
             .sink { [weak self] _ in self?.refreshButton() }
             .store(in: &bag)
 
-        SparkleUpdaterViewModel.shared.$hasUpdatePending
+        InAppUpdater.shared.$hasUpdatePending
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in self?.refreshButton() }
             .store(in: &bag)
@@ -3759,9 +3751,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         if monitor.available { monitor.start() }
 
-        // Automatically open the popover or window on launch so the user immediately sees the interface
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            self?.showPopover(nil)
+        // Only open popover on first launch if onboarding not yet completed
+        if !UserDefaults.standard.bool(forKey: "hasCompletedOnboarding") {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                self?.showPopover(nil)
+            }
         }
 
         // Initialize Sparkle 2 Updater Controller
@@ -3782,22 +3776,50 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func refreshButton() {
         guard let button = statusItem.button else { return }
 
+        let isReceiving = monitor.receiving
+        let isCalibrated = monitor.calibrated
+        let isSlouching = monitor.slouching
+        let hasUpdate = InAppUpdater.shared.hasUpdatePending
+        let degInt = Int(monitor.effectiveDeg.rounded())
+        let nodBucket = Int((monitor.nodDeg / 3.0).rounded())
+        let sideBucket = Int((monitor.sideDeg / 3.0).rounded())
+
         let color = interpolatePostureColor(
             effectiveDeg: monitor.effectiveDeg,
             thresholdDeg: monitor.thresholdDeg,
-            isSlouching: monitor.slouching,
-            isCalibrated: monitor.calibrated,
-            isReceiving: monitor.receiving
+            isSlouching: isSlouching,
+            isCalibrated: isCalibrated,
+            isReceiving: isReceiving
         )
 
-        let hasUpdate = SparkleUpdaterViewModel.shared.hasUpdatePending
+        // Only redraw icon & title if a visible attribute actually changed!
+        let stateChanged = (isReceiving != lastRenderedReceiving) ||
+                           (isCalibrated != lastRenderedCalibrated) ||
+                           (isSlouching != lastRenderedSlouching) ||
+                           (hasUpdate != lastRenderedUpdate) ||
+                           (degInt != lastRenderedDeg) ||
+                           (nodBucket != lastNodBucket) ||
+                           (sideBucket != lastSideBucket) ||
+                           (color != lastRenderedColor)
+
+        guard stateChanged else { return }
+
+        lastRenderedReceiving = isReceiving
+        lastRenderedCalibrated = isCalibrated
+        lastRenderedSlouching = isSlouching
+        lastRenderedUpdate = hasUpdate
+        lastRenderedDeg = degInt
+        lastNodBucket = nodBucket
+        lastSideBucket = sideBucket
+        lastRenderedColor = color
+
         let spineIcon = createSpineMenuIcon(
             effectiveDeg: monitor.effectiveDeg,
             nodDeg: monitor.nodDeg,
             sideDeg: monitor.sideDeg,
-            isSlouching: monitor.slouching,
-            isReceiving: monitor.receiving,
-            isCalibrated: monitor.calibrated,
+            isSlouching: isSlouching,
+            isReceiving: isReceiving,
+            isCalibrated: isCalibrated,
             hasUpdatePending: hasUpdate,
             color: color
         )
@@ -3806,9 +3828,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         button.image = spineIcon
         button.toolTip = hasUpdate ? "FixMySpine - ⚡ Update Available! (Click to Install)" : "FixMySpine - AirPods Posture Monitor"
 
-        if monitor.receiving && monitor.calibrated {
+        if isReceiving && isCalibrated {
             button.imagePosition = .imageLeading
-            let degInt = Int(monitor.effectiveDeg.rounded())
             let formattedStr: String = degInt < 10 ? "\(degInt)°\u{2007}" : "\(degInt)°"
             button.attributedTitle = NSAttributedString(
                 string: formattedStr,
