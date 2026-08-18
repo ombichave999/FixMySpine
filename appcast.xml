@@ -9,15 +9,15 @@
       <title>FixMySpine v4.4.0</title>
       <description><![CDATA[
         <h2>FixMySpine v4.4.0 Release Notes</h2>
-        <p>FixMySpine 4.4.0: Updated header tagline to 'Realign. Redefine.' and refined UI.</p>
+        <p>FixMySpine 4.4.0: Clean audited production release with zero dead code, 100% local processing, and Sparkle 2 updates.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 12:27:20 +0530</pubDate>
+      <pubDate>Tue, 18 Aug 2026 12:38:39 +0530</pubDate>
       <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v4.4.0/FixMySpine.dmg"
                  sparkle:version="4.4.0"
                  sparkle:shortVersionString="4.4.0"
-                 length="2679160"
+                 length="2661236"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="ewWGFtf4k0I3j2FzakzNQLvDKYOlQq85+yb10QojOgvyzHM3mBXrbexC2KFrt0ZM/7CN2NclMrcgOV+NZCMvAQ==" />
+                 sparkle:edSignature="xgFnpdAn7qZKy1SEeXKSNpM9gNKz6FY2NGYZQLBUHm9Y70adHPHSTHUkcoiPzKyr7e3Yy6q7m6P8fh8Xv44nCQ==" />
     </item>
   </channel>
 </rss>

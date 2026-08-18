@@ -1,6 +1,23 @@
+# macOS System Files
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Build Artifacts & Intermediate Cache
+build/
 .module-cache/
+*.o
+*.dylib
+*.dSYM/
+*.app/
+*.dmg
+*.pkg
+
+# Logs & Scratch Directories
+*.log
 debug.log
-build/stage/
-build/intermediate/
 scratch/
+tmp_dmg_folder/

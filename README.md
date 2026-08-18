@@ -3,7 +3,7 @@
 # FixMySpine 🧘‍♂️
 ### AirPods Posture Intelligence for macOS
 
-[![Version](https://img.shields.io/badge/version-2.2--beta-blue.svg)](https://github.com/ombichave999/FixMySpine/releases)
+[![Version](https://img.shields.io/badge/version-4.4.0-emerald.svg)](https://github.com/ombichave999/FixMySpine/releases)
 [![macOS](https://img.shields.io/badge/macOS-14.0%2B-black.svg?logo=apple)](https://developer.apple.com/macos/)
 [![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg?logo=swift)](https://swift.org)
 [![Privacy](https://img.shields.io/badge/privacy-100%25%20Local-emerald.svg)](https://github.com/ombichave999/FixMySpine#privacy--security)
@@ -21,9 +21,9 @@
 
 ---
 
-> [!NOTE]
-> **Beta Release Status (v2.2-beta)**  
-> FixMySpine is currently in **active public beta**. Core tracking, calibration, voice reminders, sensitivity adjustments, and weekly analytics are functional. Updates are actively being pushed to refine tracking precision and feature depth.
+> [!TIP]
+> **Production Release (v4.4.0)**  
+> FixMySpine is production-ready for macOS Sonoma & Sequoia. Features real-time 60fps AirPods spine tracking, Watch Sync haptic alerts, 100% on-device local processing, and Sparkle 2 cryptographic auto-updates.
 
 ---
 

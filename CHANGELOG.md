@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.4.0] - 2026-08-18
+
+### Added
+- **Sparkle 2 Cryptographic Auto-Update Engine**: Integrated dual-check update system with 0-second cache delay and Ed25519 signing.
+- **Smartwatch & Wearable BLE Sync**: Bluetooth Low Energy telemetry supporting Apple Watch, Garmin, Polar, and WHOOP with live heart rate, battery monitoring, and haptic feedback.
+- **Neural Voice Synthesis Engine**: Natural `.premium`/`.enhanced` macOS voice selector for posture alignment reminders.
+- **Persistent Menu Bar Autosave**: Added `autosaveName` and command-drag reordering support to prevent menu bar clipping.
+- **Compact Settings Panel**: Collapsible Watch Sync section, side-by-side reminders, and consolidated Help & About card.
+
+### Changed
+- Refined tagline to *"Realign. Redefine."* on the primary dashboard.
+- Upgraded spine physics to 60 FPS instantaneous spring response (`.spring(response: 0.28, dampingFraction: 0.78)`).
+- Standardized terminology to "Forward Lean" and "Backward Lean".
+- Optimized memory footprint (~18 MB RAM) and background CPU usage (0.0%).
+
+---
+
 ## [2.2-beta] - 2026-07-26
 
 ### Added
