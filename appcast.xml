@@ -6,18 +6,18 @@
     <description>Most recent updates to FixMySpine</description>
     <language>en</language>
     <item>
-      <title>FixMySpine v5.0.3</title>
+      <title>FixMySpine v5.0.4</title>
       <description><![CDATA[
-        <h2>FixMySpine v5.0.3 Release Notes</h2>
-        <p>FixMySpine 5.0.3: Restored instantaneous zero-delay motion processing and ultra-smooth spine gauge response.</p>
+        <h2>FixMySpine v5.0.4 Release Notes</h2>
+        <p>FixMySpine 5.0.4: Fixed popover opening stall and angle freeze by caching speech voice search and eliminating layout fittingSize pass.</p>
       ]]></description>
-      <pubDate>Tue, 18 Aug 2026 16:01:22 +0530</pubDate>
-      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v5.0.3/FixMySpine.dmg"
-                 sparkle:version="5.0.3"
-                 sparkle:shortVersionString="5.0.3"
-                 length="2662067"
+      <pubDate>Tue, 18 Aug 2026 16:10:45 +0530</pubDate>
+      <enclosure url="https://github.com/ombichave999/FixMySpine-Releases/releases/download/v5.0.4/FixMySpine.dmg"
+                 sparkle:version="5.0.4"
+                 sparkle:shortVersionString="5.0.4"
+                 length="2662181"
                  type="application/x-apple-diskimage"
-                 sparkle:edSignature="OlnHTlCGsEx3MVnS87vKS994Az4mAs1rHlrD9txJv6CaIxreQoJcuJ/JA3hZSflHxy3hdkByJwsBorQiq2ZWAA==" />
+                 sparkle:edSignature="+nZya45L8C+cJM/UUPaU33Gn0Mv1Y2DL0rS6+i6MuOj00asQw7Z9W12SDw9//MZde2q6rtGjY6OQB9Ftq40PAw==" />
     </item>
   </channel>
 </rss>

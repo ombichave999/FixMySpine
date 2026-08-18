@@ -22,7 +22,7 @@ final class SparkleUpdaterViewModel: NSObject, ObservableObject {
 
 enum AppInfo {
     static var version: String {
-        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "5.0.3"
+        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "5.0.4"
     }
     static let apiLatestURL = "https://api.github.com/repos/ombichave999/FixMySpine-Releases/releases/latest"
     static let appcastURL = "https://raw.githubusercontent.com/ombichave999/FixMySpine-Releases/main/appcast.xml"
@@ -147,7 +147,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                let tagName = json["tag_name"] as? String {
 
                 let latestVersion = tagName.trimmingCharacters(in: CharacterSet(charactersIn: "vV"))
-                let title = json["name"] as? String ?? "5.0.3"
+                let title = json["name"] as? String ?? "5.0.4"
                 var dmgURLString: String? = nil
 
                 if let assets = json["assets"] as? [[String: Any]] {
@@ -208,7 +208,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
                 DispatchQueue.main.async {
                     if let latest = parser.latestVersion, self.isNewer(latest, than: AppInfo.version) {
                         self.updateAvailable = latest
-                        self.releaseNotes = parser.releaseTitle ?? "5.0.3"
+                        self.releaseNotes = parser.releaseTitle ?? "5.0.4"
                         if let s = parser.downloadURL, let u = URL(string: s) {
                             self.downloadURL = u
                         } else {
@@ -236,7 +236,7 @@ final class InAppUpdater: NSObject, ObservableObject, URLSessionDownloadDelegate
     }
 
     func startDownloadAndInstall() {
-        let ver = updateAvailable ?? "5.0.3"
+        let ver = updateAvailable ?? "5.0.4"
         let fallbackURL = "https://github.com/ombichave999/FixMySpine-Releases/releases/download/v\(ver)/FixMySpine.dmg"
         guard let url = downloadURL ?? URL(string: fallbackURL) else { return }
         isDownloading = true
@@ -366,7 +366,7 @@ struct InAppUpdateModal: View {
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
 
-                    Text(updater.releaseNotes ?? "5.0.3")
+                    Text(updater.releaseNotes ?? "5.0.4")
                         .font(.system(size: 10.5, weight: .regular))
                         .foregroundStyle(.white.opacity(0.75))
                         .multilineTextAlignment(.center)
@@ -1473,7 +1473,7 @@ final class WatchBLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDel
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         isConnected = false
         isScanning = false
-        let msg = "Failed to connect to \(peripheral.name ?? "5.0.3"): \(error?.localizedDescription ?? "5.0.3")"
+        let msg = "Failed to connect to \(peripheral.name ?? "5.0.4"): \(error?.localizedDescription ?? "5.0.4")"
         errorMessage = msg
         PostureMonitor.shared.watchError = msg
         PostureMonitor.shared.watchConnected = false
@@ -1900,9 +1900,8 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         speak(reminder)
     }
 
-    private static func bestVoice() -> AVSpeechSynthesisVoice? {
+    private static let cachedVoice: AVSpeechSynthesisVoice? = {
         let voices = AVSpeechSynthesisVoice.speechVoices()
-        // Prioritize natural premium or enhanced voices (Samantha Premium, Zoe, Daniel Premium, Siri)
         if let premium = voices.first(where: { $0.language.starts(with: "en") && $0.quality == .premium }) {
             return premium
         }
@@ -1911,6 +1910,10 @@ final class PostureMonitor: NSObject, ObservableObject, CMHeadphoneMotionManager
         }
         return AVSpeechSynthesisVoice(identifier: "com.apple.speech.synthesis.voice.samantha")
             ?? AVSpeechSynthesisVoice(language: "en-US")
+    }()
+
+    private static func bestVoice() -> AVSpeechSynthesisVoice? {
+        return cachedVoice
     }
 
     private func speak(_ text: String) {
@@ -3111,7 +3114,7 @@ struct PostureView: View {
                                     .font(.system(size: 9.5, weight: .bold))
                                     .foregroundStyle(.white)
                             }
-                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "5.0.3")")
+                            Text("Update \(updater.updateAvailable.map { "v\($0)" } ?? "5.0.4")")
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(.white)
                             Spacer()
@@ -3924,12 +3927,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             showStandaloneWindow()
             return
         }
-        if let host = popover.contentViewController as? NSHostingController<PostureView> {
-            popover.contentSize = host.view.fittingSize
-        }
+        popover.contentSize = NSSize(width: 310, height: 560)
         if !popover.isShown {
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         }
+        monitor.objectWillChange.send()
     }
 
     private func showStandaloneWindow() {
@@ -3951,6 +3953,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         standaloneWindow?.center()
         standaloneWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+        monitor.objectWillChange.send()
     }
 
     @objc private func togglePopover(_ sender: AnyObject?) {
