@@ -3360,51 +3360,44 @@ struct AppleWatchSettingsCard: View {
     @State private var testSuccess = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                HStack(spacing: 6) {
-                    Image(systemName: "applewatch")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(monitor.accentColor)
-                    Text("APPLE WATCH HAPTIC SYNC")
-                        .font(.system(size: 8.5, weight: .bold))
-                        .foregroundStyle(.secondary.opacity(0.85))
-                        .tracking(0.6)
-                }
+        VStack(alignment: .leading, spacing: 8) {
+            // Compact Header with Main Toggle
+            HStack(spacing: 8) {
+                Image(systemName: "applewatch")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(monitor.appleWatchEnabled ? monitor.accentColor : .secondary)
+                    .frame(width: 14)
+
+                Text("Apple Watch Sync")
+                    .font(.system(size: 11.5, weight: .semibold))
 
                 Spacer()
 
-                HStack(spacing: 4) {
-                    Circle()
-                        .fill(monitor.appleWatchEnabled ? Color.appleGreen : Color.secondary.opacity(0.5))
-                        .frame(width: 5, height: 5)
-                    Text(monitor.appleWatchEnabled ? "Connected" : "Off")
-                        .font(.system(size: 8, weight: .bold))
-                        .foregroundStyle(monitor.appleWatchEnabled ? Color.appleGreen : Color.secondary)
-                }
-                .padding(.horizontal, 6)
-                .padding(.vertical, 2.5)
-                .background(monitor.appleWatchEnabled ? Color.appleGreen.opacity(0.14) : Color.black.opacity(0.14))
-                .clipShape(Capsule())
+                Toggle("", isOn: $monitor.appleWatchEnabled.animation(.spring(response: 0.28, dampingFraction: 0.78)))
+                    .toggleStyle(.switch)
+                    .controlSize(.mini)
+                    .tint(monitor.accentColor)
+                    .labelsHidden()
             }
 
-            VStack(spacing: 0) {
-                ToggleRow(icon: "applewatch.side.right", label: "Wrist Haptic Alerts", isOn: $monitor.appleWatchEnabled)
-                Divider().opacity(0.20).padding(.horizontal, 14)
-                ToggleRow(icon: "waveform.path.ecg", label: "Vibrate on Bad Posture", isOn: $monitor.vibrateOnSlouch)
-            }
-            .glassPill(12)
-
+            // Only reveal sub-settings when enabled!
             if monitor.appleWatchEnabled {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("HAPTIC INTENSITY")
-                        .font(.system(size: 8, weight: .semibold))
-                        .foregroundStyle(.secondary.opacity(0.7))
+                VStack(spacing: 8) {
+                    Divider().opacity(0.18)
 
-                    SegPicker(value: Binding(
-                        get: { Double(monitor.hapticIntensity) },
-                        set: { monitor.hapticIntensity = Int($0) }
-                    ), options: [("Gentle", 0), ("Medium", 1), ("Strong", 2)])
+                    ToggleRow(icon: "waveform.path.ecg", label: "Vibrate on Bad Posture", isOn: $monitor.vibrateOnSlouch)
+
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("HAPTIC INTENSITY")
+                            .font(.system(size: 8, weight: .semibold))
+                            .foregroundStyle(.secondary.opacity(0.7))
+                            .tracking(0.5)
+
+                        SegPicker(value: Binding(
+                            get: { Double(monitor.hapticIntensity) },
+                            set: { monitor.hapticIntensity = Int($0) }
+                        ), options: [("Gentle", 0), ("Medium", 1), ("Strong", 2)])
+                    }
 
                     Button {
                         withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
@@ -3423,70 +3416,57 @@ struct AppleWatchSettingsCard: View {
                     } label: {
                         HStack(spacing: 5) {
                             Image(systemName: testSuccess ? "checkmark.circle.fill" : "hand.tap.fill")
-                                .font(.system(size: 10, weight: .semibold))
+                                .font(.system(size: 9.5, weight: .semibold))
                             Text(testSuccess ? "Wrist Haptic Sent!" : (isTestingHaptic ? "Sending Wrist Tap…" : "Test Watch Vibration"))
-                                .font(.system(size: 9.5, weight: .bold))
+                                .font(.system(size: 9.5, weight: .semibold))
                         }
-                        .foregroundStyle(testSuccess ? Color.appleGreen : Color.white)
+                        .foregroundStyle(testSuccess ? Color.appleGreen : Color.primary.opacity(0.9))
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 6)
-                        .background(
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .fill(monitor.accentColor.opacity(0.20))
-                                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .strokeBorder(Color.white.opacity(0.18), lineWidth: 0.5)
-                            }
-                        )
+                        .padding(.vertical, 5)
+                        .glassPill(8)
                     }
                     .buttonStyle(.plain)
-                    .padding(.top, 2)
                 }
+                .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
-        .padding(12)
-        .glassPill(16)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+        .glassPill(14)
     }
 }
 
     private var settingsPanel: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            // Reminders & Notifications Section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("REMINDERS & NOTIFICATIONS")
+        VStack(alignment: .leading, spacing: 10) {
+            // 1. Reminders & Alerts (Side-by-Side Compact Row)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("REMINDERS & ALERTS")
                     .font(.system(size: 8.5, weight: .semibold))
                     .foregroundStyle(.secondary.opacity(0.58))
                     .tracking(0.6)
 
-                VStack(spacing: 0) {
-                    ToggleRow(icon: "speaker.wave.2.fill", label: "Voice reminders", isOn: $monitor.voiceEnabled)
-                    Divider().opacity(0.20).padding(.horizontal, 14)
-                    ToggleRow(icon: "bell.badge.fill", label: "Notifications", isOn: $monitor.notificationsEnabled)
+                HStack(spacing: 7) {
+                    CompactToggleTile(icon: "speaker.wave.2.fill", label: "Voice", isOn: $monitor.voiceEnabled)
+                    CompactToggleTile(icon: "bell.badge.fill", label: "Notifications", isOn: $monitor.notificationsEnabled)
                 }
-                .glassPill(16)
             }
 
-            // Dedicated Apple Watch Haptic Section
-            AppleWatchSettingsCard()
+            // 2. Dedicated Apple Watch Haptic Section (Collapsible when Off)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("APPLE WATCH HAPTICS")
+                    .font(.system(size: 8.5, weight: .semibold))
+                    .foregroundStyle(.secondary.opacity(0.58))
+                    .tracking(0.6)
 
-            // Accent Color Section (Native HSB Sliders & Advanced Color Picker)
+                AppleWatchSettingsCard()
+            }
+
+            // 3. Accent Color Customization Card
             NativeColorCustomizationCard()
 
-            // Report Issue Section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("HELP & FEEDBACK")
-                    .font(.system(size: 8.5, weight: .semibold))
-                    .foregroundStyle(.secondary.opacity(0.58))
-                    .tracking(0.6)
-
-                ReportIssueCard(accentColor: monitor.accentColor) {
-                    reportIssue()
-                }
-            }
-
-            // About & Updates Section
-            VStack(alignment: .leading, spacing: 6) {
-                Text("ABOUT & UPDATES")
+            // 4. Consolidated Help, About & Updates (Single Ultra-Compact Card)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("HELP & ABOUT")
                     .font(.system(size: 8.5, weight: .semibold))
                     .foregroundStyle(.secondary.opacity(0.58))
                     .tracking(0.6)
@@ -3494,58 +3474,59 @@ struct AppleWatchSettingsCard: View {
                 VStack(spacing: 8) {
                     HStack {
                         VStack(alignment: .leading, spacing: 1) {
-                            Text("FixMySpine")
-                                .font(.system(size: 12, weight: .bold))
+                            Text("FixMySpine v\(AppInfo.version)")
+                                .font(.system(size: 11, weight: .bold))
                                 .foregroundStyle(Color.primary)
-                            Text("Version \(AppInfo.version)")
-                                .font(.system(size: 9.5, weight: .medium))
-                                .foregroundStyle(.secondary)
+                            Text("100% On-Device & Private")
+                                .font(.system(size: 8.5, weight: .medium))
+                                .foregroundStyle(Color.appleGreen)
                         }
 
                         Spacer()
-
-                        VStack(alignment: .trailing, spacing: 1) {
-                            Text("Privacy")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundStyle(monitor.accentColor)
-                            Text("100% Local Processing")
-                                .font(.system(size: 9.5, weight: .medium))
-                                .foregroundStyle(Color.appleGreen)
-                        }
                     }
 
                     Divider().opacity(0.18)
 
-                    Button {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                            updater.check(silentIfLatest: false)
+                    HStack(spacing: 6) {
+                        Button {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                updater.check(silentIfLatest: false)
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .font(.system(size: 9, weight: .bold))
+                                Text("Check Updates")
+                                    .font(.system(size: 9.5, weight: .semibold))
+                            }
+                            .foregroundStyle(Color.primary.opacity(0.90))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 5)
+                            .glassPill(8)
                         }
-                    } label: {
-                        HStack(spacing: 5) {
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                                .font(.system(size: 10, weight: .bold))
-                            Text("Check for Updates…")
-                                .font(.system(size: 10.5, weight: .semibold))
-                        }
-                        .foregroundStyle(Color.primary.opacity(0.85))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 5.5)
-                        .glassPill(8)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .glassPill(16)
-            }
+                        .buttonStyle(.plain)
 
-            // Done Button
-            InteractiveDoneButton(accentColor: monitor.accentColor) {
-                withAnimation(.spring(response: 0.28, dampingFraction: 0.78)) {
-                    currentTab = .monitor
+                        Button {
+                            reportIssue()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "envelope.fill")
+                                    .font(.system(size: 9, weight: .semibold))
+                                Text("Report Issue")
+                                    .font(.system(size: 9.5, weight: .semibold))
+                            }
+                            .foregroundStyle(Color.primary.opacity(0.90))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 5)
+                            .glassPill(8)
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 9)
+                .glassPill(14)
             }
-            .padding(.top, 2)
         }
     }
 
@@ -3610,6 +3591,35 @@ struct AppleWatchSettingsCard: View {
         .frame(maxWidth: .infinity)
         .glassPill(12)
     }
+
+struct CompactToggleTile: View {
+    let icon: String
+    let label: String
+    @Binding var isOn: Bool
+    @ObservedObject private var monitor = PostureMonitor.shared
+
+    var body: some View {
+        HStack(spacing: 7) {
+            Image(systemName: icon)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(isOn ? monitor.accentColor : .secondary)
+                .frame(width: 14)
+            Text(label)
+                .font(.system(size: 10.5, weight: .medium))
+                .lineLimit(1)
+            Spacer(minLength: 2)
+            Toggle("", isOn: $isOn)
+                .toggleStyle(.switch)
+                .controlSize(.mini)
+                .tint(monitor.accentColor)
+                .labelsHidden()
+        }
+        .padding(.horizontal, 9)
+        .padding(.vertical, 7.5)
+        .frame(maxWidth: .infinity)
+        .glassPill(12)
+    }
+}
 
 struct ToggleRow: View {
     let icon: String
