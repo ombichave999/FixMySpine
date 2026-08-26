@@ -98,6 +98,34 @@ This generates `FixMySpine.dmg` in the repository root.
 
 ---
 
+## 📁 Project Structure
+
+```
+FixMySpine/
+├── Sources/                  # Swift 6.0 macOS application source code
+│   ├── main.swift            # Core entrypoint, UI, CoreMotion & Sparkle logic
+│   └── WatchCompanionBlueprint.swift # Apple Watch & WatchConnectivity blueprint
+├── Frameworks/               # Embedded native frameworks (Sparkle 2)
+├── Sparkle-Tools/            # Ed25519 cryptographic signing binaries
+├── docs/                     # Architecture documentation & design specs
+│   ├── IMPLEMENTATION_PLAN.md# Feature roadmap & implementation roadmap
+│   ├── PROJECT_ABSTRACT.md   # Academic project abstract & system workflow
+│   └── assets/               # Brand & mock imagery assets
+├── website/                  # Full-stack marketing & telemetry infrastructure
+│   ├── frontend/             # High-performance landing page (Vanilla JS/CSS)
+│   └── backend/              # Node/Express telemetry & subscriber API
+├── build.sh                  # macOS compiler & ad-hoc bundle generator
+├── make_dmg.sh               # Standalone .dmg installer packaging script
+├── build_main.sh             # Production release & Ed25519 signing workflow
+├── build_beta.sh             # Beta channel release workflow
+├── Info.plist                # App bundle metadata & permission descriptors
+├── AppIcon.png               # High-resolution primary icon asset
+├── appcast.xml               # Production Sparkle 2 RSS update feed
+└── appcast-beta.xml          # Beta Sparkle 2 RSS update feed
+```
+
+---
+
 ## 🔒 Privacy & Security
 
 FixMySpine is built with privacy as a foundational constraint:

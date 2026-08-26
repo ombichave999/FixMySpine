@@ -21,3 +21,13 @@ build/
 debug.log
 scratch/
 tmp_dmg_folder/
+.vercel
+
+# Node & Web
+node_modules/
+.env
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,19 @@
+{
+  "name": "fixmyspine-website-monorepo",
+  "version": "5.0.4",
+  "description": "FixMySpine Full-Stack Website (Frontend & Backend)",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "cd backend && npm install",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [
+    "fixmyspine",
+    "website",
+    "frontend",
+    "backend"
+  ],
+  "author": "FixMySpine Team",
+  "license": "MIT"
+}
