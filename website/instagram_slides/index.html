@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FixMySpine — Instagram Carousel (Redesigned)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800;850;900&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="slides.css" />
+</head>
+<body>
+
+  <!-- ================= SLIDE 1: HOOK / HARDWARE DISCOVERY ================= -->
+  <div class="slide" id="slide-1">
+    <div class="slide-spine-datum"></div>
+    <div class="slide-header">
+      <div class="slide-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FixMySpine</span>
+      </div>
+      <div class="slide-pill">● NATIVE MACOS UTILITY</div>
+    </div>
+
+    <div class="slide-body s1-body">
+      <div class="s1-content-col">
+        <div class="eyebrow-tag">[ 01 / SENSOR ] AIRPODS COREMOTION</div>
+        <h1 class="slide-title s1-title">
+          Your AirPods<br />
+          have a 60Hz<br />
+          gyroscope <span class="serif-italic">inside.</span>
+        </h1>
+        <p class="slide-lead s1-lead">
+          Most people use them for music. FixMySpine turns that motion stream into a silent posture coach for your Mac.
+        </p>
+
+        <div class="s1-hardware-tags">
+          <div class="hw-chip"><span class="chip-dot"></span> 3-AXIS GYROSCOPE</div>
+          <div class="hw-chip"><span class="chip-dot"></span> 60Hz SAMPLING RATE</div>
+          <div class="hw-chip"><span class="chip-dot"></span> ±0.4° PRECISION</div>
+        </div>
+      </div>
+
+      <div class="s1-visual-col">
+        <div class="s1-spatial-stage">
+          <svg class="s1-telemetry-vector" viewBox="0 0 360 420" fill="none">
+            <!-- Spatial Radar Grid -->
+            <circle cx="180" cy="210" r="140" stroke="rgba(0,0,0,0.06)" stroke-width="1" stroke-dasharray="4 6" />
+            <circle cx="180" cy="210" r="90" stroke="rgba(0,0,0,0.08)" stroke-width="1" />
+            <!-- Pitch Axis Arc -->
+            <path d="M 90 210 A 90 90 0 0 1 270 210" stroke="#00d053" stroke-width="2.5" stroke-linecap="round" />
+            <!-- Coordinate Crosshairs -->
+            <line x1="180" y1="40" x2="180" y2="380" stroke="rgba(0,0,0,0.08)" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="20" y1="210" x2="340" y2="210" stroke="rgba(0,0,0,0.08)" stroke-width="1" stroke-dasharray="3 3" />
+            <!-- Pitch Angle Indicator -->
+            <line x1="180" y1="210" x2="245" y2="145" stroke="#00d053" stroke-width="2" stroke-linecap="round" />
+            <circle cx="245" cy="145" r="5" fill="#00d053" />
+          </svg>
+
+          <!-- Studio AirPod Pro Asset -->
+          <div class="s1-pod-wrap">
+            <img src="../frontend/assets/img/airpod-pro-right.png" alt="Apple AirPods Pro Sensor" class="s1-pod-img" onerror="this.src='../frontend/assets/img/airpod-1.png'" />
+          </div>
+
+          <!-- Coordinate Data Tag -->
+          <div class="s1-floating-datum">
+            <span class="dt-axis">PITCH θ</span>
+            <span class="dt-deg">+0.4°</span>
+            <span class="dt-status">ALIGNED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div class="foot-meta">100% OFFLINE · ZERO CAMERAS</div>
+      <div class="swipe-hint">SWIPE NEXT <span class="arrow">→</span></div>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE 2: THE BIOMECHANICAL CURVE ================= -->
+  <div class="slide" id="slide-2">
+    <div class="slide-spine-datum"></div>
+    <div class="slide-header">
+      <div class="slide-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FixMySpine</span>
+      </div>
+      <div class="slide-pill pill-subtle">02 / BIOMECHANICS</div>
+    </div>
+
+    <div class="slide-body s2-body">
+      <div class="eyebrow-tag">[ 02 / CERVICAL LOAD ] THE GRAVITY MULTIPLIER</div>
+      <h2 class="slide-title s2-title">
+        A 15° forward tilt<br />
+        <span class="serif-italic">doubles</span> the weight<br />
+        on your spine.
+      </h2>
+      <p class="slide-lead s2-lead">
+        At 0° neutral, your neck supports 10–12 lbs. At 30° laptop slump, that jumps to 40 lbs of continuous muscle strain.
+      </p>
+
+      <!-- The Real Biomechanical Curve Visualization -->
+      <div class="s2-chart-container">
+        <div class="s2-chart-header">
+          <span class="ch-label">CERVICAL SPINE LOAD vs. HEAD ANGLE</span>
+          <span class="ch-unit">FORCE (LBS)</span>
+        </div>
+
+        <div class="s2-graph-area">
+          <svg class="s2-curve-svg" viewBox="0 0 912 280" fill="none">
+            <!-- Grid Lines -->
+            <line x1="60" y1="240" x2="880" y2="240" stroke="rgba(0,0,0,0.1)" stroke-width="1.5" />
+            <line x1="60" y1="170" x2="880" y2="170" stroke="rgba(0,0,0,0.06)" stroke-width="1" stroke-dasharray="4 4" />
+            <line x1="60" y1="100" x2="880" y2="100" stroke="rgba(0,0,0,0.06)" stroke-width="1" stroke-dasharray="4 4" />
+            <line x1="60" y1="30" x2="880" y2="30" stroke="rgba(0,0,0,0.06)" stroke-width="1" stroke-dasharray="4 4" />
+
+            <!-- Exponential Curve Area Gradient -->
+            <defs>
+              <linearGradient id="curveGradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00d053" stop-opacity="0.25" />
+                <stop offset="35%" stop-color="#ffcc00" stop-opacity="0.25" />
+                <stop offset="70%" stop-color="#ff9500" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#ff3b30" stop-opacity="0.3" />
+              </linearGradient>
+              <linearGradient id="strokeGradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00d053" />
+                <stop offset="35%" stop-color="#ffcc00" />
+                <stop offset="70%" stop-color="#ff9500" />
+                <stop offset="100%" stop-color="#ff3b30" />
+              </linearGradient>
+            </defs>
+
+            <!-- Shaded Area Under Curve -->
+            <path d="M 100 215 C 260 205, 420 160, 600 100 C 700 65, 780 40, 840 28 L 840 240 L 100 240 Z" fill="url(#curveGradient)" />
+
+            <!-- The Load Curve Stroke -->
+            <path d="M 100 215 C 260 205, 420 160, 600 100 C 700 65, 780 40, 840 28" stroke="url(#strokeGradient)" stroke-width="4" stroke-linecap="round" />
+
+            <!-- Point 1: 0° Neutral (12 lbs) -->
+            <circle cx="100" cy="215" r="7" fill="#00d053" stroke="#ffffff" stroke-width="3" />
+            
+            <!-- Point 2: 15° Slight Tilt (27 lbs) -->
+            <circle cx="360" cy="180" r="7" fill="#ffcc00" stroke="#ffffff" stroke-width="3" />
+
+            <!-- Point 3: 30° Coding Slump (40 lbs) -->
+            <circle cx="600" cy="100" r="7" fill="#ff9500" stroke="#ffffff" stroke-width="3" />
+
+            <!-- Point 4: 45° Deep Slouch (49 lbs) -->
+            <circle cx="840" cy="28" r="7" fill="#ff3b30" stroke="#ffffff" stroke-width="3" />
+          </svg>
+
+          <!-- 4 Data Column Badges -->
+          <div class="s2-data-columns">
+            <div class="s2-col col-0">
+              <span class="sc-ang">0° NEUTRAL</span>
+              <span class="sc-lbs text-green">12 lbs</span>
+              <span class="sc-desc">Normal cervical load</span>
+            </div>
+            <div class="s2-col col-15">
+              <span class="sc-ang">15° TILT</span>
+              <span class="sc-lbs text-yellow">27 lbs</span>
+              <span class="sc-desc">2.25x spinal pressure</span>
+            </div>
+            <div class="s2-col col-30">
+              <span class="sc-ang">30° SLUMP</span>
+              <span class="sc-lbs text-orange">40 lbs</span>
+              <span class="sc-desc">Continuous muscle strain</span>
+            </div>
+            <div class="s2-col col-45">
+              <span class="sc-ang">45° SLOUCH</span>
+              <span class="sc-lbs text-red">49 lbs</span>
+              <span class="sc-desc">Severe disc compression</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="s2-insight-strip">
+          <span class="strip-icon">ℹ</span>
+          <span>FixMySpine catches the micro-tilt at <strong>8°</strong> before muscle fatigue becomes permanent back pain.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div class="foot-meta">GRAVITATIONAL LOAD AT 60HZ</div>
+      <div class="swipe-hint">02 / 05 <span class="arrow">→</span></div>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE 3: THE MECHANISM ================= -->
+  <div class="slide" id="slide-3">
+    <div class="slide-spine-datum"></div>
+    <div class="slide-header">
+      <div class="slide-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FixMySpine</span>
+      </div>
+      <div class="slide-pill pill-subtle">03 / ARCHITECTURE</div>
+    </div>
+
+    <div class="slide-body s3-body">
+      <div class="eyebrow-tag">[ 03 / SYSTEM PIPELINE ] COREMOTION TO APPKIT</div>
+      <h2 class="slide-title s3-title">
+        Pure physics.<br />
+        Zero battery drain.<br />
+        <span class="text-green">No camera light.</span>
+      </h2>
+      <p class="slide-lead s3-lead">
+        Webcam posture tools burn laptop battery and risk privacy. FixMySpine connects to Apple's CoreMotion API directly over low-energy Bluetooth.
+      </p>
+
+      <!-- 3-Stage Engineering Flow -->
+      <div class="s3-pipeline-grid">
+        <div class="s3-pipe-card">
+          <div class="pipe-num">STAGE 01</div>
+          <div class="pipe-title">Sensor Ingestion</div>
+          <div class="pipe-code">CMHeadphoneMotionManager</div>
+          <div class="pipe-desc">Direct 60Hz IMU motion stream. Reads pitch (nod) and roll (tilt) angular velocity over BLE.</div>
+          <div class="pipe-stat">Latency &lt; 16ms</div>
+        </div>
+
+        <div class="s3-pipe-card highlight-card">
+          <div class="pipe-num">STAGE 02</div>
+          <div class="pipe-title">Biometric Filter</div>
+          <div class="pipe-code">sqrt(nod² + 0.49·side²)</div>
+          <div class="pipe-desc">Compound vector math with a 10s grace filter. Ignores natural sips of water or brief head turns.</div>
+          <div class="pipe-stat">Zero False Positives</div>
+        </div>
+
+        <div class="s3-pipe-card">
+          <div class="pipe-num">STAGE 03</div>
+          <div class="pipe-title">Local Execution</div>
+          <div class="pipe-code">AppKit / Swift 6 Sandbox</div>
+          <div class="pipe-desc">100% offline macOS processing. Zero camera permissions, zero cloud calls, &lt;0.1% CPU.</div>
+          <div class="pipe-stat">100% Private &amp; Offline</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div class="foot-meta">SWIFT 6 · COREMOTION API</div>
+      <div class="swipe-hint">03 / 05 <span class="arrow">→</span></div>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE 4: THE INTERFACE ================= -->
+  <div class="slide" id="slide-4">
+    <div class="slide-spine-datum"></div>
+    <div class="slide-header">
+      <div class="slide-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FixMySpine</span>
+      </div>
+      <div class="slide-pill pill-subtle">04 / INTERFACE</div>
+    </div>
+
+    <div class="slide-body s4-body">
+      <div class="eyebrow-tag">[ 04 / USER EXPERIENCE ] NATIVE APPKIT MENU BAR</div>
+      <h2 class="slide-title s4-title">
+        Invisible when you focus.<br />
+        <span class="serif-italic">Ambient</span> when you slump.
+      </h2>
+      <p class="slide-lead s4-lead">
+        No cartoon characters, no full-screen interruptions. Just a clean menu bar glyph and gentle in-ear audio cues.
+      </p>
+
+      <!-- macOS Dark Panel UI Mockup -->
+      <div class="s4-macos-window">
+        <!-- Native macOS Menu Bar -->
+        <div class="s4-menubar-strip">
+          <div class="s4-mb-left">
+            <span class="s4-apple-glyph"></span>
+            <span class="s4-app-label">FixMySpine</span>
+            <span class="s4-menu-item">File</span>
+            <span class="s4-menu-item">Edit</span>
+            <span class="s4-menu-item">View</span>
+          </div>
+          <div class="s4-mb-right">
+            <div class="s4-live-pill"><span class="pulse-green"></span> 0.8° ALIGNED</div>
+            <span class="s4-mb-clock">9:41 AM</span>
+          </div>
+        </div>
+
+        <!-- Dropdown Native Panel -->
+        <div class="s4-panel-content">
+          <div class="s4-panel-top">
+            <div>
+              <div class="s4-panel-title">Cervical Pitch Telemetry</div>
+              <div class="s4-panel-sub">AirPods Pro (2nd Gen) · 60Hz Active</div>
+            </div>
+            <div class="s4-calibrated-badge">● CALIBRATED</div>
+          </div>
+
+          <!-- Main Live Degree Gauge -->
+          <div class="s4-gauge-box">
+            <div class="s4-gauge-val">0.8°</div>
+            <div class="s4-gauge-label">OPTIMAL CERVICAL ALIGNMENT</div>
+            <div class="s4-gauge-bar"><div class="s4-bar-fill"></div></div>
+          </div>
+
+          <!-- 3 Stats Columns -->
+          <div class="s4-stats-row">
+            <div class="s4-stat-item">
+              <span class="s4-k">SESSION TIME</span>
+              <span class="s4-v">3h 42m</span>
+            </div>
+            <div class="s4-stat-item">
+              <span class="s4-k">GOOD STREAK</span>
+              <span class="s4-v text-green">96.4%</span>
+            </div>
+            <div class="s4-stat-item">
+              <span class="s4-k">ALERT MODE</span>
+              <span class="s4-v">Ambient Chime</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div class="foot-meta">DESIGNED FOR DEEP WORK</div>
+      <div class="swipe-hint">04 / 05 <span class="arrow">→</span></div>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE 5: THE INVITATION ================= -->
+  <div class="slide" id="slide-5">
+    <div class="slide-spine-datum"></div>
+    <div class="slide-header">
+      <div class="slide-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FixMySpine</span>
+      </div>
+      <div class="slide-pill pill-launch">● EARLY ACCESS LIVE</div>
+    </div>
+
+    <div class="slide-body s5-body">
+      <div class="eyebrow-tag">[ 05 / RELEASE ] MACOS SONOMA &amp; SEQUOIA</div>
+      <h2 class="slide-title s5-title">
+        Realign.<br />
+        <span class="serif-italic">Without thinking</span><br />
+        <span class="text-green">about it.</span>
+      </h2>
+      <p class="slide-lead s5-lead">
+        Free pre-release build available for Mac users with AirPods Pro, AirPods Max, or AirPods 3rd Gen.
+      </p>
+
+      <!-- Product Box -->
+      <div class="s5-product-card">
+        <div class="s5-icon-wrap">
+          <img src="../frontend/AppIcon.png" alt="FixMySpine Icon" class="s5-app-icon" />
+        </div>
+        <div class="s5-info">
+          <div class="s5-app-name">FixMySpine 1.0</div>
+          <div class="s5-app-spec">Native Universal Binary · Apple Silicon &amp; Intel</div>
+          <div class="s5-check-list">
+            <span class="s5-chk">✓ 100% Free Pre-Release</span>
+            <span class="s5-chk">✓ Offline Local Sandbox</span>
+            <span class="s5-chk">✓ Auto-Updates via Sparkle</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="s5-action-container">
+        <div class="s5-primary-btn">
+          <span>Get early access at <strong>fixmyspine.app</strong></span>
+          <span class="s5-btn-arrow">→</span>
+        </div>
+        <div class="s5-bio-note">🔗 Direct download link in bio <strong>@fixmyspine.app</strong></div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div class="foot-meta">BY DEVELOPERS · FOR DEVELOPERS</div>
+      <div class="swipe-hint">SAVE &amp; SHARE 🔖</div>
+    </div>
+  </div>
+
+</body>
+</html>

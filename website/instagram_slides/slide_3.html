@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FixMySpine — Instagram Carousel (Redesigned)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800;850;900&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="slides.css" />
+</head>
+<style>
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #141418;
+  display: block;
+  overflow: hidden;
+}
+.slide {
+  width: 1080px;
+  height: 1350px;
+  box-shadow: none;
+  margin: 0 auto;
+}
+
+</style>
+<body>
+<div class="slide" id="slide-3">
+    <div class="slide-spine-datum"></div>
+    <div class="slide-header">
+      <div class="slide-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FixMySpine</span>
+      </div>
+      <div class="slide-pill pill-subtle">03 / ARCHITECTURE</div>
+    </div>
+
+    <div class="slide-body s3-body">
+      <div class="eyebrow-tag">[ 03 / SYSTEM PIPELINE ] COREMOTION TO APPKIT</div>
+      <h2 class="slide-title s3-title">
+        Pure physics.<br />
+        Zero battery drain.<br />
+        <span class="text-green">No camera light.</span>
+      </h2>
+      <p class="slide-lead s3-lead">
+        Webcam posture tools burn laptop battery and risk privacy. FixMySpine connects to Apple's CoreMotion API directly over low-energy Bluetooth.
+      </p>
+
+      <!-- 3-Stage Engineering Flow -->
+      <div class="s3-pipeline-grid">
+        <div class="s3-pipe-card">
+          <div class="pipe-num">STAGE 01</div>
+          <div class="pipe-title">Sensor Ingestion</div>
+          <div class="pipe-code">CMHeadphoneMotionManager</div>
+          <div class="pipe-desc">Direct 60Hz IMU motion stream. Reads pitch (nod) and roll (tilt) angular velocity over BLE.</div>
+          <div class="pipe-stat">Latency &lt; 16ms</div>
+        </div>
+
+        <div class="s3-pipe-card highlight-card">
+          <div class="pipe-num">STAGE 02</div>
+          <div class="pipe-title">Biometric Filter</div>
+          <div class="pipe-code">sqrt(nod² + 0.49·side²)</div>
+          <div class="pipe-desc">Compound vector math with a 10s grace filter. Ignores natural sips of water or brief head turns.</div>
+          <div class="pipe-stat">Zero False Positives</div>
+        </div>
+
+        <div class="s3-pipe-card">
+          <div class="pipe-num">STAGE 03</div>
+          <div class="pipe-title">Local Execution</div>
+          <div class="pipe-code">AppKit / Swift 6 Sandbox</div>
+          <div class="pipe-desc">100% offline macOS processing. Zero camera permissions, zero cloud calls, &lt;0.1% CPU.</div>
+          <div class="pipe-stat">100% Private &amp; Offline</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div class="foot-meta">SWIFT 6 · COREMOTION API</div>
+      <div class="swipe-hint">03 / 05 <span class="arrow">→</span></div>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE 4: THE INTERFACE ================= -->
+  
+</body>
+</html>

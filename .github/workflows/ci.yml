@@ -1,0 +1,30 @@
+name: CI Build & Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-macos:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Swift Toolchain
+        run: |
+          swift --version
+          xcrun --show-sdk-version
+
+      - name: Build Application Bundle
+        run: |
+          chmod +x build.sh make_dmg.sh
+          bash build.sh 5.0.4 release
+
+      - name: Verify Binary Output
+        run: |
+          test -d build/FixMySpine.app
+          test -f build/FixMySpine.app/Contents/MacOS/FixMySpine
+          echo "✅ Build verified successfully on macOS 14 runner."

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FixMySpine — Instagram Carousel (Redesigned)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800;850;900&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="slides.css" />
+</head>
+<style>
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #141418;
+  display: block;
+  overflow: hidden;
+}
+.slide {
+  width: 1080px;
+  height: 1350px;
+  box-shadow: none;
+  margin: 0 auto;
+}
+
+</style>
+<body>
+<div class="slide" id="slide-1">
+    <div class="slide-spine-datum"></div>
+    <div class="slide-header">
+      <div class="slide-brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">FixMySpine</span>
+      </div>
+      <div class="slide-pill">● NATIVE MACOS UTILITY</div>
+    </div>
+
+    <div class="slide-body s1-body">
+      <div class="s1-content-col">
+        <div class="eyebrow-tag">[ 01 / SENSOR ] AIRPODS COREMOTION</div>
+        <h1 class="slide-title s1-title">
+          Your AirPods<br />
+          have a 60Hz<br />
+          gyroscope <span class="serif-italic">inside.</span>
+        </h1>
+        <p class="slide-lead s1-lead">
+          Most people use them for music. FixMySpine turns that motion stream into a silent posture coach for your Mac.
+        </p>
+
+        <div class="s1-hardware-tags">
+          <div class="hw-chip"><span class="chip-dot"></span> 3-AXIS GYROSCOPE</div>
+          <div class="hw-chip"><span class="chip-dot"></span> 60Hz SAMPLING RATE</div>
+          <div class="hw-chip"><span class="chip-dot"></span> ±0.4° PRECISION</div>
+        </div>
+      </div>
+
+      <div class="s1-visual-col">
+        <div class="s1-spatial-stage">
+          <svg class="s1-telemetry-vector" viewBox="0 0 360 420" fill="none">
+            <!-- Spatial Radar Grid -->
+            <circle cx="180" cy="210" r="140" stroke="rgba(0,0,0,0.06)" stroke-width="1" stroke-dasharray="4 6" />
+            <circle cx="180" cy="210" r="90" stroke="rgba(0,0,0,0.08)" stroke-width="1" />
+            <!-- Pitch Axis Arc -->
+            <path d="M 90 210 A 90 90 0 0 1 270 210" stroke="#00d053" stroke-width="2.5" stroke-linecap="round" />
+            <!-- Coordinate Crosshairs -->
+            <line x1="180" y1="40" x2="180" y2="380" stroke="rgba(0,0,0,0.08)" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="20" y1="210" x2="340" y2="210" stroke="rgba(0,0,0,0.08)" stroke-width="1" stroke-dasharray="3 3" />
+            <!-- Pitch Angle Indicator -->
+            <line x1="180" y1="210" x2="245" y2="145" stroke="#00d053" stroke-width="2" stroke-linecap="round" />
+            <circle cx="245" cy="145" r="5" fill="#00d053" />
+          </svg>
+
+          <!-- Studio AirPod Pro Asset -->
+          <div class="s1-pod-wrap">
+            <img src="../frontend/assets/img/airpod-pro-right.png" alt="Apple AirPods Pro Sensor" class="s1-pod-img" onerror="this.src='../frontend/assets/img/airpod-1.png'" />
+          </div>
+
+          <!-- Coordinate Data Tag -->
+          <div class="s1-floating-datum">
+            <span class="dt-axis">PITCH θ</span>
+            <span class="dt-deg">+0.4°</span>
+            <span class="dt-status">ALIGNED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <div class="foot-meta">100% OFFLINE · ZERO CAMERAS</div>
+      <div class="swipe-hint">SWIPE NEXT <span class="arrow">→</span></div>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE 2: THE BIOMECHANICAL CURVE ================= -->
+  
+</body>
+</html>

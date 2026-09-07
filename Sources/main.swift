@@ -3439,6 +3439,45 @@ struct AppleWatchSettingsCard: View {
 
                     HStack(spacing: 6) {
                         Button {
+                            if let url = URL(string: "https://buymeacoffee.com/fixmyspine") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("☕")
+                                    .font(.system(size: 9.5))
+                                Text("Buy Me a Coffee")
+                                    .font(.system(size: 9.5, weight: .semibold))
+                            }
+                            .foregroundStyle(Color.primary.opacity(0.90))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 5)
+                            .glassPill(8)
+                        }
+                        .buttonStyle(.plain)
+
+                        Button {
+                            if let url = URL(string: "https://github.com/ombichave999/FixMySpine") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "star.fill")
+                                    .font(.system(size: 8.5, weight: .semibold))
+                                    .foregroundStyle(.yellow)
+                                Text("GitHub")
+                                    .font(.system(size: 9.5, weight: .semibold))
+                            }
+                            .foregroundStyle(Color.primary.opacity(0.90))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 5)
+                            .glassPill(8)
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    HStack(spacing: 6) {
+                        Button {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
                                 updater.check(silentIfLatest: false)
                             }
