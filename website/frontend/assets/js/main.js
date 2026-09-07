@@ -1,318 +1,467 @@
 /**
  * FixMySpine — macOS Desktop Simulator & Posture Intelligence Engine
- * 100% Vanilla ES6 · Apple SF Pro Design & CoreMotion Simulation
+ * 100% Exact Swift calculation & interaction model matching Sources/main.swift
  */
 
 (function () {
   "use strict";
 
-  // State
+  // App State matching PostureMonitor in Swift
   const state = {
-    pitch: 2.0,
-    targetPitch: 2.0,
-    roll: 1.2,
-    targetRoll: 1.2,
-    yaw: 0.4,
-    calibratedOffset: 0.0,
-    sensitivity: "balanced", // strict (8), balanced (12), gentle (15)
-    gracePeriod: 10,
-    soundEnabled: true,
-    screenDimEnabled: false,
+    nodDeg: 3.0,          // Forward / Backward Head Pitch
+    sideDeg: -1.0,        // Left / Right Lateral Lean
+    calibrated: true,
+    monitoring: true,
+    thresholdDeg: 12.0,   // Relaxed (18), Balanced (12), Strict (8), Expert (5)
+    graceSeconds: 30,     // Instant (3), 10 sec (10), 30 sec (30)
+    currentTab: "monitor",// monitor, reports, watch, settings
     theme: localStorage.getItem("fms-theme") || "green",
     popoverOpen: true,
-    windowOpen: true,
-    windowMinimized: false,
     audioCtx: null
   };
 
-  // DOM Elements
+  // Helper
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
+  const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
 
+  // DOM Elements
   const dom = {
     // Menu Bar
-    mbClock: $("#mbClock"),
-    mbPitchVal: $("#mbPitchVal"),
     mbFixMySpine: $("#mbFixMySpine"),
-    mbExtraDot: $("#mbExtraDot"),
+    mbExtraAngle: $("#mbExtraAngle"),
+    mbOrigIcon: $("#mbOrigIcon"),
+    mbClock: $("#mbClock"),
+    mbStatusChip: $(".mb-status-chip"),
 
-    // Popover
+    // Popover Shell
     popover: $("#popover"),
-    popStateBadge: $("#popStateBadge"),
-    popStateText: $("#popStateText"),
-    popSpineSvg: $("#popSpineSvg"),
-    popPitchReadout: $("#popPitchReadout"),
-    popRollReadout: $("#popRollReadout"),
-    angleSlider: $("#angleSlider"),
-    sliderValueText: $("#sliderValueText"),
-    btnCalibrateAction: $("#btnCalibrateAction"),
-    calBtnText: $("#calBtnText"),
-    btnOpenMainWindow: $("#btnOpenMainWindow"),
-    btnTestChime: $("#btnTestChime"),
-    chimeStatusText: $("#chimeStatusText"),
-    toggleSound: $("#toggleSound"),
-    toggleScreenDim: $("#toggleScreenDim"),
-    miniChart: $("#miniChart"),
-    chartSelectedDay: $("#chartSelectedDay"),
-    chartSelectedScore: $("#chartSelectedScore"),
-    sensExplainer: $("#sensExplainer"),
+    fmsHeaderSub: $("#fmsHeaderSub"),
+    fmsBtnSettings: $("#fmsBtnSettings"),
+    fmsSettingsIcon: $("#fmsSettingsIcon"),
+    fmsBackLabel: $("#fmsBackLabel"),
+    fmsSensorPulse: $("#fmsSensorPulse"),
 
-    // Window
-    winSettings: $("#winSettings"),
-    tlClose: $("#tlClose"),
-    tlMin: $("#tlMin"),
-    tlZoom: $("#tlZoom"),
-    winPitchSummary: $("#winPitchSummary"),
-    winTelPitch: $("#winTelPitch"),
-    winTelRoll: $("#winTelRoll"),
-    winTelYaw: $("#winTelYaw"),
-    sparkPitch: $("#sparkPitch"),
-    sparkRoll: $("#sparkRoll"),
-    sparkYaw: $("#sparkYaw"),
-    quatW: $("#quatW"),
-    quatX: $("#quatX"),
-    quatY: $("#quatY"),
-    quatZ: $("#quatZ"),
-    winSearch: $("#winSearch"),
+    // Monitor Tab Elements
+    tabPaneMonitor: $("#tabPaneMonitor"),
+    tabPaneReports: $("#tabPaneReports"),
+    tabPaneWatch: $("#tabPaneWatch"),
+    tabPaneSettings: $("#tabPaneSettings"),
+    fmsHeroGauge: $("#fmsHeroGauge"),
+    fmsGaugeAura: $("#fmsGaugeAura"),
+    fmsSpineSvg: $("#fmsSpineSvg"),
+    fmsGaugeAngle: $("#fmsGaugeAngle"),
+    fmsGaugeTitle: $("#fmsGaugeTitle"),
+    fmsGreatBadge: $("#fmsGreatBadge"),
+    fmsStatPitch: $("#fmsStatPitch"),
+    fmsStatRoll: $("#fmsStatRoll"),
+    fmsStatusCard: $("#fmsStatusCard"),
+    fmsStatusText: $("#fmsStatusText"),
+    fmsBtnCalibrate: $("#fmsBtnCalibrate"),
+    fmsCalTitle: $("#fmsCalTitle"),
+
+    // Hardware Simulation Widget
+    hwPitchSlider: $("#hwPitchSlider"),
+    hwPitchVal: $("#hwPitchVal"),
+    hwRollSlider: $("#hwRollSlider"),
+    hwRollVal: $("#hwRollVal"),
+    airpods3dImg: $("#airpods3dImg"),
+    btnDeskCalibrate: $("#btnDeskCalibrate"),
+    btnTestChimeDesk: $("#btnTestChimeDesk"),
+    btnTogglePopoverDesk: $("#btnTogglePopoverDesk"),
+
+    // Footer Toolbar
+    fmsFootPause: $("#fmsFootPause"),
+    fmsPauseIcon: $("#fmsPauseIcon"),
+    fmsPauseLabel: $("#fmsPauseLabel"),
+    fmsFootWatch: $("#fmsFootWatch"),
+    fmsFootReports: $("#fmsFootReports"),
+    fmsFootQuit: $("#fmsFootQuit"),
 
     // Dock
-    dockAppSettings: $("#dockAppSettings"),
-    dockSettingsDot: $("#dockSettingsDot"),
-    dockCalibrate: $("#dockCalibrate"),
-    dockDownload: $("#dockDownload"),
-
-    // Desktop
-    deskIconSettings: $("#deskIconSettings"),
-    deskIconCalibrate: $("#deskIconCalibrate"),
-    deskIconDownload: $("#deskIconDownload"),
-
-    // Modal
-    downloadModal: $("#downloadModal"),
-    btnCloseModal: $("#btnCloseModal")
+    dockAppFixMySpine: $("#dockAppFixMySpine"),
+    dockCalibrate: $("#dockCalibrate")
   };
 
-  // ================= 1. LIVE SPINE SVG RENDERER =================
-  const VERTEBRAE_COUNT = 10;
-  
-  function initSpineSvg() {
-    if (!dom.popSpineSvg) return;
-    dom.popSpineSvg.innerHTML = `
-      <defs>
-        <linearGradient id="spineGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="var(--accent)" />
-          <stop offset="100%" stop-color="var(--accent-deep)" />
-        </linearGradient>
-      </defs>
-      <path id="spinePath" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3" stroke-dasharray="3 3" />
-      <g id="vertebraeGroup"></g>
-      <!-- Head node with AirPods icon -->
-      <g id="headNode">
-        <circle cx="80" cy="30" r="16" fill="rgba(255,255,255,0.06)" stroke="var(--accent)" stroke-width="2" />
-        <circle cx="80" cy="30" r="5" fill="var(--accent)" />
-        <!-- Earbud stems -->
-        <line x1="72" y1="30" x2="68" y2="44" stroke="var(--text-hi)" stroke-width="2.5" stroke-linecap="round" />
-        <line x1="88" y1="30" x2="92" y2="44" stroke="var(--text-hi)" stroke-width="2.5" stroke-linecap="round" />
-      </g>
-    `;
+  // ================= 1. POSTURE COLOR & TITLE CALCULATIONS (Swift parity) =================
+  function computeEffectiveDeg() {
+    return Math.sqrt(state.nodDeg * state.nodDeg + state.sideDeg * state.sideDeg);
+  }
 
-    const vGroup = $("#vertebraeGroup");
-    for (let i = 0; i < VERTEBRAE_COUNT; i++) {
-      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      rect.setAttribute("class", "vert-node");
-      rect.setAttribute("rx", "2");
-      rect.setAttribute("ry", "2");
-      rect.setAttribute("fill", "var(--accent)");
-      vGroup.appendChild(rect);
+  function getStatusColor(effectiveDeg) {
+    if (!state.calibrated) return "#8e8e93";
+    const ratio = state.thresholdDeg > 0 ? effectiveDeg / state.thresholdDeg : 0.0;
+    if (ratio <= 0.70) {
+      return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#00d053";
+    } else if (ratio <= 1.0) {
+      return "#ff9f0a"; // appleOrange
+    } else {
+      return "#ff453a"; // appleRed
     }
   }
 
-  function updateSpine(pitchAngle) {
-    const vGroup = $("#vertebraeGroup");
-    const headNode = $("#headNode");
-    const spinePath = $("#spinePath");
-    if (!vGroup || !headNode) return;
+  function getAlignmentTitle(effectiveDeg) {
+    if (!state.calibrated) return "Standby • Tap Calibrate below";
+    const isSlouching = effectiveDeg > state.thresholdDeg;
+    if (isSlouching) {
+      if (state.nodDeg < -3) {
+        return Math.abs(state.sideDeg) > 3 ? (state.sideDeg > 0 ? "Backward & Right Lean" : "Backward & Left Lean") : "Backward Lean";
+      } else if (state.nodDeg > 3) {
+        return Math.abs(state.sideDeg) > 3 ? (state.sideDeg > 0 ? "Forward & Right Lean" : "Forward & Left Lean") : "Forward Lean";
+      } else if (Math.abs(state.sideDeg) > 3) {
+        return state.sideDeg > 0 ? "Right Side Lean" : "Left Side Lean";
+      } else {
+        return "Spine Slouched";
+      }
+    }
+    if (effectiveDeg > state.thresholdDeg * 0.7) {
+      if (state.nodDeg < -3) return "Backward Lean";
+      if (state.nodDeg > 3) return "Forward Lean";
+      if (Math.abs(state.sideDeg) > 3) return state.sideDeg > 0 ? "Right Side Lean" : "Left Side Lean";
+      return "Forward Lean";
+    }
+    if (effectiveDeg <= 2.5) return "Perfect Alignment";
+    return "Good Posture";
+  }
 
-    const nodes = vGroup.querySelectorAll(".vert-node");
-    const baseY = 200;
-    const baseCenterX = 80;
-    
-    // Curvature factor proportional to pitch (0° = vertical, 20° = forward curve)
-    const curveAmount = (pitchAngle / 20) * 35;
-    
-    let pathD = `M ${baseCenterX} ${baseY}`;
-    
-    nodes.forEach((node, idx) => {
-      const t = (VERTEBRAE_COUNT - idx) / VERTEBRAE_COUNT; // 1 at bottom, 0 at top
-      const y = baseY - (idx * 15);
-      const xOffset = Math.sin((1 - t) * Math.PI * 0.5) * curveAmount;
-      const x = baseCenterX + xOffset;
-      
-      const width = 16 - (idx * 0.6);
-      const height = 6;
-      
-      node.setAttribute("x", (x - width / 2).toFixed(1));
-      node.setAttribute("y", (y - height / 2).toFixed(1));
-      node.setAttribute("width", width.toFixed(1));
-      node.setAttribute("height", height.toString());
-      node.setAttribute("opacity", (0.5 + (0.5 * (1 - t))).toFixed(2));
-      
-      pathD += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+  // ================= 2. LIVE SPINE SVG RENDERER (Exact LiveSpineGauge Geometry) =================
+  function renderSpineSvg(effectiveDeg, statusColor) {
+    if (!dom.fmsSpineSvg) return;
+
+    const w = 260;
+    const h = 115;
+    const basePoint = { x: w / 2, y: h * 0.82 }; // 130, 94.3
+
+    const maxTilt = 30.0;
+    const sideTilt = state.calibrated ? state.sideDeg : 0;
+    const nodTilt = state.calibrated ? state.nodDeg : 0;
+
+    const sideOffset = clamp(sideTilt / maxTilt, -1, 1) * 36.0;
+    const nodOffset = clamp(nodTilt / maxTilt, -1, 1) * 22.0;
+
+    const headPoint = { x: w / 2 + sideOffset, y: h * 0.22 + nodOffset };
+    const controlPoint = { x: w / 2 + sideOffset * 0.42, y: h * 0.52 + nodOffset * 0.28 };
+
+    // Build 5 vertebrae circles
+    let vertebraeSvg = "";
+    for (let i = 1; i <= 5; i++) {
+      const t = i / 6.0;
+      const vx = (1 - t) * (1 - t) * basePoint.x + 2 * (1 - t) * t * controlPoint.x + t * t * headPoint.x;
+      const vy = (1 - t) * (1 - t) * basePoint.y + 2 * (1 - t) * t * controlPoint.y + t * t * headPoint.y;
+      vertebraeSvg += `<circle cx="${vx.toFixed(2)}" cy="${vy.toFixed(2)}" r="2.1" fill="${statusColor}" filter="drop-shadow(0 0 3px ${statusColor})" />`;
+    }
+
+    dom.fmsSpineSvg.innerHTML = `
+      <defs>
+        <filter id="headGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- Head Aura Radial -->
+      <circle cx="${headPoint.x.toFixed(2)}" cy="${headPoint.y.toFixed(2)}" r="18" fill="${statusColor}" opacity="0.25" filter="url(#headGlow)" />
+
+      <!-- Quad Bezier Curve (Dashed Spine Track) -->
+      <path d="M ${basePoint.x} ${basePoint.y} Q ${controlPoint.x.toFixed(2)} ${controlPoint.y.toFixed(2)} ${headPoint.x.toFixed(2)} ${headPoint.y.toFixed(2)}"
+            fill="none"
+            stroke="${statusColor}"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-dasharray="4, 3"
+            filter="drop-shadow(0 0 3px ${statusColor})" />
+
+      <!-- 5 Vertebrae Beads -->
+      ${vertebraeSvg}
+
+      <!-- Base Pedestal Line -->
+      <rect x="${(basePoint.x - 13).toFixed(2)}" y="${(basePoint.y + 2).toFixed(2)}" width="26" height="2.5" rx="1.25" fill="rgba(255, 255, 255, 0.35)" />
+
+      <!-- Head Node (Glowing Circle + Specular Ring) -->
+      <circle cx="${headPoint.x.toFixed(2)}" cy="${headPoint.y.toFixed(2)}" r="6" fill="${statusColor}" filter="url(#headGlow)" />
+      <circle cx="${headPoint.x.toFixed(2)}" cy="${headPoint.y.toFixed(2)}" r="6" fill="none" stroke="rgba(255, 255, 255, 0.7)" stroke-width="1.0" />
+    `;
+  }
+
+  // ================= 3. UPDATE UI FROM STATE =================
+  function updateUI() {
+    const effectiveDeg = computeEffectiveDeg();
+    const statusColor = getStatusColor(effectiveDeg);
+    const alignTitle = getAlignmentTitle(effectiveDeg);
+    const isSlouching = state.calibrated && (effectiveDeg > state.thresholdDeg);
+
+    // 1. Render Spine SVG
+    renderSpineSvg(effectiveDeg, statusColor);
+
+    // 2. Readout numbers & titles
+    if (dom.fmsGaugeAngle) {
+      dom.fmsGaugeAngle.textContent = Math.round(effectiveDeg) + "°";
+      dom.fmsGaugeAngle.style.color = statusColor;
+    }
+    if (dom.fmsGaugeTitle) {
+      dom.fmsGaugeTitle.textContent = alignTitle;
+    }
+    if (dom.fmsGreatBadge) {
+      dom.fmsGreatBadge.classList.toggle("is-visible", effectiveDeg <= 2.5 && state.calibrated);
+    }
+
+    // 3. Stat Pills
+    if (dom.fmsStatPitch) {
+      const roundedPitch = Math.abs(Math.round(state.nodDeg));
+      dom.fmsStatPitch.textContent = roundedPitch === 0 ? "0° Perfect" : `${roundedPitch}° ${state.nodDeg >= 0 ? "Forward" : "Backward"}`;
+      dom.fmsStatPitch.style.color = roundedPitch === 0 ? statusColor : "#fff";
+    }
+    if (dom.fmsStatRoll) {
+      const roundedRoll = Math.abs(Math.round(state.sideDeg));
+      dom.fmsStatRoll.textContent = roundedRoll === 0 ? "0° Perfect" : `${roundedRoll}° ${state.sideDeg >= 0 ? "Right" : "Left"}`;
+      dom.fmsStatRoll.style.color = roundedRoll === 0 ? statusColor : "#fff";
+    }
+
+    // 4. Status Card
+    if (dom.fmsStatusCard) {
+      dom.fmsStatusCard.classList.toggle("slouching", isSlouching);
+    }
+    if (dom.fmsStatusText) {
+      if (!state.calibrated) {
+        dom.fmsStatusText.textContent = "AirPods Connected • Ready to Calibrate";
+      } else if (isSlouching) {
+        dom.fmsStatusText.textContent = "Slouching Alert • Roll Shoulders Back";
+      } else {
+        dom.fmsStatusText.textContent = "AirPods Connected • Posture Optimal";
+      }
+    }
+
+    // 5. Menu Bar Extra
+    if (dom.mbExtraAngle) {
+      dom.mbExtraAngle.textContent = Math.round(effectiveDeg) + "°";
+      dom.mbExtraAngle.style.color = statusColor;
+    }
+    if (dom.mbOrigIcon) {
+      // Subtle tilt of the menubar icon
+      const tiltAngle = clamp(state.nodDeg * 0.8, -12, 16);
+      dom.mbOrigIcon.style.transform = `rotate(${tiltAngle}deg)`;
+      dom.mbOrigIcon.style.filter = `drop-shadow(0 0 4px ${statusColor})`;
+    }
+
+    // 6. Hardware Stage (Desktop Widget)
+    if (dom.hwPitchVal) {
+      dom.hwPitchVal.textContent = `${state.nodDeg.toFixed(1)}° ${state.nodDeg >= 0 ? "Forward" : "Backward"}`;
+      dom.hwPitchVal.style.color = statusColor;
+    }
+    if (dom.hwRollVal) {
+      dom.hwRollVal.textContent = `${Math.abs(state.sideDeg).toFixed(1)}° ${state.sideDeg >= 0 ? "Right" : "Left"}`;
+      dom.hwRollVal.style.color = statusColor;
+    }
+    if (dom.airpods3dImg) {
+      const rx = clamp(-state.nodDeg * 1.5, -24, 20);
+      const ry = clamp(state.sideDeg * 1.6, -20, 20);
+      dom.airpods3dImg.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${-ry * 0.4}deg)`;
+    }
+  }
+
+  // ================= 4. TAB NAVIGATION =================
+  function setTab(tabName) {
+    state.currentTab = tabName;
+
+    // Subtitle in header
+    const subtitles = {
+      monitor: "Realign. Redefine.",
+      reports: "Weekly Posture Analytics",
+      watch: "Apple Watch Live Telemetry",
+      settings: "Settings & Customization"
+    };
+    if (dom.fmsHeaderSub) dom.fmsHeaderSub.textContent = subtitles[tabName] || "Realign. Redefine.";
+
+    // Header Right Button: Gear vs Back
+    const isBack = tabName !== "monitor";
+    if (dom.fmsSettingsIcon) dom.fmsSettingsIcon.style.display = isBack ? "none" : "block";
+    if (dom.fmsBackLabel) dom.fmsBackLabel.hidden = !isBack;
+
+    // Panes
+    const panes = [
+      { name: "monitor", el: dom.tabPaneMonitor },
+      { name: "reports", el: dom.tabPaneReports },
+      { name: "watch", el: dom.tabPaneWatch },
+      { name: "settings", el: dom.tabPaneSettings }
+    ];
+
+    panes.forEach((p) => {
+      if (p.el) {
+        if (p.name === tabName) {
+          p.el.hidden = false;
+          p.el.classList.add("is-active");
+        } else {
+          p.el.hidden = true;
+          p.el.classList.remove("is-active");
+        }
+      }
     });
 
-    if (spinePath) spinePath.setAttribute("d", pathD);
-
-    // Position head node at top of spine curve
-    const topX = baseCenterX + curveAmount;
-    const topY = baseY - (VERTEBRAE_COUNT * 15) - 10;
-    headNode.setAttribute("transform", `translate(${topX - 80}, ${topY - 30}) rotate(${(pitchAngle * 0.8).toFixed(1)}, 80, 30)`);
+    // Footer toolbar highlights
+    if (dom.fmsFootReports) dom.fmsFootReports.classList.toggle("is-active", tabName === "reports");
+    if (dom.fmsFootWatch) dom.fmsFootWatch.classList.toggle("is-active", tabName === "watch");
   }
 
-  // ================= 2. POSTURE STATE & METRICS LOOP =================
-  function evaluatePostureState(angle) {
-    let status = "good";
-    let text = "Aligned";
-    let threshold = 12;
-
-    if (state.sensitivity === "strict") threshold = 8;
-    if (state.sensitivity === "gentle") threshold = 15;
-
-    if (angle > threshold) {
-      status = "slouch";
-      text = `Slouching (>${threshold}°)`;
-    } else if (angle > threshold * 0.5) {
-      status = "drift";
-      text = `Drift (${angle.toFixed(1)}°)`;
-    }
-
-    // Update Popover Badge
-    if (dom.popStateBadge) {
-      dom.popStateBadge.setAttribute("data-state", status);
-      dom.popStateText.textContent = text;
-    }
-
-    // Update Menubar Dot
-    if (dom.mbExtraDot) {
-      if (status === "good") dom.mbExtraDot.style.background = "var(--accent)";
-      if (status === "drift") dom.mbExtraDot.style.background = "var(--orange)";
-      if (status === "slouch") dom.mbExtraDot.style.background = "var(--red)";
-    }
+  // Header settings button click
+  if (dom.fmsBtnSettings) {
+    dom.fmsBtnSettings.addEventListener("click", () => {
+      if (state.currentTab === "monitor") {
+        setTab("settings");
+      } else {
+        setTab("monitor");
+      }
+    });
   }
 
-  function updateTelemetryReadouts() {
-    const pitchStr = `${state.pitch.toFixed(1)}°`;
-    const rollStr = `${state.roll.toFixed(1)}°`;
-    const yawStr = `${state.yaw.toFixed(1)}°`;
-
-    if (dom.popPitchReadout) dom.popPitchReadout.textContent = pitchStr;
-    if (dom.popRollReadout) dom.popRollReadout.textContent = rollStr;
-    if (dom.mbPitchVal) dom.mbPitchVal.textContent = pitchStr;
-
-    // Window Telemetry Pane
-    if (dom.winPitchSummary) dom.winPitchSummary.textContent = pitchStr;
-    if (dom.winTelPitch) dom.winTelPitch.textContent = pitchStr;
-    if (dom.winTelRoll) dom.winTelRoll.textContent = rollStr;
-    if (dom.winTelYaw) dom.winTelYaw.textContent = yawStr;
-
-    if (dom.sparkPitch) dom.sparkPitch.style.width = `${Math.min(100, Math.max(5, (state.pitch / 25) * 100))}%`;
-    if (dom.sparkRoll) dom.sparkRoll.style.width = `${Math.min(100, Math.max(5, (state.roll / 15) * 100))}%`;
-    if (dom.sparkYaw) dom.sparkYaw.style.width = `${Math.min(100, Math.max(5, (state.yaw / 10) * 100))}%`;
-
-    // Simulated Quaternions
-    const pRad = (state.pitch * Math.PI) / 180;
-    const rRad = (state.roll * Math.PI) / 180;
-    if (dom.quatW) dom.quatW.textContent = Math.cos(pRad / 2).toFixed(3);
-    if (dom.quatX) dom.quatX.textContent = Math.sin(pRad / 2).toFixed(3);
-    if (dom.quatY) dom.quatY.textContent = Math.sin(rRad / 2).toFixed(3);
+  // Footer Toolbar Action Handlers
+  if (dom.fmsFootReports) {
+    dom.fmsFootReports.addEventListener("click", () => {
+      setTab(state.currentTab === "reports" ? "monitor" : "reports");
+    });
   }
 
-  // Animation Frame Physics Loop
-  function tick() {
-    // Spring interpolation towards target pitch
-    const dPitch = state.targetPitch - state.pitch;
-    state.pitch += dPitch * 0.16;
-
-    // Gentle organic micro-drift
-    const time = Date.now() * 0.002;
-    state.roll = state.targetRoll + Math.sin(time) * 0.4;
-    state.yaw = Math.cos(time * 0.7) * 0.3;
-
-    updateSpine(state.pitch);
-    evaluatePostureState(state.pitch);
-    updateTelemetryReadouts();
-
-    requestAnimationFrame(tick);
+  if (dom.fmsFootWatch) {
+    dom.fmsFootWatch.addEventListener("click", () => {
+      setTab(state.currentTab === "watch" ? "monitor" : "watch");
+    });
   }
 
-  // ================= 3. AUDIO SYNTHESIZER (Web Audio API) =================
+  if (dom.fmsFootPause) {
+    dom.fmsFootPause.addEventListener("click", () => {
+      state.monitoring = !state.monitoring;
+      if (dom.fmsPauseLabel) dom.fmsPauseLabel.textContent = state.monitoring ? "Pause" : "Resume";
+      if (dom.fmsPauseIcon) {
+        dom.fmsPauseIcon.innerHTML = `<use href="${state.monitoring ? "#i-pause" : "#i-play"}"/>`;
+      }
+      dom.fmsFootPause.classList.toggle("is-active", state.monitoring);
+    });
+  }
+
+  if (dom.fmsFootQuit) {
+    dom.fmsFootQuit.addEventListener("click", () => {
+      if (confirm("Quit FixMySpine?")) {
+        togglePopover(false);
+      }
+    });
+  }
+
+  // ================= 5. CALIBRATION & AUDIO CHIME =================
   function playHapticChime() {
     try {
       if (!state.audioCtx) {
         state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-      if (state.audioCtx.state === "suspended") {
-        state.audioCtx.resume();
-      }
-
       const ctx = state.audioCtx;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      if (ctx.state === "suspended") ctx.resume();
 
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, ctx.currentTime); // A5
-      osc.frequency.exponentialRampToValueAtTime(1318.51, ctx.currentTime + 0.12); // E6
+      const now = ctx.currentTime;
+      // Tone 1: 880 Hz (A5)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(880, now);
+      gain1.gain.setValueAtTime(0.2, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.3);
 
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + 0.48);
-
-      if (dom.chimeStatusText) {
-        dom.chimeStatusText.textContent = "Chime Played 🔔";
-        setTimeout(() => { dom.chimeStatusText.textContent = "Web Audio ready"; }, 1500);
-      }
+      // Tone 2: 1320 Hz (E6)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(1320, now + 0.08);
+      gain2.gain.setValueAtTime(0.25, now + 0.08);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(now + 0.08);
+      osc2.stop(now + 0.48);
     } catch (e) {
-      console.warn("Web Audio not allowed without user gesture:", e);
+      // Audio autoplay policy fallback
     }
-  }
-
-  // ================= 4. SLIDER & CALIBRATION EVENTS =================
-  if (dom.angleSlider) {
-    dom.angleSlider.addEventListener("input", (e) => {
-      const val = parseFloat(e.target.value);
-      state.targetPitch = val;
-      if (dom.sliderValueText) dom.sliderValueText.textContent = `${val.toFixed(1)}°`;
-    });
   }
 
   function triggerCalibration() {
-    state.targetPitch = 0.0;
-    if (dom.angleSlider) dom.angleSlider.value = "0";
-    if (dom.sliderValueText) dom.sliderValueText.textContent = "0.0°";
+    state.nodDeg = 0.0;
+    state.sideDeg = 0.0;
+    state.calibrated = true;
+    if (dom.hwPitchSlider) dom.hwPitchSlider.value = 0;
+    if (dom.hwRollSlider) dom.hwRollSlider.value = 0;
 
-    if (dom.calBtnText) {
-      const old = dom.calBtnText.textContent;
-      dom.calBtnText.textContent = "Calibrated! ✓";
-      setTimeout(() => { dom.calBtnText.textContent = old; }, 1600);
+    if (dom.fmsCalTitle) {
+      dom.fmsCalTitle.textContent = "✓ Calibrated Upright";
+      setTimeout(() => {
+        if (dom.fmsCalTitle) dom.fmsCalTitle.textContent = "Recalibrate Posture";
+      }, 1600);
     }
 
     playHapticChime();
+    updateUI();
   }
 
-  if (dom.btnCalibrateAction) dom.btnCalibrateAction.addEventListener("click", triggerCalibration);
+  if (dom.fmsBtnCalibrate) dom.fmsBtnCalibrate.addEventListener("click", triggerCalibration);
+  if (dom.btnDeskCalibrate) dom.btnDeskCalibrate.addEventListener("click", triggerCalibration);
   if (dom.dockCalibrate) dom.dockCalibrate.addEventListener("click", triggerCalibration);
-  if (dom.deskIconCalibrate) dom.deskIconCalibrate.addEventListener("click", triggerCalibration);
   if ($("#menuItemCalibrate")) $("#menuItemCalibrate").addEventListener("click", triggerCalibration);
+  if (dom.btnTestChimeDesk) dom.btnTestChimeDesk.addEventListener("click", playHapticChime);
 
-  // ================= 5. POPOVER CONTROLLER =================
+  // ================= 6. SLIDERS & SENSITIVITY =================
+  if (dom.hwPitchSlider) {
+    dom.hwPitchSlider.addEventListener("input", (e) => {
+      state.nodDeg = parseFloat(e.target.value);
+      updateUI();
+    });
+  }
+
+  if (dom.hwRollSlider) {
+    dom.hwRollSlider.addEventListener("input", (e) => {
+      state.sideDeg = parseFloat(e.target.value);
+      updateUI();
+    });
+  }
+
+  // Sensitivity Segmented Buttons
+  $$("#segSensitivity .fms-seg-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      $$("#segSensitivity .fms-seg-btn").forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      state.thresholdDeg = parseFloat(btn.dataset.val);
+      updateUI();
+    });
+  });
+
+  // Alert After Segmented Buttons
+  $$("#segAlertAfter .fms-seg-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      $$("#segAlertAfter .fms-seg-btn").forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      state.graceSeconds = parseInt(btn.dataset.val, 10);
+    });
+  });
+
+  // Theme Swatches
+  $$("#fmsThemePicker .fms-theme-swatch").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      $$("#fmsThemePicker .fms-theme-swatch").forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      const theme = btn.dataset.theme;
+      state.theme = theme;
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("fms-theme", theme);
+      updateUI();
+    });
+  });
+
+  // ================= 7. POPOVER TOGGLE & DOCK =================
   function togglePopover(show) {
     const isVisible = show !== undefined ? show : dom.popover.hidden;
     dom.popover.hidden = !isVisible;
     state.popoverOpen = isVisible;
-    if (dom.mbFixMySpine) dom.mbFixMySpine.setAttribute("aria-expanded", isVisible ? "true" : "false");
     if (dom.mbFixMySpine) dom.mbFixMySpine.classList.toggle("is-active", isVisible);
   }
 
@@ -322,271 +471,12 @@
       togglePopover();
     });
   }
-
-  // Popover Tab Navigation
-  const popNavBtns = $$("#popNav .sn-btn");
-  popNavBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      popNavBtns.forEach((b) => {
-        b.classList.remove("is-active");
-        b.setAttribute("aria-selected", "false");
-      });
-      btn.classList.add("is-active");
-      btn.setAttribute("aria-selected", "true");
-
-      const targetTab = btn.getAttribute("data-tab");
-      $$(".pop-tab").forEach((tab) => {
-        if (tab.getAttribute("data-tab-content") === targetTab) {
-          tab.classList.add("is-active");
-          tab.hidden = false;
-        } else {
-          tab.classList.remove("is-active");
-          tab.hidden = true;
-        }
-      });
-    });
-  });
-
-  // Sensitivity segmented selector
-  $$("#segSensitivity .sc-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      $$("#segSensitivity .sc-btn").forEach((b) => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
-      state.sensitivity = btn.getAttribute("data-val");
-
-      if (dom.sensExplainer) {
-        if (state.sensitivity === "strict") dom.sensExplainer.textContent = "Strict (8°) — Ideal for focused posture correction.";
-        if (state.sensitivity === "balanced") dom.sensExplainer.textContent = "Balanced (12°) — Default ergonomic setting for daily work.";
-        if (state.sensitivity === "gentle") dom.sensExplainer.textContent = "Gentle (15°) — Relaxed setting with fewer alerts.";
-      }
-    });
-  });
-
-  // Grace period selector
-  $$("#segGrace .sc-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      $$("#segGrace .sc-btn").forEach((b) => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
-      state.gracePeriod = parseInt(btn.getAttribute("data-val"), 10);
-    });
-  });
-
-  // Preview chime
-  if (dom.btnTestChime) dom.btnTestChime.addEventListener("click", playHapticChime);
-
-  // Weekly Mini-Chart Generator
-  const weekData = [
-    { day: "M", full: "Monday", score: 88, slouch: "22m" },
-    { day: "T", full: "Tuesday", score: 92, slouch: "15m" },
-    { day: "W", full: "Wednesday", score: 94, slouch: "12m" },
-    { day: "T", full: "Thursday", score: 89, slouch: "19m" },
-    { day: "F", full: "Friday", score: 96, slouch: "8m" },
-    { day: "S", full: "Saturday", score: 90, slouch: "16m" },
-    { day: "S", full: "Sunday", score: 95, slouch: "10m" }
-  ];
-
-  if (dom.miniChart) {
-    dom.miniChart.innerHTML = "";
-    weekData.forEach((item, idx) => {
-      const col = document.createElement("div");
-      col.className = `chart-col ${idx === 2 ? "is-active" : ""}`;
-      col.innerHTML = `
-        <div class="bar" style="height: ${(item.score / 100) * 46}px"></div>
-        <span class="day-lbl">${item.day}</span>
-      `;
-      col.addEventListener("click", () => {
-        $$(".chart-col").forEach((c) => c.classList.remove("is-active"));
-        col.classList.add("is-active");
-        if (dom.chartSelectedDay) dom.chartSelectedDay.textContent = item.full;
-        if (dom.chartSelectedScore) dom.chartSelectedScore.textContent = `${item.score}% Aligned (${item.slouch} slouch)`;
-      });
-      dom.miniChart.appendChild(col);
-    });
+  if (dom.btnTogglePopoverDesk) {
+    dom.btnTogglePopoverDesk.addEventListener("click", () => togglePopover());
   }
-
-  // Themes
-  $$(".t-chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      $$(".t-chip").forEach((c) => c.classList.remove("is-active"));
-      chip.classList.add("is-active");
-      const themeName = chip.getAttribute("data-theme");
-      document.documentElement.setAttribute("data-theme", themeName);
-      localStorage.setItem("fms-theme", themeName);
-      state.theme = themeName;
-      if ($("#themeSelectedName")) $("#themeSelectedName").textContent = chip.getAttribute("title");
-    });
-  });
-
-  // Apply saved theme
-  if (state.theme && state.theme !== "green") {
-    document.documentElement.setAttribute("data-theme", state.theme);
-    const activeChip = $(`.t-chip[data-theme="${state.theme}"]`);
-    if (activeChip) {
-      $$(".t-chip").forEach((c) => c.classList.remove("is-active"));
-      activeChip.classList.add("is-active");
-    }
+  if (dom.dockAppFixMySpine) {
+    dom.dockAppFixMySpine.addEventListener("click", () => togglePopover());
   }
-
-  // ================= 6. DRAGGABLE SETTINGS WINDOW =================
-  function toggleSettingsWindow(show) {
-    const isVisible = show !== undefined ? show : dom.winSettings.hidden;
-    dom.winSettings.hidden = !isVisible;
-    state.windowOpen = isVisible;
-    if (dom.dockSettingsDot) dom.dockSettingsDot.hidden = !isVisible;
-    if (isVisible) bringWindowToFront();
-  }
-
-  function bringWindowToFront() {
-    if (dom.winSettings) dom.winSettings.style.zIndex = "120";
-  }
-
-  if (dom.btnOpenMainWindow) dom.btnOpenMainWindow.addEventListener("click", () => toggleSettingsWindow(true));
-  if (dom.deskIconSettings) dom.deskIconSettings.addEventListener("click", () => toggleSettingsWindow(true));
-  if (dom.dockAppSettings) dom.dockAppSettings.addEventListener("click", () => toggleSettingsWindow(true));
-  if ($("#menuItemSettings")) $("#menuItemSettings").addEventListener("click", () => toggleSettingsWindow(true));
-
-  // Traffic lights
-  if (dom.tlClose) dom.tlClose.addEventListener("click", () => toggleSettingsWindow(false));
-  if (dom.tlMin) {
-    dom.tlMin.addEventListener("click", () => {
-      dom.winSettings.style.transform = "scale(0.2) translate(0, 500px)";
-      dom.winSettings.style.opacity = "0";
-      dom.winSettings.style.transition = "all 0.3s ease";
-      setTimeout(() => {
-        toggleSettingsWindow(false);
-        dom.winSettings.style.transform = "";
-        dom.winSettings.style.opacity = "";
-        dom.winSettings.style.transition = "";
-      }, 300);
-    });
-  }
-  if (dom.tlZoom) {
-    dom.tlZoom.addEventListener("click", () => {
-      const isZoomed = dom.winSettings.getAttribute("data-zoomed") === "true";
-      if (!isZoomed) {
-        dom.winSettings.setAttribute("data-zoomed", "true");
-        dom.winSettings.style.top = "44px";
-        dom.winSettings.style.left = "16px";
-        dom.winSettings.style.width = "calc(100vw - 32px)";
-        dom.winSettings.style.height = "calc(100vh - 120px)";
-      } else {
-        dom.winSettings.removeAttribute("data-zoomed");
-        dom.winSettings.style.top = "";
-        dom.winSettings.style.left = "";
-        dom.winSettings.style.width = "";
-        dom.winSettings.style.height = "";
-      }
-    });
-  }
-
-  // Dragging Engine
-  const titlebar = $("[data-drag]");
-  if (titlebar && dom.winSettings) {
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let winX = 180;
-    let winY = 85;
-
-    titlebar.addEventListener("pointerdown", (e) => {
-      if (e.target.closest(".traffic-lights")) return;
-      isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      const rect = dom.winSettings.getBoundingClientRect();
-      winX = rect.left;
-      winY = rect.top;
-      titlebar.setPointerCapture(e.pointerId);
-      bringWindowToFront();
-    });
-
-    titlebar.addEventListener("pointermove", (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      const newX = Math.max(10, Math.min(window.innerWidth - 300, winX + dx));
-      const newY = Math.max(38, Math.min(window.innerHeight - 100, winY + dy));
-      dom.winSettings.style.left = `${newX}px`;
-      dom.winSettings.style.top = `${newY}px`;
-    });
-
-    titlebar.addEventListener("pointerup", (e) => {
-      isDragging = false;
-      try { titlebar.releasePointerCapture(e.pointerId); } catch (_) {}
-    });
-  }
-
-  // Resizing Engine
-  const resizeHandle = $("[data-resize]");
-  if (resizeHandle && dom.winSettings) {
-    let isResizing = false;
-    let rStartX = 0;
-    let rStartY = 0;
-    let rStartW = 820;
-    let rStartH = 540;
-
-    resizeHandle.addEventListener("pointerdown", (e) => {
-      isResizing = true;
-      rStartX = e.clientX;
-      rStartY = e.clientY;
-      const rect = dom.winSettings.getBoundingClientRect();
-      rStartW = rect.width;
-      rStartH = rect.height;
-      resizeHandle.setPointerCapture(e.pointerId);
-    });
-
-    resizeHandle.addEventListener("pointermove", (e) => {
-      if (!isResizing) return;
-      const newW = Math.max(480, rStartW + (e.clientX - rStartX));
-      const newH = Math.max(340, rStartH + (e.clientY - rStartY));
-      dom.winSettings.style.width = `${newW}px`;
-      dom.winSettings.style.height = `${newH}px`;
-    });
-
-    resizeHandle.addEventListener("pointerup", (e) => {
-      isResizing = false;
-      try { resizeHandle.releasePointerCapture(e.pointerId); } catch (_) {}
-    });
-  }
-
-  // Window Sidebar Navigation
-  const sbItems = $$(".sb-item");
-  sbItems.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      sbItems.forEach((b) => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
-
-      const paneKey = btn.getAttribute("data-win-pane");
-      $$(".win-pane").forEach((pane) => {
-        if (pane.getAttribute("data-pane") === paneKey) {
-          pane.classList.add("is-active");
-          pane.hidden = false;
-        } else {
-          pane.classList.remove("is-active");
-          pane.hidden = true;
-        }
-      });
-    });
-  });
-
-  // Sidebar Search filter
-  if (dom.winSearch) {
-    dom.winSearch.addEventListener("input", (e) => {
-      const q = e.target.value.toLowerCase().trim();
-      sbItems.forEach((btn) => {
-        const txt = btn.textContent.toLowerCase();
-        btn.hidden = q.length > 0 && !txt.includes(q);
-      });
-    });
-  }
-
-  // ================= 7. DOWNLOAD MODAL =================
-  function toggleDownloadModal(show) {
-    if (dom.downloadModal) dom.downloadModal.hidden = !show;
-  }
-  if (dom.deskIconDownload) dom.deskIconDownload.addEventListener("click", () => toggleDownloadModal(true));
-  if (dom.dockDownload) dom.dockDownload.addEventListener("click", () => toggleDownloadModal(true));
-  if (dom.btnCloseModal) dom.btnCloseModal.addEventListener("click", () => toggleDownloadModal(false));
 
   // ================= 8. LIVE CLOCK =================
   function updateClock() {
@@ -594,41 +484,27 @@
     const now = new Date();
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    
     const day = days[now.getDay()];
     const date = now.getDate();
     const month = months[now.getMonth()];
-    
     let hours = now.getHours();
     const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12;
-    hours = hours ? hours : 12;
+    hours = hours % 12 || 12;
     const mins = String(now.getMinutes()).padStart(2, "0");
-
     dom.mbClock.textContent = `${day} ${date} ${month} ${hours}:${mins} ${ampm}`;
   }
 
-  // ================= 9. GLOBAL KEYBOARD & CLICK OUTSIDE =================
+  // Keyboard shortcut: Escape closes popover
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      togglePopover(false);
-      toggleDownloadModal(false);
-    }
+    if (e.key === "Escape") togglePopover(false);
   });
 
-  // ================= 10. INITIALIZATION =================
-  initSpineSvg();
+  // ================= 9. INITIALIZATION =================
+  document.documentElement.setAttribute("data-theme", state.theme);
   updateClock();
   setInterval(updateClock, 1000);
-
-  // Start with open popover & window on desktop, popover on mobile
   togglePopover(true);
-  toggleSettingsWindow(window.innerWidth > 768);
-
-  // Remove booting class
+  updateUI();
   document.body.classList.remove("booting");
-
-  // Start physics loop
-  requestAnimationFrame(tick);
 
 })();

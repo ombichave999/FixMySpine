@@ -15,15 +15,15 @@
   <meta property="og:site_name" content="FixMySpine" />
   <meta property="og:title" content="FixMySpine — AirPods Posture Intelligence for macOS" />
   <meta property="og:description" content="FixMySpine turns the motion sensors inside your AirPods into a real-time posture coach for your Mac. Silent, precise, and 100% on-device." />
-  <meta property="og:image" content="assets/img/icon-512.png" />
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260907-1" />
+  <meta property="og:image" content="assets/img/app-icon.png" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260907-2" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "FixMySpine",
     "url": "https://fixmyspine-theta.vercel.app",
-    "image": "assets/img/icon-512.png",
+    "image": "assets/img/app-icon.png",
     "description": "FixMySpine turns the motion sensors inside your AirPods into a real-time posture coach for your Mac. Silent, precise, and 100% on-device.",
     "operatingSystem": "macOS 14.0+",
     "applicationCategory": "HealthApplication",
@@ -62,7 +62,15 @@
       <symbol id="i-reset" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5A7.5 7.5 0 1 1 4.2 13"/><path d="M4 4v4.5h4.5"/></g></symbol>
       <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.2"/><path d="m16 16 4 4"/></g></symbol>
       <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-check-circle" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
       <symbol id="i-battery" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="8" width="16.5" height="8" rx="2.3"/><path d="M21 11v2" stroke-linecap="round"/></g><rect x="4" y="9.5" width="11" height="5" rx="1" fill="currentColor"/></symbol>
+      <symbol id="i-watch" viewBox="0 0 24 24"><path fill="currentColor" d="M9 2h6v3H9V2zm0 17h6v3H9v-3zM7 6h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zm1 3v6h8V9H8z"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></symbol>
+      <symbol id="i-power" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></symbol>
+      <symbol id="i-arrow-up-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m7 15 5 5 5-5M7 9l5-5 5 5"/></symbol>
+      <symbol id="i-arrow-left-right" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m15 7 5 5-5 5M9 7l-5 5 5 5"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="m12 17.27 4.15 2.51c.76.46 1.69-.22 1.49-1.08l-1.1-4.72 3.67-3.18c.67-.58.31-1.68-.57-1.75l-4.83-.41-1.89-4.46c-.34-.81-1.5-.81-1.84 0L9.19 8.63l-4.83.41c-.88.07-1.24 1.17-.57 1.75l3.67 3.18-1.1 4.72c-.2.86.73 1.54 1.49 1.08l4.15-2.51z"/></symbol>
     </defs>
   </svg>
 
@@ -142,16 +150,11 @@
           <span class="chip-text">AirPods Connected</span>
         </div>
 
-        <div class="mb-metric-readout" title="Real-time forward pitch">
-          <span class="metric-label">Pitch</span>
-          <span class="metric-val" id="mbPitchVal">2.0°</span>
-        </div>
-
-        <!-- FixMySpine Menubar Extra Trigger -->
-        <button class="mb-extra-btn" id="mbFixMySpine" title="Toggle FixMySpine Popover" aria-expanded="false" aria-controls="popover">
-          <div class="mb-extra-icon">
-            <svg class="ic" viewBox="0 0 24 24"><use href="#i-spine"/></svg>
-            <span class="mb-extra-dot" id="mbExtraDot"></span>
+        <!-- FixMySpine Original Menu Bar Extra Trigger (Original MenuBarIcon.png + Angle) -->
+        <button class="mb-extra-btn" id="mbFixMySpine" title="FixMySpine - AirPods Posture Monitor (Click to Open)" aria-expanded="true" aria-controls="popover">
+          <div class="mb-extra-spine-wrap">
+            <img src="assets/img/MenuBarIcon.png" alt="FixMySpine Menubar Icon" class="mb-orig-icon" id="mbOrigIcon" width="18" height="18" />
+            <span class="mb-extra-angle" id="mbExtraAngle">3°</span>
           </div>
         </button>
 
@@ -160,544 +163,447 @@
           <span>94%</span>
         </div>
 
-        <span class="mb-clock" id="mbClock">Wed 27 Aug 10:45 AM</span>
+        <span class="mb-clock" id="mbClock">Mon 7 Sep 12:05 PM</span>
       </div>
     </header>
 
-    <!-- ================= DESKTOP SHORTCUTS ================= -->
-    <section class="desk-icons" aria-label="Desktop icons">
-      <button class="desk-icon" id="deskIconSettings" data-action="open-window" data-window="settings">
-        <span class="di-tile di-app">
-          <img src="assets/img/app-icon.png" alt="FixMySpine" width="48" height="48" />
-        </span>
-        <span class="di-label">FixMySpine</span>
-      </button>
+    <!-- ================= 3D HARDWARE STAGE & INTERACTIVE SIMULATOR (Desktop Widget) ================= -->
+    <section class="hw-stage-card" id="hwStageCard" aria-label="AirPods Hardware Simulation">
+      <div class="hw-card-glow"></div>
+      <div class="hw-card-inner">
+        <div class="hw-badge-row">
+          <span class="hw-pill green"><span class="pulse-dot sm"></span> 50 Hz CoreMotion</span>
+          <span class="hw-pill"><svg class="ic xs"><use href="#i-shield"/></svg> 0 Cameras • 100% On-Device</span>
+          <span class="hw-pill"><svg class="ic xs"><use href="#i-airpods"/></svg> AirPods Pro (2nd Gen)</span>
+        </div>
 
-      <button class="desk-icon" id="deskIconCalibrate" data-action="calibrate">
-        <span class="di-tile di-cal">
-          <svg class="ic"><use href="#i-reset"/></svg>
-        </span>
-        <span class="di-label">Calibrate</span>
-      </button>
+        <!-- 3D AirPods Pro Floating Asset from File Access -->
+        <div class="hw-3d-visual">
+          <img src="assets/img/airpods-pro-pair.png" alt="Apple AirPods Pro 3D Motion Sensors" class="airpods-3d-img" id="airpods3dImg" />
+          <div class="hw-3d-shadow"></div>
+        </div>
 
-      <button class="desk-icon" id="deskIconDownload" data-action="open-download">
-        <span class="di-tile di-down">
-          <svg class="ic"><use href="#i-download"/></svg>
-        </span>
-        <span class="di-label">Get App</span>
-      </button>
+        <div class="hw-desc-block">
+          <h1 class="hw-title">Your AirPods. Your Posture Coach.</h1>
+          <p class="hw-subtitle">FixMySpine turns the motion sensors inside your Apple AirPods into a real-time posture coach for your Mac. Silent, precise, and completely private.</p>
+        </div>
 
-      <a class="desk-icon" href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener">
-        <span class="di-tile di-gh">
-          <svg viewBox="0 0 24 24" class="ic"><path fill="currentColor" d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.21 3.44 9.63 8.21 11.19.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.6-4.04-1.6-.55-1.38-1.34-1.75-1.34-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.22 1.84 1.22 1.07 1.8 2.81 1.28 3.5.98.11-.77.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.84 0-1.29.47-2.34 1.24-3.17-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 6 0c2.29-1.53 3.3-1.21 3.3-1.21.65 1.66.24 2.88.12 3.18.77.83 1.23 1.88 1.23 3.17 0 4.54-2.81 5.54-5.49 5.83.43.36.81 1.08.81 2.18v3.23c0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg>
-        </span>
-        <span class="di-label">GitHub</span>
-      </a>
+        <!-- Interactive Simulation Controls -->
+        <div class="hw-control-panel">
+          <div class="hw-slider-group">
+            <div class="hw-slider-head">
+              <label for="hwPitchSlider" class="hw-slider-label">Simulate Head Pitch (Tilt)</label>
+              <span class="hw-slider-val" id="hwPitchVal">3.0° Forward</span>
+            </div>
+            <input type="range" id="hwPitchSlider" min="-5" max="25" step="0.5" value="3" class="range-slider" />
+            <div class="hw-slider-scale">
+              <span>0° Good</span>
+              <span>8° Balanced</span>
+              <span>20° Slouch</span>
+            </div>
+          </div>
+
+          <div class="hw-slider-group">
+            <div class="hw-slider-head">
+              <label for="hwRollSlider" class="hw-slider-label">Simulate Side Lean (Roll)</label>
+              <span class="hw-slider-val" id="hwRollVal">1.0° Left</span>
+            </div>
+            <input type="range" id="hwRollSlider" min="-15" max="15" step="0.5" value="-1" class="range-slider" />
+            <div class="hw-slider-scale">
+              <span>-15° Left</span>
+              <span>0° Centered</span>
+              <span>+15° Right</span>
+            </div>
+          </div>
+
+          <div class="hw-btn-row">
+            <button class="btn btn-primary" id="btnDeskCalibrate">
+              <svg class="ic xs"><use href="#i-reset"/></svg>
+              <span>Recalibrate Baseline</span>
+            </button>
+            <button class="btn btn-ghost" id="btnTestChimeDesk">
+              <svg class="ic xs"><use href="#i-sound"/></svg>
+              <span>Test Audio Chime</span>
+            </button>
+            <button class="btn btn-ghost" id="btnTogglePopoverDesk">
+              <img src="assets/img/MenuBarIcon.png" alt="" width="14" height="14" style="filter: brightness(2);" />
+              <span>Toggle App Popover</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- ================= POPOVER (Real App Menu Panel) ================= -->
-    <section class="popover" id="popover" role="dialog" aria-modal="false" aria-label="FixMySpine menu bar popover" hidden>
+    <!-- ================= EXACT FIXMYSPINE SWIFTUI POPOVER VIEW ================= -->
+    <section class="fms-popover" id="popover" role="dialog" aria-modal="false" aria-label="FixMySpine menu bar popover">
       <div class="pop-notch" aria-hidden="true"></div>
       
-      <div class="pop-inner">
-        <!-- Popover Header -->
-        <div class="pop-header">
-          <div class="pop-brand">
-            <img src="assets/img/icon-64.png" alt="FixMySpine icon" width="22" height="22" />
-            <span class="pop-title">FixMySpine</span>
-          </div>
-          <div class="pop-state-badge" id="popStateBadge" data-state="good">
-            <span class="state-dot"></span>
-            <span class="state-txt" id="popStateText">Aligned</span>
-          </div>
-        </div>
-
-        <!-- Section Navigation Tabs -->
-        <nav class="sect-nav" id="popNav" role="tablist">
-          <button class="sn-btn is-active" role="tab" aria-selected="true" data-tab="live" title="Live Posture">
-            <svg class="ic"><use href="#i-spine"/></svg>
-          </button>
-          <button class="sn-btn" role="tab" aria-selected="false" data-tab="sensitivity" title="Sensitivity Presets">
-            <svg class="ic"><use href="#i-sliders"/></svg>
-          </button>
-          <button class="sn-btn" role="tab" aria-selected="false" data-tab="analytics" title="Weekly Stats">
-            <svg class="ic"><use href="#i-chart"/></svg>
-          </button>
-          <button class="sn-btn" role="tab" aria-selected="false" data-tab="nudges" title="Audio Nudges">
-            <svg class="ic"><use href="#i-sound"/></svg>
-          </button>
-          <button class="sn-btn" role="tab" aria-selected="false" data-tab="themes" title="Personalization">
-            <svg class="ic"><use href="#i-spark"/></svg>
-          </button>
-        </nav>
-
-        <!-- Popover Body -->
-        <div class="pop-body">
-
-          <!-- Tab 1: Live Posture Gauge -->
-          <div class="pop-tab is-active" data-tab-content="live">
-            <div class="spine-stage">
-              <svg id="popSpineSvg" viewBox="0 0 160 220" preserveAspectRatio="xMidYMid meet">
-                <!-- Dynamic vertebrae rendered via JS -->
-              </svg>
-              <div class="spine-telemetry">
-                <div class="tel-item">
-                  <span class="tel-label">Pitch</span>
-                  <span class="tel-val" id="popPitchReadout">2.0°</span>
-                </div>
-                <div class="tel-item">
-                  <span class="tel-label">Lateral Lean</span>
-                  <span class="tel-val" id="popRollReadout">1.2°</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Interactive Angle Slider -->
-            <div class="card slider-card">
-              <div class="row between">
-                <span class="sm muted">Simulate Head Tilt</span>
-                <span class="mono sm accent" id="sliderValueText">2.0°</span>
-              </div>
-              <input type="range" id="angleSlider" min="-5" max="25" step="0.5" value="2" aria-label="Head angle simulation slider" />
-              <div class="slider-ticks">
-                <span>0° Good</span>
-                <span>8° Balanced</span>
-                <span>20° Slouch</span>
-              </div>
-            </div>
-
-            <!-- Recalibrate Action -->
-            <div class="row between pt-1">
-              <button class="btn-cal" id="btnCalibrateAction">
-                <svg class="ic xs"><use href="#i-reset"/></svg>
-                <span id="calBtnText">Recalibrate Baseline</span>
-              </button>
-              <span class="xs muted">Locks current pose as 0°</span>
-            </div>
-          </div>
-
-          <!-- Tab 2: Sensitivity & Grace Period -->
-          <div class="pop-tab" data-tab-content="sensitivity" hidden>
-            <div class="sect-head">Posture Sensitivity</div>
-            <div class="card">
-              <div class="segmented-control" id="segSensitivity" role="radiogroup" aria-label="Sensitivity preset">
-                <button class="sc-btn" data-val="strict" role="radio" aria-checked="false">Strict (8°)</button>
-                <button class="sc-btn is-active" data-val="balanced" role="radio" aria-checked="true">Balanced (12°)</button>
-                <button class="sc-btn" data-val="gentle" role="radio" aria-checked="false">Gentle (15°)</button>
-              </div>
-              <p class="xs muted pt-1" id="sensExplainer">Alert triggers when forward head tilt exceeds 12° continuously.</p>
-            </div>
-
-            <div class="sect-head pt-2">Alert Grace Period</div>
-            <div class="card">
-              <div class="segmented-control" id="segGrace" role="radiogroup" aria-label="Grace period">
-                <button class="sc-btn" data-val="5">5s</button>
-                <button class="sc-btn is-active" data-val="10">10s</button>
-                <button class="sc-btn" data-val="20">20s</button>
-                <button class="sc-btn" data-val="30">30s</button>
-              </div>
-              <p class="xs muted pt-1">Gives you time to lean down for coffee before notifying.</p>
-            </div>
-          </div>
-
-          <!-- Tab 3: Weekly Analytics -->
-          <div class="pop-tab" data-tab-content="analytics" hidden>
-            <div class="sect-head">This Week's Alignment</div>
-            <div class="card">
-              <div class="chart-summary">
-                <div class="cs-item">
-                  <span class="cs-label">Average Score</span>
-                  <span class="cs-val accent" id="chartAvgScore">91%</span>
-                </div>
-                <div class="cs-item">
-                  <span class="cs-label">Slouch Time</span>
-                  <span class="cs-val" id="chartSlouchTime">18 min/day</span>
-                </div>
-              </div>
-              
-              <!-- Mini Bar Chart -->
-              <div class="mini-chart" id="miniChart">
-                <!-- Rendered dynamically -->
-              </div>
-              <div class="row between pt-1">
-                <span class="xs muted">Selected: <b id="chartSelectedDay">Wednesday</b></span>
-                <span class="xs accent" id="chartSelectedScore">94% Aligned</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tab 4: Audio & Nudges -->
-          <div class="pop-tab" data-tab-content="nudges" hidden>
-            <div class="sect-head">Feedback &amp; Nudges</div>
-            <div class="card">
-              <div class="row between">
-                <div>
-                  <div class="sm font-medium">Haptic Spatial Chime</div>
-                  <div class="xs muted">Soft binaural sound cue through AirPods</div>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggleSound" checked />
-                  <span class="track"></span>
-                </label>
-              </div>
-              
-              <div class="divider"></div>
-
-              <div class="row between">
-                <div>
-                  <div class="sm font-medium">Screen Dimmer</div>
-                  <div class="xs muted">Subtle display dim until neck is realigned</div>
-                </div>
-                <label class="switch">
-                  <input type="checkbox" id="toggleScreenDim" />
-                  <span class="track"></span>
-                </label>
-              </div>
-
-              <div class="divider"></div>
-
-              <div class="row between">
-                <button class="bordered-btn" id="btnTestChime">
-                  <svg class="ic xs"><use href="#i-sound"/></svg>
-                  <span>Preview Audio Cue</span>
-                </button>
-                <span class="xs muted" id="chimeStatusText">Web Audio ready</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Tab 5: Themes -->
-          <div class="pop-tab" data-tab-content="themes" hidden>
-            <div class="sect-head">Accent Color</div>
-            <div class="card">
-              <div class="theme-chips-grid">
-                <button class="t-chip is-active" data-theme="green" title="Signature Green" style="--chip:#00d053"></button>
-                <button class="t-chip" data-theme="blue" title="Electric Blue" style="--chip:#0A84FF"></button>
-                <button class="t-chip" data-theme="cyan" title="Cyan Frost" style="--chip:#00e5ff"></button>
-                <button class="t-chip" data-theme="purple" title="Royal Purple" style="--chip:#af52de"></button>
-                <button class="t-chip" data-theme="orange" title="Amber Orange" style="--chip:#ff9f0a"></button>
-              </div>
-              <p class="xs muted pt-1" id="themeSelectedName">Signature Green (Default)</p>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Popover Footer -->
-        <div class="pop-footer">
-          <button class="pf-link" id="btnOpenMainWindow">
-            <svg class="ic xs"><use href="#i-gear"/></svg>
-            <span>Open Settings Window</span>
-          </button>
-          <span class="xs muted">macOS 14+ · v5.0.4</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= DRAGGABLE SETTINGS WINDOW ================= -->
-    <section class="window" id="winSettings" role="dialog" aria-modal="false" aria-labelledby="winTitle" hidden style="--x:180px; --y:85px; --w:820px; --h:540px;">
-      <!-- Title Bar -->
-      <div class="win-titlebar" data-drag>
-        <div class="traffic-lights">
-          <button class="tl tl-close" id="tlClose" title="Close window" aria-label="Close"></button>
-          <button class="tl tl-min" id="tlMin" title="Minimize window" aria-label="Minimize"></button>
-          <button class="tl tl-zoom" id="tlZoom" title="Zoom window" aria-label="Zoom"></button>
-        </div>
-        <div class="win-title" id="winTitle">FixMySpine — Settings &amp; Diagnostics</div>
-        <div class="win-spacer"></div>
-      </div>
-
-      <!-- Window Body with Sidebar -->
-      <div class="win-body">
+      <div class="fms-pop-inner">
         
-        <!-- Window Sidebar -->
-        <aside class="win-sidebar">
-          <div class="sidebar-search">
-            <svg class="ic xs"><use href="#i-search"/></svg>
-            <input type="search" id="winSearch" placeholder="Search" aria-label="Search settings" />
+        <!-- Popover Header -->
+        <header class="fms-header">
+          <div class="fms-brand-block">
+            <h2 class="fms-app-name">FixMySpine</h2>
+            <p class="fms-app-sub" id="fmsHeaderSub">Realign. Redefine.</p>
           </div>
 
-          <nav class="sidebar-nav" id="winSidebarNav">
-            <div class="sb-group-title">General</div>
-            <button class="sb-item is-active" data-win-pane="overview">
-              <svg class="ic sm"><use href="#i-spine"/></svg>
-              <span>Overview</span>
-            </button>
-            <button class="sb-item" data-win-pane="telemetry">
-              <svg class="ic sm"><use href="#i-sliders"/></svg>
-              <span>Sensor Telemetry</span>
-            </button>
+          <div class="fms-header-right">
+            <div class="fms-header-pill" id="fmsHeaderPill">
+              <span class="fms-sensor-pulse" id="fmsSensorPulse" title="Sensor Active"></span>
+              <span class="fms-divider-vert"></span>
+              <button class="fms-settings-btn" id="fmsBtnSettings" title="Settings" aria-label="Settings">
+                <svg class="ic xs" id="fmsSettingsIcon" viewBox="0 0 24 24"><use href="#i-gear"/></svg>
+                <span class="fms-back-label" id="fmsBackLabel" hidden>Back</span>
+              </button>
+            </div>
+          </div>
+        </header>
 
-            <div class="sb-group-title">Intelligence</div>
-            <button class="sb-item" data-win-pane="science">
-              <svg class="ic sm"><use href="#i-chart"/></svg>
-              <span>Neck Load Science</span>
-            </button>
-            <button class="sb-item" data-win-pane="privacy">
-              <svg class="ic sm"><use href="#i-shield"/></svg>
-              <span>Privacy &amp; Local Engine</span>
-            </button>
-            <button class="sb-item" data-win-pane="hardware">
-              <svg class="ic sm"><use href="#i-airpods"/></svg>
-              <span>Hardware Compatibility</span>
-            </button>
-          </nav>
-        </aside>
+        <!-- Optional In-App Update Banner (Sparkle) -->
+        <div class="fms-update-banner" id="fmsUpdateBanner" hidden>
+          <div class="fms-up-sparkle"><svg class="ic xs"><use href="#i-spark"/></svg></div>
+          <span class="fms-up-text">Update v5.0.4 available</span>
+          <button class="fms-up-action" id="fmsBtnInstallUpdate">Install Now →</button>
+        </div>
 
-        <!-- Window Main Content Pane -->
-        <div class="win-content" id="winContentArea">
+        <!-- ================= TAB 1: MONITOR (Default Posture View) ================= -->
+        <div class="fms-tab-pane is-active" id="tabPaneMonitor" data-pane="monitor">
+          
+          <!-- Live Spine Gauge (Exact LiveSpineGauge SwiftUI Component) -->
+          <div class="fms-hero-gauge" id="fmsHeroGauge">
+            <div class="fms-gauge-aura" id="fmsGaugeAura"></div>
+            
+            <div class="fms-gauge-canvas-wrap">
+              <svg id="fmsSpineSvg" class="fms-spine-svg" viewBox="0 0 260 115" preserveAspectRatio="xMidYMid meet">
+                <!-- Calculated Quad Curve, Dashed Line, Vertebrae Circles, Head Node & Pedestal -->
+              </svg>
+            </div>
 
-          <!-- Pane 1: Overview -->
-          <div class="win-pane is-active" data-pane="overview">
-            <div class="pane-header">
-              <div class="pane-avatar">
-                <img src="assets/img/app-icon.png" alt="App Icon" width="60" height="60" />
+            <div class="fms-gauge-readout">
+              <div class="fms-gauge-angle" id="fmsGaugeAngle">3°</div>
+              <div class="fms-gauge-title" id="fmsGaugeTitle">Good Posture</div>
+              <div class="fms-great-badge" id="fmsGreatBadge">
+                <svg class="ic xs" viewBox="0 0 24 24"><use href="#i-check"/></svg>
+                <span>Great Posture</span>
               </div>
+            </div>
+          </div>
+
+          <!-- Stat Pills (Side-by-side pitch & roll) -->
+          <div class="fms-stat-pills">
+            <div class="fms-pill">
+              <div class="fms-pill-left">
+                <svg class="ic xs"><use href="#i-arrow-up-down"/></svg>
+                <span class="fms-pill-label">Head Pitch</span>
+              </div>
+              <span class="fms-pill-val" id="fmsStatPitch">2° Forward</span>
+            </div>
+
+            <div class="fms-pill">
+              <div class="fms-pill-left">
+                <svg class="ic xs"><use href="#i-arrow-left-right"/></svg>
+                <span class="fms-pill-label">Side Lean</span>
+              </div>
+              <span class="fms-pill-val" id="fmsStatRoll">1° Left</span>
+            </div>
+          </div>
+
+          <!-- Compact Status Card Component -->
+          <div class="fms-status-card" id="fmsStatusCard">
+            <div class="fms-status-left">
+              <span class="fms-status-icon-wrap" id="fmsStatusIconWrap">
+                <svg class="ic xs"><use href="#i-check-circle"/></svg>
+              </span>
+              <span class="fms-status-text" id="fmsStatusText">AirPods Connected • Posture Optimal</span>
+            </div>
+            <span class="fms-watch-badge" id="fmsWatchBadge" hidden>
+              <svg class="ic xs"><use href="#i-watch"/></svg>
+              <span>Watch Sync</span>
+            </span>
+          </div>
+
+          <!-- Large Interactive Calibrate Button -->
+          <button class="fms-btn-calibrate" id="fmsBtnCalibrate">
+            <span class="fms-cal-title" id="fmsCalTitle">Recalibrate Posture</span>
+            <span class="fms-cal-sub">Sit naturally and look forward</span>
+          </button>
+
+          <!-- Sensitivity & Alert After Selectors -->
+          <div class="fms-sensitivity-block">
+            <span class="fms-section-label">SENSITIVITY</span>
+            <div class="fms-seg-picker" id="segSensitivity" role="radiogroup">
+              <button class="fms-seg-btn" data-val="18">Relaxed</button>
+              <button class="fms-seg-btn is-active" data-val="12">Balanced</button>
+              <button class="fms-seg-btn" data-val="8">Strict</button>
+              <button class="fms-seg-btn" data-val="5">Expert</button>
+            </div>
+
+            <span class="fms-section-label">ALERT AFTER</span>
+            <div class="fms-seg-picker" id="segAlertAfter" role="radiogroup">
+              <button class="fms-seg-btn" data-val="3">Instant</button>
+              <button class="fms-seg-btn" data-val="10">10 sec</button>
+              <button class="fms-seg-btn is-active" data-val="30">30 sec</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= TAB 2: REPORTS (WeeklyReportView SwiftUI Component) ================= -->
+        <div class="fms-tab-pane" id="tabPaneReports" data-pane="reports" hidden>
+          
+          <!-- Score & Streak Header -->
+          <div class="fms-report-header">
+            <!-- Weekly Score Card -->
+            <div class="fms-score-card">
+              <div class="fms-score-ring">
+                <svg viewBox="0 0 40 40" class="fms-ring-svg">
+                  <circle cx="20" cy="20" r="16" class="fms-ring-bg" />
+                  <circle cx="20" cy="20" r="16" class="fms-ring-fg" id="fmsScoreRingFg" stroke-dasharray="100" stroke-dashoffset="8" />
+                </svg>
+                <span class="fms-score-num" id="fmsScoreNum">92%</span>
+              </div>
+              <div class="fms-score-meta">
+                <span class="fms-score-lbl">WEEKLY SCORE</span>
+                <span class="fms-score-delta">+4% vs last wk</span>
+              </div>
+            </div>
+
+            <!-- Current Streak Card -->
+            <div class="fms-streak-card">
+              <span class="fms-streak-flame">🔥</span>
+              <div class="fms-streak-meta">
+                <span class="fms-streak-lbl">CURRENT STREAK</span>
+                <span class="fms-streak-days" id="fmsStreakDays">5 Days</span>
+                <span class="fms-streak-best">Best: 7 days</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7-Day Posture Time Chart -->
+          <div class="fms-chart-card">
+            <div class="fms-chart-head">
               <div>
-                <h2>FixMySpine for Mac</h2>
-                <p class="muted sm">AirPods Posture Intelligence · Swift 6.0 &amp; SwiftUI</p>
+                <div class="fms-chart-title">7-DAY POSTURE TIME</div>
+                <div class="fms-chart-sub">This Week</div>
+              </div>
+              <div class="fms-chart-right">
+                <div class="fms-chart-lbl">Tracking Time</div>
+                <div class="fms-chart-total">6h 42m</div>
               </div>
             </div>
 
-            <div class="grid-2col pt-2">
-              <div class="card">
-                <div class="card-head">Active Sensor Feed</div>
-                <div class="row between">
-                  <div class="pwr-row">
-                    <svg class="ic sm accent"><use href="#i-airpods"/></svg>
-                    <div>
-                      <div class="sm font-medium">AirPods Pro (2nd Gen)</div>
-                      <div class="xs muted">Connected · CoreMotion Active</div>
-                    </div>
-                  </div>
-                  <span class="pressure normal"><span class="pr-dot"></span>50 Hz Stream</span>
-                </div>
-                <div class="divider"></div>
-                <div class="row between">
-                  <span class="xs muted">Current Pitch: <b class="text-hi" id="winPitchSummary">2.0°</b></span>
-                  <span class="xs muted">Baseline: <b class="text-hi">0.0°</b></span>
-                </div>
-              </div>
-
-              <div class="card">
-                <div class="card-head">Engine Status</div>
-                <div class="status-summary-grid">
-                  <div class="ss-item">
-                    <span class="xs muted">Battery</span>
-                    <span class="sm font-medium">94%</span>
-                  </div>
-                  <div class="ss-item">
-                    <span class="xs muted">Latency</span>
-                    <span class="sm font-medium accent">1.8 ms</span>
-                  </div>
-                  <div class="ss-item">
-                    <span class="xs muted">Camera Use</span>
-                    <span class="sm font-medium">0% (Disabled)</span>
-                  </div>
-                  <div class="ss-item">
-                    <span class="xs muted">Memory</span>
-                    <span class="sm font-medium">18 MB</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card mt-2">
-              <div class="card-head">How it Works</div>
-              <p class="sm muted line-relaxed">
-                FixMySpine connects to the built-in accelerometer and gyroscope inside your Apple AirPods via Apple's native CoreMotion framework. As you sit and work, it computes head tilt relative to your calibrated upright baseline. If posture drifts beyond your threshold, it provides a quiet audio or visual reminder to realign.
-              </p>
+            <div class="fms-bar-chart" id="fmsBarChart">
+              <div class="fms-bar-col" data-day="Sun" data-hrs="3.2"><div class="fms-bar-track"><div class="fms-bar-fill" style="height: 42%;"></div></div><span class="fms-bar-label">Sun</span></div>
+              <div class="fms-bar-col" data-day="Mon" data-hrs="5.8"><div class="fms-bar-track"><div class="fms-bar-fill" style="height: 76%;"></div></div><span class="fms-bar-label">Mon</span></div>
+              <div class="fms-bar-col" data-day="Tue" data-hrs="2.9"><div class="fms-bar-track"><div class="fms-bar-fill" style="height: 38%;"></div></div><span class="fms-bar-label">Tue</span></div>
+              <div class="fms-bar-col" data-day="Wed" data-hrs="4.1"><div class="fms-bar-track"><div class="fms-bar-fill" style="height: 54%;"></div></div><span class="fms-bar-label">Wed</span></div>
+              <div class="fms-bar-col" data-day="Thu" data-hrs="5.2"><div class="fms-bar-track"><div class="fms-bar-fill" style="height: 68%;"></div></div><span class="fms-bar-label">Thu</span></div>
+              <div class="fms-bar-col" data-day="Fri" data-hrs="3.8"><div class="fms-bar-track"><div class="fms-bar-fill" style="height: 50%;"></div></div><span class="fms-bar-label">Fri</span></div>
+              <div class="fms-bar-col is-selected" data-day="Sat" data-hrs="6.7"><div class="fms-bar-track"><div class="fms-bar-fill" style="height: 88%;"></div></div><span class="fms-bar-label is-active">Sat</span></div>
             </div>
           </div>
 
-          <!-- Pane 2: Sensor Telemetry -->
-          <div class="win-pane" data-pane="telemetry" hidden>
-            <h2>Real-Time CoreMotion Telemetry</h2>
-            <p class="muted sm">Live 50 Hz orientation quaternion stream mapped into Euler angles.</p>
+          <!-- Quick Stats Grid -->
+          <div class="fms-quick-grid">
+            <div class="fms-qtile">
+              <span class="fms-qlbl">AVG TILT</span>
+              <span class="fms-qval">8.0°</span>
+            </div>
+            <div class="fms-qtile">
+              <span class="fms-qlbl">SIDE LEAN</span>
+              <span class="fms-qval">1.4°</span>
+            </div>
+            <div class="fms-qtile">
+              <span class="fms-qlbl">BEST SESSION</span>
+              <span class="fms-qval">45m</span>
+            </div>
+            <div class="fms-qtile">
+              <span class="fms-qlbl">STREAK</span>
+              <span class="fms-qval">5d</span>
+            </div>
+          </div>
 
-            <div class="grid-3col pt-2">
-              <div class="card tel-card">
-                <div class="xs muted uppercase">Pitch (Forward Tilt)</div>
-                <div class="tel-big-val accent" id="winTelPitch">2.0°</div>
-                <div class="spark-line"><div class="spark-bar" id="sparkPitch" style="width:15%"></div></div>
+          <!-- Ergonomic Tip -->
+          <div class="fms-tip-card">
+            <div class="fms-tip-icon"><svg class="ic xs"><use href="#i-star"/></svg></div>
+            <div class="fms-tip-text">
+              <strong>ERGONOMIC TIP</strong>
+              <p>Align your ears over your shoulders for optimal cervical spine health.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= TAB 3: WATCH (AppleWatchLiveView SwiftUI Component) ================= -->
+        <div class="fms-tab-pane" id="tabPaneWatch" data-pane="watch" hidden>
+          
+          <div class="fms-watch-card">
+            <div class="fms-watch-hero-icon">
+              <svg viewBox="0 0 24 24" class="ic"><use href="#i-watch"/></svg>
+            </div>
+            <h3 class="fms-watch-title">Apple Watch Live Sync</h3>
+            <p class="fms-watch-sub">Pair your Apple Watch over Bluetooth for silent wrist haptic alerts and real-time posture telemetrics.</p>
+
+            <div class="fms-watch-feature-list">
+              <div class="fms-wf-item">
+                <span class="fms-wf-dot green"></span>
+                <span>Silent Wrist Taps when you slouch</span>
               </div>
-              <div class="card tel-card">
-                <div class="xs muted uppercase">Roll (Lateral Lean)</div>
-                <div class="tel-big-val cyan" id="winTelRoll">1.2°</div>
-                <div class="spark-line"><div class="spark-bar cyan" id="sparkRoll" style="width:10%"></div></div>
+              <div class="fms-wf-item">
+                <span class="fms-wf-dot red"></span>
+                <span>Live Heart Rate (BPM) &amp; Stress Tracking</span>
               </div>
-              <div class="card tel-card">
-                <div class="xs muted uppercase">Yaw (Head Rotation)</div>
-                <div class="tel-big-val" id="winTelYaw">0.4°</div>
-                <div class="spark-line"><div class="spark-bar purple" id="sparkYaw" style="width:4%"></div></div>
+              <div class="fms-wf-item">
+                <span class="fms-wf-dot blue"></span>
+                <span>Real-Time Battery &amp; Hardware Status</span>
               </div>
             </div>
 
-            <div class="card mt-2">
-              <div class="card-head">Quaternion Sensor Matrix</div>
-              <div class="matrix-grid">
-                <div><span>qw</span><b id="quatW">0.998</b></div>
-                <div><span>qx</span><b id="quatX">0.017</b></div>
-                <div><span>qy</span><b id="quatY">0.010</b></div>
-                <div><span>qz</span><b id="quatZ">0.003</b></div>
+            <button class="fms-btn-watch-pair" id="fmsBtnWatchPair">
+              <svg class="ic xs"><use href="#i-watch"/></svg>
+              <span>Connect Apple Watch</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ================= TAB 4: SETTINGS (settingsPanel SwiftUI Component) ================= -->
+        <div class="fms-tab-pane" id="tabPaneSettings" data-pane="settings" hidden>
+          
+          <!-- Reminders & Alerts -->
+          <div class="fms-set-group">
+            <span class="fms-section-label">REMINDERS &amp; ALERTS</span>
+            <div class="fms-toggle-row-grid">
+              <div class="fms-toggle-card">
+                <div class="fms-tc-left">
+                  <svg class="ic xs"><use href="#i-sound"/></svg>
+                  <span>Voice</span>
+                </div>
+                <label class="switch sm">
+                  <input type="checkbox" id="toggleVoice" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="fms-toggle-card">
+                <div class="fms-tc-left">
+                  <svg class="ic xs"><use href="#i-bell"/></svg>
+                  <span>Alerts</span>
+                </div>
+                <label class="switch sm">
+                  <input type="checkbox" id="toggleAlerts" checked />
+                  <span class="slider"></span>
+                </label>
               </div>
             </div>
           </div>
 
-          <!-- Pane 3: Neck Load Science -->
-          <div class="win-pane" data-pane="science" hidden>
-            <h2>Cervical Spine Biomechanics</h2>
-            <p class="muted sm">How head angle exponentially increases effective neck gravitational load.</p>
-
-            <div class="load-table-card mt-2">
-              <div class="load-row">
-                <span class="load-angle">0° (Neutral)</span>
-                <div class="load-bar-wrap"><div class="load-bar lvl-0" style="width:16%"></div></div>
-                <span class="load-weight">10–12 lbs</span>
-              </div>
-              <div class="load-row">
-                <span class="load-angle">15° Forward</span>
-                <div class="load-bar-wrap"><div class="load-bar lvl-1" style="width:45%"></div></div>
-                <span class="load-weight">27 lbs</span>
-              </div>
-              <div class="load-row">
-                <span class="load-angle">30° Forward</span>
-                <div class="load-bar-wrap"><div class="load-bar lvl-2" style="width:66%"></div></div>
-                <span class="load-weight">40 lbs</span>
-              </div>
-              <div class="load-row">
-                <span class="load-angle">60° (Text Neck)</span>
-                <div class="load-bar-wrap"><div class="load-bar lvl-3" style="width:100%"></div></div>
-                <span class="load-weight">60 lbs</span>
-              </div>
+          <!-- Accent Theme Customization Card -->
+          <div class="fms-set-group">
+            <span class="fms-section-label">ACCENT COLOR</span>
+            <div class="fms-theme-row" id="fmsThemePicker">
+              <button class="fms-theme-swatch is-active" data-theme="green" style="--c:#00d053;" title="Emerald Green"></button>
+              <button class="fms-theme-swatch" data-theme="blue" style="--c:#0a84ff;" title="Electric Blue"></button>
+              <button class="fms-theme-swatch" data-theme="orange" style="--c:#ff9f0a;" title="Sunset Orange"></button>
+              <button class="fms-theme-swatch" data-theme="purple" style="--c:#af52de;" title="Cyber Purple"></button>
+              <button class="fms-theme-swatch" data-theme="cyan" style="--c:#00e5ff;" title="Neon Mint"></button>
             </div>
-
-            <p class="xs muted pt-2 line-relaxed">
-              *Data sourced from Dr. Kenneth Hansraj's spine biomechanics research. Maintaining neutral head angle prevents chronic trapezius strain and cervical disc herniation.
-            </p>
           </div>
 
-          <!-- Pane 4: Privacy & Local Engine -->
-          <div class="win-pane" data-pane="privacy" hidden>
-            <h2>Privacy &amp; Local Execution</h2>
-            <p class="muted sm">Zero camera. Zero cloud. Zero tracking.</p>
-
-            <div class="privacy-list mt-2">
-              <div class="priv-item">
-                <div class="priv-icon green"><svg class="ic sm"><use href="#i-check"/></svg></div>
+          <!-- Help, About & Updates -->
+          <div class="fms-set-group">
+            <span class="fms-section-label">HELP &amp; ABOUT</span>
+            <div class="fms-about-card">
+              <div class="fms-about-top">
                 <div>
-                  <div class="sm font-medium">100% On-Device Processing</div>
-                  <div class="xs muted">CoreMotion quaternions are processed purely in Mac memory and discarded immediately.</div>
+                  <div class="fms-about-name">FixMySpine v5.0.4</div>
+                  <div class="fms-about-status">100% On-Device &amp; Private</div>
                 </div>
+                <span class="fms-about-tag">Swift 6.0</span>
               </div>
-
-              <div class="priv-item">
-                <div class="priv-icon green"><svg class="ic sm"><use href="#i-check"/></svg></div>
-                <div>
-                  <div class="sm font-medium">Zero Camera Permissions Needed</div>
-                  <div class="xs muted">Unlike camera-based posture apps, FixMySpine uses earbud inertial sensors. It works in the dark with zero battery drain on your Mac's webcam.</div>
-                </div>
+              <div class="fms-about-divider"></div>
+              <div class="fms-about-btn-grid">
+                <a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" class="fms-about-btn">
+                  <span>☕ Buy Me a Coffee</span>
+                </a>
+                <a href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener" class="fms-about-btn">
+                  <svg class="ic xs"><use href="#i-star"/></svg>
+                  <span>GitHub</span>
+                </a>
               </div>
-
-              <div class="priv-item">
-                <div class="priv-icon green"><svg class="ic sm"><use href="#i-check"/></svg></div>
-                <div>
-                  <div class="sm font-medium">Open Source &amp; Auditable</div>
-                  <div class="xs muted">All Swift code is publicly verifiable on GitHub with cryptographic signatures.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pane 5: Hardware Compatibility -->
-          <div class="win-pane" data-pane="hardware" hidden>
-            <h2>Supported Hardware</h2>
-            <p class="muted sm">Compatible with all Apple spatial motion tracking devices on macOS 14+.</p>
-
-            <div class="hw-grid mt-2">
-              <div class="hw-card is-supported">
-                <svg class="ic"><use href="#i-airpods"/></svg>
-                <div class="hw-name">AirPods Pro</div>
-                <div class="xs accent">1st &amp; 2nd Generation</div>
-              </div>
-              <div class="hw-card is-supported">
-                <svg class="ic"><use href="#i-airpods"/></svg>
-                <div class="hw-name">AirPods Max</div>
-                <div class="xs accent">Lightning &amp; USB-C</div>
-              </div>
-              <div class="hw-card is-supported">
-                <svg class="ic"><use href="#i-airpods"/></svg>
-                <div class="hw-name">AirPods (3rd &amp; 4th Gen)</div>
-                <div class="xs accent">With Spatial Audio</div>
-              </div>
-              <div class="hw-card is-supported">
-                <svg class="ic"><use href="#i-airpods"/></svg>
-                <div class="hw-name">Beats Fit Pro</div>
-                <div class="xs accent">Apple H1 Chip</div>
+              <div class="fms-about-btn-grid">
+                <button class="fms-about-btn" id="btnSparkleCheck">
+                  <svg class="ic xs"><use href="#i-reset"/></svg>
+                  <span>Check Updates</span>
+                </button>
+                <a href="mailto:ombichave639@gmail.com?subject=FixMySpine%20Issue%20/%20Feedback" class="fms-about-btn">
+                  <svg class="ic xs"><use href="#i-bell"/></svg>
+                  <span>Report Issue</span>
+                </a>
               </div>
             </div>
           </div>
 
         </div>
 
-      </div>
+        <!-- Popover Footer Toolbar (Exact RefinedBottomToolbarItem SwiftUI Component) -->
+        <footer class="fms-footer-toolbar">
+          <button class="fms-foot-btn is-active" id="fmsFootPause" title="Pause / Resume Tracking">
+            <svg class="ic xs" id="fmsPauseIcon"><use href="#i-pause"/></svg>
+            <span id="fmsPauseLabel">Pause</span>
+          </button>
+          <span class="fms-foot-divider"></span>
+          <button class="fms-foot-btn" id="fmsFootWatch" title="Apple Watch Sync">
+            <svg class="ic xs"><use href="#i-watch"/></svg>
+            <span>Watch</span>
+          </button>
+          <span class="fms-foot-divider"></span>
+          <button class="fms-foot-btn" id="fmsFootReports" title="Weekly Posture Analytics">
+            <svg class="ic xs"><use href="#i-chart"/></svg>
+            <span>Reports</span>
+          </button>
+          <span class="fms-foot-divider"></span>
+          <button class="fms-foot-btn" id="fmsFootQuit" title="Quit FixMySpine">
+            <svg class="ic xs"><use href="#i-power"/></svg>
+            <span>Quit</span>
+          </button>
+        </footer>
 
-      <!-- Window Resize Handle -->
-      <div class="win-resize" data-resize title="Resize window"></div>
+      </div>
     </section>
 
-    <!-- ================= NATIVE MACOS DOCK ================= -->
+    <!-- ================= BOTTOM MACOS DOCK ================= -->
     <nav class="dock" id="dock" aria-label="macOS Dock">
       <div class="dock-inner">
-        <button class="dock-item" id="dockAppSettings" data-action="open-window" data-window="settings" data-tip="FixMySpine Settings">
-          <span class="dock-icon-tile">
-            <img src="assets/img/app-icon.png" alt="FixMySpine app" width="44" height="44" />
-          </span>
-          <span class="dock-running-dot" id="dockSettingsDot"></span>
+        <button class="dock-icon-tile" id="dockAppFixMySpine" title="FixMySpine (Active App)" data-action="toggle-popover">
+          <img src="assets/img/app-icon.png" alt="FixMySpine" width="44" height="44" />
+          <span class="dock-indicator" id="dockActiveDot"></span>
         </button>
 
-        <button class="dock-item" id="dockCalibrate" data-action="calibrate" data-tip="Calibrate Baseline (0°)">
-          <span class="dock-icon-tile di-cal">
+        <button class="dock-icon-tile" id="dockCalibrate" title="Recalibrate Posture">
+          <div class="di-tile-inner di-cal">
             <svg class="ic"><use href="#i-reset"/></svg>
-          </span>
+          </div>
         </button>
 
-        <button class="dock-item" id="dockDownload" data-action="open-download" data-tip="Download macOS App">
-          <span class="dock-icon-tile di-down">
+        <a class="dock-icon-tile" id="dockDownload" title="Download FixMySpine (.dmg)" href="https://github.com/ombichave999/FixMySpine/releases" target="_blank" rel="noopener">
+          <div class="di-tile-inner di-down">
             <svg class="ic"><use href="#i-download"/></svg>
-          </span>
-        </button>
+          </div>
+        </a>
 
-        <span class="dock-sep"></span>
+        <div class="dock-separator"></div>
 
-        <a class="dock-item" href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener" data-tip="GitHub Repository">
-          <span class="dock-icon-tile di-gh">
+        <a class="dock-icon-tile" id="dockGitHub" title="GitHub Repository" href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener">
+          <div class="di-tile-inner di-gh">
             <svg viewBox="0 0 24 24" class="ic"><path fill="currentColor" d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.21 3.44 9.63 8.21 11.19.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.6-4.04-1.6-.55-1.38-1.34-1.75-1.34-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.22 1.84 1.22 1.07 1.8 2.81 1.28 3.5.98.11-.77.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.84 0-1.29.47-2.34 1.24-3.17-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 6 0c2.29-1.53 3.3-1.21 3.3-1.21.65 1.66.24 2.88.12 3.18.77.83 1.23 1.88 1.23 3.17 0 4.54-2.81 5.54-5.49 5.83.43.36.81 1.08.81 2.18v3.23c0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg>
-          </span>
+          </div>
         </a>
       </div>
     </nav>
 
-    <!-- Download Modal / Toast -->
-    <div class="modal-dialog" id="downloadModal" hidden>
-      <div class="modal-card">
-        <img src="assets/img/app-icon.png" alt="FixMySpine App" width="64" height="64" style="border-radius:14px" />
-        <h3>FixMySpine for macOS</h3>
-        <p class="sm muted">Native Swift 6.0 app for macOS 14.0+ (Apple Silicon &amp; Intel with AirPods). 100% Free &amp; Open-Source.</p>
-        <div class="status-badge" role="status" style="border-color:rgba(0,208,83,0.35);color:#00d053">
-          <span class="status-dot" style="background:#00d053"></span>
-          v5.0.4 Release Ready
-        </div>
-        <div class="modal-actions pt-2" style="display:flex;flex-direction:column;gap:0.5rem;width:100%">
-          <a href="https://github.com/ombichave999/FixMySpine/releases/download/v5.0.4/FixMySpine.dmg" download class="btn btn-primary" style="text-align:center">Download .DMG (v5.0.4) ↓</a>
-          <a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" class="btn btn-ghost" style="background:#FFDD00;color:#000;font-weight:600;text-align:center">☕ Buy Me a Coffee</a>
-          <button class="btn btn-ghost" id="btnCloseModal">Close</button>
-        </div>
-      </div>
-    </div>
-
   </main>
 
-  <script src="assets/js/main.js?v=20260907-1"></script>
+  <script src="assets/js/main.js?v=20260907-2"></script>
 </body>
 </html>
