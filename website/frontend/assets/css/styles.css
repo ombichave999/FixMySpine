@@ -1080,6 +1080,7 @@ button:focus-visible, a:focus-visible {
   .mb-status-chip .chip-text { display: none; }
   .mb-battery { display: none; }
   .mb-metric-readout .metric-label { display: none; }
+  .mb-clock { display: none; }
   
   .popover {
     position: fixed;
@@ -1088,6 +1089,8 @@ button:focus-visible, a:focus-visible {
     left: 10px;
     right: 10px;
     width: auto;
+    max-width: calc(100% - 20px);
+    margin: 0 auto;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
   }
@@ -1113,7 +1116,6 @@ button:focus-visible, a:focus-visible {
 }
 
 @media (max-width: 420px) {
-  .mb-clock { display: none; }
   .pop-body { min-height: 200px; }
   .spine-stage { padding: 6px 8px; }
   .tel-val { font-size: 14px; }
