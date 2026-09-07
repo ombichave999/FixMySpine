@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="website/frontend/assets/img/icon-512.png" width="112" alt="FixMySpine logo">
+  <img src=".github/assets/app-icon.png" width="112" alt="FixMySpine logo">
 </p>
 
 <h1 align="center">FixMySpine</h1>
@@ -29,20 +29,32 @@
 
 <p align="center">
   <a href="https://github.com/ombichave999/FixMySpine/releases/download/v5.0.4/FixMySpine.dmg">
-    <img src="https://img.shields.io/badge/Download_for_macOS-v5.0.4_.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download for macOS">
+    <img src=".github/assets/btn-download.svg" height="50" alt="Download for macOS">
   </a>
   &nbsp;&nbsp;
-  <a href="https://buymeacoffee.com/fixmyspine">
-    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_FOSS-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee">
+  <a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener">
+    <img src=".github/assets/btn-bmac.svg" height="50" alt="Buy Me a Coffee">
   </a>
 </p>
 
-<p align="center">
-  <img src=".github/screenshots/1-airpods-already-know.png" width="190" alt="Your AirPods already know">
-  <img src=".github/screenshots/2-so-i-built-something.png" width="190" alt="So I built something">
-  <img src=".github/screenshots/3-it-knows-difference.png" width="190" alt="It knows the difference">
-  <img src=".github/screenshots/4-and-it-remembers.png" width="190" alt="And it remembers">
-</p>
+<div align="center">
+<table>
+  <tr>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/1-airpods-already-know.png" width="100%" alt="1. Your AirPods already know.">
+    </td>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/2-so-i-built-something.png" width="100%" alt="2. So I built something.">
+    </td>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/3-it-knows-difference.png" width="100%" alt="3. It knows the difference.">
+    </td>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/4-and-it-remembers.png" width="100%" alt="4. And it remembers.">
+    </td>
+  </tr>
+</table>
+</div>
 
 Real-time 60Hz AirPods motion tracking, subtle in-ear alerts, intelligent slouch hysteresis, Apple Watch haptic taps, daily posture scoring, and native SwiftUI custom accents. The posture intelligence tools Mac users need during deep focus work, behind a featherlight menu bar icon with no camera access, no account, no telemetry, and no subscription.
 

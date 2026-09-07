@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="58" viewBox="0 0 250 58" fill="none">
+  <defs>
+    <linearGradient id="grad-bmac" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFEB3B"/>
+      <stop offset="100%" stop-color="#FFC107"/>
+    </linearGradient>
+    <linearGradient id="bmac-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="bmac-glow" x="-10%" y="-10%" width="120%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Base Curved Pill -->
+  <rect x="3" y="3" width="244" height="52" rx="26" fill="url(#grad-bmac)" filter="url(#bmac-glow)"/>
+  <rect x="3.5" y="3.5" width="243" height="51" rx="25.5" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+  <rect x="4" y="4" width="242" height="25" rx="13" fill="url(#bmac-highlight)"/>
+
+  <!-- Coffee Icon / Text -->
+  <text x="24" y="36" font-size="20">☕</text>
+  <text x="56" y="35.5" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#111111" letter-spacing="-0.2">Buy Me a Coffee</text>
+</svg>

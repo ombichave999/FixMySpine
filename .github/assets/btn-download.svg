@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="58" viewBox="0 0 340 58" fill="none">
+  <defs>
+    <linearGradient id="grad-dl" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00E35B"/>
+      <stop offset="100%" stop-color="#00A843"/>
+    </linearGradient>
+    <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-10%" y="-10%" width="120%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <!-- Base Curved Pill -->
+  <rect x="3" y="3" width="334" height="52" rx="26" fill="url(#grad-dl)" filter="url(#glow)"/>
+  <rect x="3.5" y="3.5" width="333" height="51" rx="25.5" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <rect x="4" y="4" width="332" height="25" rx="13" fill="url(#highlight)"/>
+
+  <!-- Apple Logo -->
+  <g transform="translate(22, 16.5) scale(0.055)">
+    <path fill="#ffffff" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 66.2 31.9 125.7c15.6 28.5 35.3 56.4 62.4 86.8 24.3 27.4 44.5 50.1 72.8 49.3 28.3-.9 38.8-18.4 71.9-18.4 32.2 0 42.7 18.4 71.9 17.5 30.1-.9 51.5-24.8 74.8-51.3 18.4-20.9 33.1-43.9 44.1-68.8-72.2-27.4-85.1-95.6-85.1-145.6zm-50.6-160.2c16.3-20.4 27.6-48.4 24.4-76.5-23.7 1-52.6 15.7-69.5 35.8-15 17.6-28.2 45.9-24.7 73.1 26.6 2.1 53.5-12 69.8-32.4z"/>
+  </g>
+
+  <!-- Label -->
+  <text x="58" y="35" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#ffffff" letter-spacing="-0.2">Download for Mac</text>
+
+  <!-- Tag Pill -->
+  <g transform="translate(224, 13)">
+    <rect width="98" height="32" rx="16" fill="rgba(0,0,0,0.22)"/>
+    <rect x="0.5" y="0.5" width="97" height="31" rx="15.5" stroke="rgba(255,255,255,0.22)" stroke-width="1"/>
+    <text x="49" y="21" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="0.3">v5.0.4 · .DMG</text>
+  </g>
+</svg>

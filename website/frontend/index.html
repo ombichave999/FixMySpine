@@ -168,7 +168,7 @@
     <section class="desk-icons" aria-label="Desktop icons">
       <button class="desk-icon" id="deskIconSettings" data-action="open-window" data-window="settings">
         <span class="di-tile di-app">
-          <img src="assets/img/icon-512.png" alt="FixMySpine" width="48" height="48" />
+          <img src="assets/img/app-icon.png" alt="FixMySpine" width="48" height="48" />
         </span>
         <span class="di-label">FixMySpine</span>
       </button>
@@ -451,7 +451,7 @@
           <div class="win-pane is-active" data-pane="overview">
             <div class="pane-header">
               <div class="pane-avatar">
-                <img src="assets/img/icon-512.png" alt="App Icon" width="60" height="60" />
+                <img src="assets/img/app-icon.png" alt="App Icon" width="60" height="60" />
               </div>
               <div>
                 <h2>FixMySpine for Mac</h2>
@@ -651,7 +651,7 @@
       <div class="dock-inner">
         <button class="dock-item" id="dockAppSettings" data-action="open-window" data-window="settings" data-tip="FixMySpine Settings">
           <span class="dock-icon-tile">
-            <img src="assets/img/icon-512.png" alt="FixMySpine app" width="44" height="44" />
+            <img src="assets/img/app-icon.png" alt="FixMySpine app" width="44" height="44" />
           </span>
           <span class="dock-running-dot" id="dockSettingsDot"></span>
         </button>
@@ -681,15 +681,16 @@
     <!-- Download Modal / Toast -->
     <div class="modal-dialog" id="downloadModal" hidden>
       <div class="modal-card">
-        <img src="assets/img/icon-512.png" alt="FixMySpine App" width="64" height="64" />
+        <img src="assets/img/app-icon.png" alt="FixMySpine App" width="64" height="64" style="border-radius:14px" />
         <h3>FixMySpine for macOS</h3>
-        <p class="sm muted">Native Swift 6.0 app for macOS 14.0+ (Apple Silicon &amp; Intel with AirPods).</p>
-        <div class="status-badge" role="status">
-          <span class="status-dot"></span>
-          macOS App · Coming Soon
+        <p class="sm muted">Native Swift 6.0 app for macOS 14.0+ (Apple Silicon &amp; Intel with AirPods). 100% Free &amp; Open-Source.</p>
+        <div class="status-badge" role="status" style="border-color:rgba(0,208,83,0.35);color:#00d053">
+          <span class="status-dot" style="background:#00d053"></span>
+          v5.0.4 Release Ready
         </div>
-        <div class="modal-actions pt-2">
-          <a href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener" class="btn btn-primary">Star on GitHub</a>
+        <div class="modal-actions pt-2" style="display:flex;flex-direction:column;gap:0.5rem;width:100%">
+          <a href="https://github.com/ombichave999/FixMySpine/releases/download/v5.0.4/FixMySpine.dmg" download class="btn btn-primary" style="text-align:center">Download .DMG (v5.0.4) ↓</a>
+          <a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" class="btn btn-ghost" style="background:#FFDD00;color:#000;font-weight:600;text-align:center">☕ Buy Me a Coffee</a>
           <button class="btn btn-ghost" id="btnCloseModal">Close</button>
         </div>
       </div>
