@@ -16,8 +16,19 @@
 
 <br/>
 
-*FixMySpine turns the 60Hz CoreMotion gyroscopes inside your AirPods into a silent, real-time posture coach for macOS. Zero cameras, zero cloud calls, zero battery drain.*
+<br/>
 
+<a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg">
+  <img src="https://img.shields.io/badge/Download_FixMySpine_v5.0.4-.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download .DMG" height="38" />
+</a>
+&nbsp;&nbsp;
+<a href="https://buymeacoffee.com/fixmyspine">
+  <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_FOSS-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee" height="38" />
+</a>
+
+<br/><br/>
+
+[Product Tour](#-product-tour) •
 [Download Latest .DMG](https://github.com/ombichave999/FixMySpine/releases) •
 [Features](#-features) •
 [Supported Hardware](#-supported-hardware) •
@@ -25,6 +36,55 @@
 [Building Locally](#-building-locally) •
 [Sponsor](#-support--sponsor)
 
+</div>
+
+---
+
+## 📸 Product Tour
+
+<div align="center">
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <a href=".github/screenshots/1-airpods-already-know.png">
+        <img src=".github/screenshots/1-airpods-already-know.png" width="100%" alt="Your AirPods already know." />
+      </a>
+      <br/>
+      <b>1. Your AirPods already know.</b>
+      <br/>
+      <sub>60Hz CoreMotion head-tracking reads pitch &amp; roll directly.</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href=".github/screenshots/2-so-i-built-something.png">
+        <img src=".github/screenshots/2-so-i-built-something.png" width="100%" alt="So I built something." />
+      </a>
+      <br/>
+      <b>2. So I built something.</b>
+      <br/>
+      <sub>A featherlight menu bar companion crafted in native SwiftUI.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <a href=".github/screenshots/3-it-knows-difference.png">
+        <img src=".github/screenshots/3-it-knows-difference.png" width="100%" alt="It knows the difference." />
+      </a>
+      <br/>
+      <b>3. It knows the difference.</b>
+      <br/>
+      <sub>Hysteresis grace window ignores head turns, water sips, and natural movement.</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href=".github/screenshots/4-and-it-remembers.png">
+        <img src=".github/screenshots/4-and-it-remembers.png" width="100%" alt="And it remembers." />
+      </a>
+      <br/>
+      <b>4. And it remembers.</b>
+      <br/>
+      <sub>Local weekly spine telemetry and posture streaks stored on-device.</sub>
+    </td>
+  </tr>
+</table>
 </div>
 
 ---
