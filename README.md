@@ -1,17 +1,16 @@
 <p align="center">
-  <img src="website/frontend/assets/img/icon-512.png" width="120" alt="FixMySpine logo">
+  <img src="website/frontend/assets/img/icon-512.png" width="112" alt="FixMySpine logo">
 </p>
 
 <h1 align="center">FixMySpine</h1>
 
 <p align="center">
   AirPods posture intelligence for macOS.<br>
-  Free, open source, and everything runs 100% locally on your Mac.
+  100% Free &amp; Open-Source · Runs entirely on your Mac.
 </p>
 
 <p align="center">
-  <a href="https://github.com/ombichave999/FixMySpine">GitHub</a> ·
-  <a href="#install">Install</a> ·
+  <a href="https://github.com/ombichave999/FixMySpine/releases/tag/v5.0.4">Download</a> ·
   <a href="#everything-it-does">Features</a> ·
   <a href="#how-it-works">How It Works</a> ·
   <a href="#private-by-default">Privacy</a> ·
@@ -20,21 +19,21 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ombichave999/FixMySpine/releases/latest"><img src="https://img.shields.io/github/v/release/ombichave999/FixMySpine?label=release&color=00D053" alt="Latest release"></a>
-  <a href="https://github.com/ombichave999/FixMySpine/releases"><img src="https://img.shields.io/badge/downloads-100%25%20FOSS-00D053" alt="Downloads"></a>
-  <a href="https://github.com/ombichave999/FixMySpine/actions/workflows/ci.yml"><img src="https://github.com/ombichave999/FixMySpine/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
-  <a href="#what-you-need"><img src="https://img.shields.io/badge/macOS-14%2B%20Sonoma%20%26%20Sequoia-black?logo=apple" alt="macOS 14 and newer"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License MIT"></a>
-  <a href="https://buymeacoffee.com/fixmyspine"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
+  <a href="https://github.com/ombichave999/FixMySpine/releases/tag/v5.0.4"><img src="https://img.shields.io/badge/version-5.0.4-00D053?style=flat-square" alt="Version 5.0.4"></a>
+  <a href="https://developer.apple.com/macos/"><img src="https://img.shields.io/badge/macOS-14.0%2B-black?style=flat-square&logo=apple&logoColor=white" alt="macOS 14+"></a>
+  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-6.0-FA7343?style=flat-square&logo=swift&logoColor=white" alt="Swift 6"></a>
+  <a href="#private-by-default"><img src="https://img.shields.io/badge/privacy-100%25_On--Device-00D053?style=flat-square" alt="100% On-Device"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0071E3?style=flat-square" alt="MIT License"></a>
+  <a href="https://buymeacoffee.com/fixmyspine"><img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg">
-    <img src="https://img.shields.io/badge/Download_FixMySpine_v5.0.4-.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download .DMG" height="38">
+  <a href="https://github.com/ombichave999/FixMySpine/releases/download/v5.0.4/FixMySpine.dmg">
+    <img src="https://img.shields.io/badge/Download_for_macOS-v5.0.4_.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download for macOS">
   </a>
-  &nbsp;
+  &nbsp;&nbsp;
   <a href="https://buymeacoffee.com/fixmyspine">
-    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_FOSS-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee" height="38">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_FOSS-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee">
   </a>
 </p>
 
@@ -75,11 +74,11 @@ Every head-tracking AirPod carries an Inertial Measurement Unit (IMU) built for 
 
 ```mermaid
 flowchart LR
-    A["AirPods 60Hz IMU<br/>(Gyroscope / Accel)"] -->|Bluetooth LE| B["CMHeadphoneMotionManager<br/>(Sources/main.swift)"]
-    B --> C["Compound Vector Filter<br/>sqrt(nod² + 0.49·side²)"]
-    C --> D{"10s Slouch Filter"}
-    D -->|Aligned (0°-5°)| E["● Green Menu Bar Glyph"]
-    D -->|Slouching (>8° for 10s)| F["Ambient In-Ear Chime / Voice Reset"]
+    A[AirPods 60Hz IMU] -->|Bluetooth LE| B[CoreMotion Engine]
+    B --> C[Compound Biometric Filter]
+    C --> D{10s Slouch Window}
+    D -->|Aligned| E[Green Menu Bar Glyph]
+    D -->|Slouching| F[Ambient In-Ear Chime]
 ```
 
 ## Install
@@ -87,7 +86,7 @@ flowchart LR
 Grab the disk image from the [releases page](https://github.com/ombichave999/FixMySpine/releases) and drag FixMySpine into Applications:
 
 <p align="center">
-  <a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg">
+  <a href="https://github.com/ombichave999/FixMySpine/releases/download/v5.0.4/FixMySpine.dmg">
     <img src="https://img.shields.io/badge/Download_FixMySpine_v5.0.4-.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download .DMG" height="42">
   </a>
 </p>
@@ -115,7 +114,7 @@ FixMySpine is built with privacy as an absolute foundational constraint:
 FixMySpine works with any Apple audio device equipped with head-tracking IMUs running on macOS 14.0+:
 
 | Device | Head-Tracking IMU | Status |
-| :--- | :---: | :---: |
+| :--- | :---: | :--- |
 | **AirPods Pro (2nd Generation)** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
 | **AirPods Pro (1st Generation)** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
 | **AirPods Max** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
@@ -153,13 +152,11 @@ FixMySpine is **100% Free and Open-Source**. If it helps protect your neck and p
 
 <p align="center">
   <a href="https://buymeacoffee.com/fixmyspine">
-    <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=fixmyspine&button_colour=00D053&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me A Coffee">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee">
   </a>
-</p>
-
-<p align="center">
+  &nbsp;&nbsp;
   <a href="https://github.com/sponsors/ombichave999">
-    <img src="https://img.shields.io/badge/Sponsor%20on%20GitHub-EA4AAA?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors">
+    <img src="https://img.shields.io/badge/Sponsor_on_GitHub-EA4AAA?style=for-the-badge&logo=github-sponsors&logoColor=white" alt="Sponsor on GitHub">
   </a>
 </p>
 
@@ -168,4 +165,5 @@ For private feedback or questions, contact [ombichave639@gmail.com](mailto:ombic
 ## License
 
 Distributed under the [MIT License](LICENSE).
+
 
