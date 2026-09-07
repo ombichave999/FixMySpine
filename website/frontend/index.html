@@ -5,837 +5,698 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>FixMySpine — AirPods Posture Intelligence for macOS</title>
   <meta name="description" content="FixMySpine turns the motion sensors inside your AirPods into a real-time posture coach for your Mac. Silent, precise, and 100% on-device." />
-  <meta name="theme-color" content="#0d0e12" />
-  <link rel="icon" type="image/png" href="assets/img/icon-256.png" />
-  <link rel="apple-touch-icon" href="assets/img/icon-256.png" />
-  <link rel="stylesheet" href="assets/css/styles.css?v=9" />
-
-  <meta property="og:title" content="FixMySpine — AirPods Posture Intelligence for macOS" />
-  <meta property="og:description" content="Real-time head-tilt and posture tracking using your AirPods motion sensors. 100% on-device processing." />
-  <meta property="og:image" content="assets/img/icon-512.png" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="application-name" content="FixMySpine" />
+  <meta name="apple-mobile-web-app-title" content="FixMySpine" />
+  <meta name="theme-color" content="#070b12" />
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/img/icon-64.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="assets/img/icon-512.png" />
   <meta property="og:type" content="website" />
-
-  <script>document.documentElement.classList.add("js");</script>
+  <meta property="og:site_name" content="FixMySpine" />
+  <meta property="og:title" content="FixMySpine — AirPods Posture Intelligence for macOS" />
+  <meta property="og:description" content="FixMySpine turns the motion sensors inside your AirPods into a real-time posture coach for your Mac. Silent, precise, and 100% on-device." />
+  <meta property="og:image" content="assets/img/icon-512.png" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260907-1" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "FixMySpine",
+    "url": "https://fixmyspine-theta.vercel.app",
+    "image": "assets/img/icon-512.png",
+    "description": "FixMySpine turns the motion sensors inside your AirPods into a real-time posture coach for your Mac. Silent, precise, and 100% on-device.",
     "operatingSystem": "macOS 14.0+",
-    "softwareVersion": "5.0.4",
     "applicationCategory": "HealthApplication",
-    "description": "Menu bar app that uses AirPods motion sensors to track posture in real time. 100% on-device processing."
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
   }
   </script>
 </head>
-<body>
-  <a href="#main" class="skip-link">Skip to main content</a>
+<body class="booting">
 
-  <!-- ================= Header ================= -->
-  <header class="site-header" id="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="FixMySpine home">
-        <span>FixMySpine</span>
-      </a>
+  <!-- ================= SVG ICONS (SF Symbols Style) ================= -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M17.6 12.7c0-2.3 1.9-3.4 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.8-3.5.8-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.9-.4 7.1 1.2 9.4.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.8-2.2.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.5-1-2.5-3.8zM15.3 5.8c.6-.8 1-1.9.9-3-1 0-2.1.7-2.8 1.5-.6.7-1.1 1.8-1 2.8 1.1.1 2.2-.5 2.9-1.3z"/></symbol>
+      
+      <symbol id="i-spine" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-2.5 5.5a1.5 1.5 0 0 0 0 3h5a1.5 1.5 0 0 0 0-3h-5zm-.5 4.5a1.5 1.5 0 0 0 0 3h6a1.5 1.5 0 0 0 0-3h-6zm0 4.5a1.5 1.5 0 0 0 0 3h6a1.5 1.5 0 0 0 0-3h-6zm1 4.5a1.5 1.5 0 0 0 0 3h4a1.5 1.5 0 0 0 0-3h-4z"/>
+      </symbol>
 
-      <nav class="header-nav" aria-label="Primary">
-        <a href="#showcase">Product Tour</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#demo">Live demo</a>
-        <a href="#setup">Get started</a>
-        <a href="#features">Features</a>
-        <a href="#privacy">Privacy</a>
-        <a href="#requirements">Requirements</a>
-      </nav>
+      <symbol id="i-airpods" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M6 3a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h1v8a2 2 0 1 0 4 0V6a3 3 0 0 0-3-3H6zm12 0a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h1v8a2 2 0 1 0 4 0V6a3 3 0 0 0-3-3h-2z"/>
+      </symbol>
 
-      <div class="header-cta">
-        <a class="bmac-nav-btn" href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" aria-label="Buy Me a Coffee">☕ <span>Buy Me a Coffee</span></a>
-        <a class="btn btn-primary btn-sm" href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg" download style="padding:0.45rem 0.9rem;font-size:0.84rem">Download .DMG ↓</a>
-        <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
-          <span aria-hidden="true"></span>
+      <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></g></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></g></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 7.5h7M14.3 7.5H21M3 12h11.3M18.6 12H21M3 16.5h4M11.3 16.5H21"/></g><g fill="currentColor"><circle cx="12" cy="7.5" r="2.3"/><circle cx="16.3" cy="12" r="2.3"/><circle cx="9" cy="16.5" r="2.3"/></g></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></g></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><path fill="currentColor" d="M12 8.4A3.6 3.6 0 1 0 12 15.6 3.6 3.6 0 0 0 12 8.4zm0 5.4A1.8 1.8 0 1 1 12 10.2 1.8 1.8 0 0 1 12 13.8z"/><path fill="currentColor" d="m20 13.6-.1-3.2-2-.5a6 6 0 0 0-.5-1.2l1-1.8L16.1 4.6l-1.8 1a6 6 0 0 0-1.2-.5l-.5-2H9.4l-.5 2a6 6 0 0 0-1.2.5l-1.8-1L3.6 6.9l1 1.8a6 6 0 0 0-.5 1.2l-2 .5v3.2l2 .5a6 6 0 0 0 .5 1.2l-1 1.8 2.3 2.3 1.8-1a6 6 0 0 0 1.2.5l.5 2h3.2l.5-2a6 6 0 0 0 1.2-.5l1.8 1 2.3-2.3-1-1.8a6 6 0 0 0 .5-1.2zM12 17.4A5.4 5.4 0 1 1 12 6.6 5.4 5.4 0 0 1 12 17.4z"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v10M8 9.5l4 4 4-4"/><path d="M5 17.5v1.5a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-1.5"/></g></symbol>
+      <symbol id="i-sound" viewBox="0 0 24 24"><g fill="currentColor"><path d="M4 9.5h3l4-3.2v11.4L7 14.5H4z"/></g><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 9a4 4 0 0 1 0 6M16.4 7a7 7 0 0 1 0 10"/></g></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.6c.3 0 .5.2.6.5l1 3.6a4 4 0 0 0 2.8 2.8l3.6 1c.5.2.5.9 0 1l-3.6 1a4 4 0 0 0-2.8 2.8l-1 3.6c-.1.5-.9.5-1 0l-1-3.6A4 4 0 0 0 7.8 12.6l-3.6-1c-.5-.1-.5-.8 0-1l3.6-1A4 4 0 0 0 10.6 6.7l1-3.6c.1-.3.3-.5.4-.5z"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m9.5 6 6 6-6 6"/></symbol>
+      <symbol id="i-reset" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5A7.5 7.5 0 1 1 4.2 13"/><path d="M4 4v4.5h4.5"/></g></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.2"/><path d="m16 16 4 4"/></g></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-battery" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="8" width="16.5" height="8" rx="2.3"/><path d="M21 11v2" stroke-linecap="round"/></g><rect x="4" y="9.5" width="11" height="5" rx="1" fill="currentColor"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ================= DESKTOP SIMULATOR ================= -->
+  <main id="desktop" class="desktop">
+
+    <!-- Screen reader / SEO structured information -->
+    <section class="sr-only">
+      <h1>FixMySpine — AirPods Posture Intelligence for macOS</h1>
+      <p>FixMySpine turns the motion sensors inside your AirPods into a real-time posture coach for your Mac. Silent, precise, and 100% on-device. Zero cameras. Real-time cervical spine tracking and gentle nudges.</p>
+      <h2>Key Features</h2>
+      <ul>
+        <li>CoreMotion Head Angle Tracking with 50Hz precision</li>
+        <li>One-click baseline calibration</li>
+        <li>Custom sensitivity thresholds and grace periods</li>
+        <li>100% on-device privacy guarantee</li>
+        <li>AirPods Pro, AirPods Max, 3rd &amp; 4th Gen AirPods, and Beats Fit Pro support</li>
+      </ul>
+      <a href="https://github.com/ombichave999/FixMySpine">GitHub Repository</a>
+    </section>
+
+    <!-- Dynamic Glowing macOS Wallpaper -->
+    <svg class="wallpaper" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="bgGrad" cx="50%" cy="20%" r="110%">
+          <stop offset="0%" stop-color="#0e1f18" />
+          <stop offset="40%" stop-color="#0a141c" />
+          <stop offset="75%" stop-color="#060a10" />
+          <stop offset="100%" stop-color="#03060a" />
+        </radialGradient>
+        <linearGradient id="auroraGreen" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#00d053" stop-opacity="0" />
+          <stop offset="45%" stop-color="#00ff73" stop-opacity="0.85" />
+          <stop offset="60%" stop-color="#73ffb0" stop-opacity="0.95" />
+          <stop offset="100%" stop-color="#00d053" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="auroraCyan" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stop-color="#00d0a0" stop-opacity="0" />
+          <stop offset="50%" stop-color="#00e5ff" stop-opacity="0.65" />
+          <stop offset="100%" stop-color="#00d0a0" stop-opacity="0" />
+        </linearGradient>
+        <filter id="softBlur"><feGaussianBlur stdDeviation="2.5" /></filter>
+        <filter id="glowHaze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="40" /></filter>
+      </defs>
+      <rect width="1600" height="1000" fill="url(#bgGrad)" />
+      <ellipse cx="1120" cy="180" rx="550" ry="380" fill="#00d053" opacity="0.22" filter="url(#glowHaze)" />
+      <ellipse cx="320" cy="850" rx="480" ry="340" fill="#007a38" opacity="0.3" filter="url(#glowHaze)" />
+      <ellipse cx="800" cy="450" rx="600" ry="250" fill="#00e5ff" opacity="0.12" filter="url(#glowHaze)" />
+      
+      <!-- Wave light ribbons -->
+      <g filter="url(#softBlur)" fill="none" class="aurora-paths">
+        <path d="M-60 480 C 380 240 580 740 1000 520 S 1520 220 1740 380" stroke="url(#auroraGreen)" stroke-width="2.6" />
+        <path d="M-60 580 C 400 370 640 820 1050 590 S 1540 310 1740 480" stroke="url(#auroraGreen)" stroke-width="3.2" />
+        <path d="M-60 700 C 440 510 660 960 1100 700 S 1560 450 1740 620" stroke="url(#auroraCyan)" stroke-width="1.8" />
+        <path d="M-60 340 C 340 160 560 510 960 360 S 1500 130 1740 240" stroke="url(#auroraCyan)" stroke-width="1.5" />
+      </g>
+    </svg>
+
+    <!-- ================= TOP MENU BAR ================= -->
+    <header class="menubar" id="menubar">
+      <div class="menubar-left">
+        <button class="mb-menu-btn apple-logo" id="appleMenuBtn" aria-label="Apple menu">
+          <svg viewBox="0 0 24 24"><use href="#i-apple"/></svg>
         </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Mobile menu -->
-  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile" aria-hidden="true">
-    <a href="#showcase">Product Tour <span class="idx">01</span></a>
-    <a href="#how-it-works">How it works <span class="idx">02</span></a>
-    <a href="#demo">Live demo <span class="idx">03</span></a>
-    <a href="#setup">Get started <span class="idx">04</span></a>
-    <a href="#features">Features <span class="idx">05</span></a>
-    <a href="#privacy">Privacy <span class="idx">06</span></a>
-    <a href="#requirements">Requirements <span class="idx">07</span></a>
-    <div style="padding-top:0.75rem;display:flex;flex-direction:column;gap:0.5rem">
-      <a class="btn btn-primary" href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg" download style="text-align:center">Download for Mac (.DMG) ↓</a>
-      <a class="bmac-btn" href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" style="justify-content:center">☕ Support on Buy Me a Coffee</a>
-    </div>
-  </nav>
-
-  <main id="main">
-    <!-- ================= Hero ================= -->
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero-bg" aria-hidden="true">
-        <div class="grid-lines"></div>
-        <div class="aurora"></div>
-      </div>
-
-      <div class="container">
-        <div class="hero-copy">
-          <h1 id="hero-title">
-            <span class="h1-line"><span class="h1-line-inner">Realign.</span></span>
-            <span class="h1-line"><span class="h1-line-inner">Without <em class="accent-word">thinking</em></span></span>
-            <span class="h1-line"><span class="h1-line-inner">about it.</span></span>
-          </h1>
-          <p class="hero-position hero-fade">Your AirPods. Your posture coach. Zero cameras.</p>
-
-          <p class="hero-sub hero-fade">
-            The motion sensors inside your AirPods already track every degree of head movement.
-            <strong>FixMySpine turns that signal into a silent posture coach</strong> — it notices the slump
-            before your neck does.
-          </p>
-
-          <div class="hero-ctas hero-fade">
-            <a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg" download class="btn btn-primary btn-glow btn-arrow">
-              Download for Mac
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-            </a>
-            <a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" class="bmac-btn">☕ Buy Me a Coffee</a>
-            <a href="#showcase" class="btn btn-ghost">Product Tour</a>
-          </div>
-
-          <div class="hero-trust hero-fade">
-            <span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-              100% on-device — nothing leaves your Mac
-            </span>
-            <span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-              AirPods Pro, Max, 3rd gen &amp; Beats Fit Pro
-            </span>
-            <span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
-              Native Swift app · macOS 14+
-            </span>
-          </div>
-        </div>
-
-        <!-- Live posture instrument -->
-        <div class="hero-stage hero-fade">
-          <div class="instrument" id="hero-instrument" data-state="good">
-            <div class="instrument-bar">
-              <span class="label"><span class="live-dot" aria-hidden="true"></span>Live posture engine — interactive demo</span>
-              <span class="state-pill" id="hero-state-pill">Aligned</span>
-            </div>
-
-            <div class="instrument-body">
-              <div class="spine-scene">
-                <div class="scene-glow" aria-hidden="true"></div>
-                <div class="float-chip fc-pitch floaty" aria-hidden="true"><span class="fc-dot"></span>head pitch <b id="chip-pitch">0.0° fwd</b></div>
-                <div class="float-chip fc-roll floaty d1" aria-hidden="true"><span class="fc-dot"></span>side lean <b id="chip-roll">0.0°</b></div>
-                <div class="float-chip fc-base floaty d2" aria-hidden="true"><span class="fc-dot"></span>baseline <b>locked</b></div>
-                <div id="hero-spine" role="img" aria-label="Animated spine visualization showing live head tilt angle"></div>
-              </div>
-
-              <div class="angle-panel">
-                <div class="angle-stats">
-                  <div class="stat-cell tilt">
-                    <span class="k">Forward tilt</span>
-                    <span class="v" id="stat-tilt">0.0°</span>
-                  </div>
-                  <div class="stat-cell">
-                    <span class="k">Side lean</span>
-                    <span class="v" id="stat-side">0.0°</span>
-                  </div>
-                  <div class="stat-cell">
-                    <span class="k">State</span>
-                    <span class="v" id="stat-state">Aligned</span>
-                  </div>
-                </div>
-
-                <div class="angle-control">
-                  <div class="control-row">
-                    <label for="angle-slider">Take control — drag to slouch</label>
-                    <b id="slider-readout">0.0°</b>
-                  </div>
-                  <input type="range" class="angle-slider" id="angle-slider" min="-5" max="25" value="0" step="0.5"
-                         aria-label="Simulate forward head tilt in degrees" />
-                  <div class="slider-scale" aria-hidden="true">
-                    <span>−5°</span><span>0°</span><span>5°</span><span>12°</span><span>25°</span>
-                  </div>
-                </div>
-
-                <p class="fine" style="margin:0">
-                  A live simulation of the real gauge — <span class="mono">no AirPods required</span>.
-                  Green mirrors the app: 0–5° aligned, 6–12° drifting, past 12° you get a nudge.
-                </p>
-              </div>
-            </div>
-          </div>
-          <p class="instrument-caption">Real telemetry, simulated in your browser · <span class="mono">CMHeadphoneMotionManager</span> does this sixty times a second</p>
+        <span class="mb-app-title">FixMySpine</span>
+        <div class="mb-menus">
+          <button class="mb-item" id="menuItemFile">Posture</button>
+          <button class="mb-item" id="menuItemCalibrate">Calibrate</button>
+          <button class="mb-item" id="menuItemSettings">Settings</button>
+          <button class="mb-item" id="menuItemHelp">Help</button>
         </div>
       </div>
+
+      <div class="menubar-right">
+        <div class="mb-status-chip" title="AirPods CoreMotion active">
+          <span class="pulse-dot"></span>
+          <span class="chip-text">AirPods Connected</span>
+        </div>
+
+        <div class="mb-metric-readout" title="Real-time forward pitch">
+          <span class="metric-label">Pitch</span>
+          <span class="metric-val" id="mbPitchVal">2.0°</span>
+        </div>
+
+        <!-- FixMySpine Menubar Extra Trigger -->
+        <button class="mb-extra-btn" id="mbFixMySpine" title="Toggle FixMySpine Popover" aria-expanded="false" aria-controls="popover">
+          <div class="mb-extra-icon">
+            <svg class="ic" viewBox="0 0 24 24"><use href="#i-spine"/></svg>
+            <span class="mb-extra-dot" id="mbExtraDot"></span>
+          </div>
+        </button>
+
+        <div class="mb-battery" title="Battery: 94% Charging">
+          <svg class="ic xs"><use href="#i-battery"/></svg>
+          <span>94%</span>
+        </div>
+
+        <span class="mb-clock" id="mbClock">Wed 27 Aug 10:45 AM</span>
+      </div>
+    </header>
+
+    <!-- ================= DESKTOP SHORTCUTS ================= -->
+    <section class="desk-icons" aria-label="Desktop icons">
+      <button class="desk-icon" id="deskIconSettings" data-action="open-window" data-window="settings">
+        <span class="di-tile di-app">
+          <img src="assets/img/icon-512.png" alt="FixMySpine" width="48" height="48" />
+        </span>
+        <span class="di-label">FixMySpine</span>
+      </button>
+
+      <button class="desk-icon" id="deskIconCalibrate" data-action="calibrate">
+        <span class="di-tile di-cal">
+          <svg class="ic"><use href="#i-reset"/></svg>
+        </span>
+        <span class="di-label">Calibrate</span>
+      </button>
+
+      <button class="desk-icon" id="deskIconDownload" data-action="open-download">
+        <span class="di-tile di-down">
+          <svg class="ic"><use href="#i-download"/></svg>
+        </span>
+        <span class="di-label">Get App</span>
+      </button>
+
+      <a class="desk-icon" href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener">
+        <span class="di-tile di-gh">
+          <svg viewBox="0 0 24 24" class="ic"><path fill="currentColor" d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.21 3.44 9.63 8.21 11.19.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.6-4.04-1.6-.55-1.38-1.34-1.75-1.34-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.22 1.84 1.22 1.07 1.8 2.81 1.28 3.5.98.11-.77.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.84 0-1.29.47-2.34 1.24-3.17-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 6 0c2.29-1.53 3.3-1.21 3.3-1.21.65 1.66.24 2.88.12 3.18.77.83 1.23 1.88 1.23 3.17 0 4.54-2.81 5.54-5.49 5.83.43.36.81 1.08.81 2.18v3.23c0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg>
+        </span>
+        <span class="di-label">GitHub</span>
+      </a>
     </section>
 
-    <!-- ================= Proof Strip (Warmwind-inspired) ================= -->
-    <div class="proof-strip" data-reveal>
-      <div class="container proof-inner">
-        <div class="proof-item"><span class="proof-num">100%</span><span>On-Device</span></div>
-        <div class="proof-item"><span class="proof-num">0</span><span>Network Calls</span></div>
-        <div class="proof-item"><span class="proof-num">60×/s</span><span>Motion Sampling</span></div>
-        <div class="proof-item"><span class="proof-num">0.1°</span><span>Tilt Precision</span></div>
-      </div>
-    </div>
-
-    <!-- ================= Product Tour Showcase (4 User Slides) ================= -->
-    <section class="section showcase-section" id="showcase" aria-labelledby="showcase-title">
-      <div class="container">
-        <div class="section-head center" data-reveal>
-          <p class="eyebrow">Product Tour</p>
-          <h2 class="h2" id="showcase-title">Built for Mac. Powered by physics.</h2>
-          <p class="lead">See how FixMySpine connects to your AirPods, catches micro-slumps, and keeps a detailed log of your spinal posture.</p>
-        </div>
-
-        <div class="showcase-grid" data-reveal>
-          <div class="showcase-card">
-            <div class="showcase-img-wrap">
-              <img src="assets/img/showcase/1-airpods-already-know.png" alt="Your AirPods already know." loading="lazy" />
-            </div>
-            <div class="showcase-caption">
-              <h3>1. Your AirPods already know.</h3>
-              <p>Direct CoreMotion 60Hz gyroscopes track head pitch and roll over Bluetooth Low Energy.</p>
-            </div>
+    <!-- ================= POPOVER (Real App Menu Panel) ================= -->
+    <section class="popover" id="popover" role="dialog" aria-modal="false" aria-label="FixMySpine menu bar popover" hidden>
+      <div class="pop-notch" aria-hidden="true"></div>
+      
+      <div class="pop-inner">
+        <!-- Popover Header -->
+        <div class="pop-header">
+          <div class="pop-brand">
+            <img src="assets/img/icon-64.png" alt="FixMySpine icon" width="22" height="22" />
+            <span class="pop-title">FixMySpine</span>
           </div>
-
-          <div class="showcase-card">
-            <div class="showcase-img-wrap">
-              <img src="assets/img/showcase/2-so-i-built-something.png" alt="So I built something." loading="lazy" />
-            </div>
-            <div class="showcase-caption">
-              <h3>2. So I built something.</h3>
-              <p>A featherlight native macOS menu bar companion built in Swift 6 &amp; SwiftUI.</p>
-            </div>
-          </div>
-
-          <div class="showcase-card">
-            <div class="showcase-img-wrap">
-              <img src="assets/img/showcase/3-it-knows-difference.png" alt="It knows the difference." loading="lazy" />
-            </div>
-            <div class="showcase-caption">
-              <h3>3. It knows the difference.</h3>
-              <p>Compound biometric filter ignores casual sips, nods, and screen glances.</p>
-            </div>
-          </div>
-
-          <div class="showcase-card">
-            <div class="showcase-img-wrap">
-              <img src="assets/img/showcase/4-and-it-remembers.png" alt="And it remembers." loading="lazy" />
-            </div>
-            <div class="showcase-caption">
-              <h3>4. And it remembers.</h3>
-              <p>Private on-device posture score tracking, day-by-day logs, and spinal discipline streaks.</p>
-            </div>
+          <div class="pop-state-badge" id="popStateBadge" data-state="good">
+            <span class="state-dot"></span>
+            <span class="state-txt" id="popStateText">Aligned</span>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ================= Problem ================= -->
-    <section class="section" id="problem" aria-labelledby="problem-title">
-      <div class="container">
-        <div class="problem-grid">
-          <div class="problem-copy" data-reveal>
-            <p class="eyebrow">The problem</p>
-            <h2 class="h2" id="problem-title">Deep work is a slow&nbsp;bend.</h2>
-            <p class="lead">
-              You never decide to slouch. Forty minutes into a focus session your chin drifts forward,
-              your shoulders roll in — and your neck quietly absorbs every degree.
-            </p>
-            <p class="lead kicker">
-              FixMySpine exists to interrupt that drift. Gently. Early. Every single time.
-            </p>
-          </div>
+        <!-- Section Navigation Tabs -->
+        <nav class="sect-nav" id="popNav" role="tablist">
+          <button class="sn-btn is-active" role="tab" aria-selected="true" data-tab="live" title="Live Posture">
+            <svg class="ic"><use href="#i-spine"/></svg>
+          </button>
+          <button class="sn-btn" role="tab" aria-selected="false" data-tab="sensitivity" title="Sensitivity Presets">
+            <svg class="ic"><use href="#i-sliders"/></svg>
+          </button>
+          <button class="sn-btn" role="tab" aria-selected="false" data-tab="analytics" title="Weekly Stats">
+            <svg class="ic"><use href="#i-chart"/></svg>
+          </button>
+          <button class="sn-btn" role="tab" aria-selected="false" data-tab="nudges" title="Audio Nudges">
+            <svg class="ic"><use href="#i-sound"/></svg>
+          </button>
+          <button class="sn-btn" role="tab" aria-selected="false" data-tab="themes" title="Personalization">
+            <svg class="ic"><use href="#i-spark"/></svg>
+          </button>
+        </nav>
 
-          <div class="drift-visual" data-reveal>
+        <!-- Popover Body -->
+        <div class="pop-body">
 
-            <div id="drift-svg" role="img" aria-label="Spine curve gradually drifting from upright alignment into a forward slouch over time"></div>
-            <div class="drift-beats" aria-hidden="true">
-              <div class="beat" data-beat="0"><span class="b-time">Minute 0</span>Tall, neutral, effortless.</div>
-              <div class="beat" data-beat="1"><span class="b-time">Minute 40</span>The chin starts to creep.</div>
-              <div class="beat hot" data-beat="2"><span class="b-time">Hour 3</span>The slouch feels normal.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= How it works ================= -->
-    <section class="section" id="how-it-works" aria-labelledby="science-title">
-      <div class="container">
-        <div class="science-grid">
-          <div class="section-head" style="margin-bottom:0" data-reveal>
-            <p class="eyebrow">How it works</p>
-            <h2 class="h2" id="science-title">Your AirPods are already motion&nbsp;sensors.</h2>
-            <p class="lead">
-              Every head-tracking AirPod carries an IMU built for spatial audio. FixMySpine reads that
-              signal through Apple&rsquo;s CoreMotion — no extra hardware, nothing clipped to your shirt.
-            </p>
-            <p class="api-chip"><span class="dot" aria-hidden="true"></span>CMHeadphoneMotionManager</p>
-          </div>
-
-          <div class="signal-chain" data-reveal aria-label="How FixMySpine processes AirPods motion data">
-
-            <div class="chain-node" data-chain="0">
-              <div class="node-rail"><span class="node-idx">1</span><span class="node-line" aria-hidden="true"></span></div>
-              <div class="node-body">
-                <h3>The IMU streams</h3>
-                <p>Your earbuds measure head pitch (nod) and roll (side-lean) as you move.</p>
-              </div>
-              <span class="node-tag">60× / second</span>
-            </div>
-            <div class="chain-node" data-chain="1">
-              <div class="node-rail"><span class="node-idx">2</span><span class="node-line" aria-hidden="true"></span></div>
-              <div class="node-body">
-                <h3>Gravity orients you</h3>
-                <p>Each sample places your head precisely in space, relative to true vertical.</p>
-              </div>
-              <span class="node-tag">gravity vector</span>
-            </div>
-            <div class="chain-node" data-chain="2">
-              <div class="node-rail"><span class="node-idx">3</span><span class="node-line" aria-hidden="true"></span></div>
-              <div class="node-body">
-                <h3>Your baseline, not a template</h3>
-                <p>One calibration captures your neutral posture — desk height, screen distance, anatomy.</p>
-              </div>
-              <span class="node-tag">1 tap</span>
-            </div>
-            <div class="chain-node" data-chain="3">
-              <div class="node-rail"><span class="node-idx">4</span><span class="node-line" aria-hidden="true"></span></div>
-              <div class="node-body">
-                <h3>Drift becomes a number</h3>
-                <p>The angle between now and neutral, computed every frame — forward tilt and side lean, separately.</p>
-              </div>
-              <span class="node-tag">0.1° precision</span>
-            </div>
-            <div class="chain-node" data-chain="4">
-              <div class="node-rail"><span class="node-idx">5</span><span class="node-line" aria-hidden="true"></span></div>
-              <div class="node-body">
-                <h3>Only real slouches speak up</h3>
-                <p>A built-in grace window means sipping coffee or glancing down never triggers a false alarm.</p>
-              </div>
-              <span class="node-tag">3–30 s grace</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= Mid-Page Download & Support Banner ================= -->
-    <div class="container" data-reveal>
-      <div class="mid-download-banner">
-        <div class="mid-banner-inner">
-          <h2>Ready to protect your spine?</h2>
-          <p>Download FixMySpine for macOS or support independent open-source health engineering.</p>
-          <div class="mid-banner-actions">
-            <a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg" download class="btn btn-primary btn-glow">
-              Download for Mac (.DMG) ↓
-            </a>
-            <a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" class="bmac-btn">
-              ☕ Buy Me a Coffee
-            </a>
-            <a href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener" class="btn btn-ghost">
-              ⭐️ Star on GitHub
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= Live demo ================= -->
-    <section class="section" id="demo" aria-labelledby="demo-title">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">The interface</p>
-          <h2 class="h2" id="demo-title">A gauge that lives in your menu&nbsp;bar.</h2>
-          <p class="lead">One glance tells you everything: current tilt, side lean, and how you&rsquo;re trending. Drag the slider — the app window reacts exactly like the real one.</p>
-        </div>
-
-        <div class="demo-grid">
-          <div class="demo-panel" data-reveal data-state="good" id="demo-spine-panel">
-            <div class="panel-head">
-              <span class="t">Spine kinematics</span>
-              <span class="state-pill" id="demo-state-pill">Aligned</span>
-            </div>
-            <div class="panel-body">
-              <div class="spine-scene" style="min-height:360px;display:grid;align-items:center">
-                <div class="scene-glow" aria-hidden="true"></div>
-                <div id="demo-spine" role="img" aria-label="Interactive spine visualization controlled by the angle slider"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="demo-panel" data-reveal data-state="good" id="demo-window-panel">
-            <div class="panel-head">
-              <span class="t">Menu bar popover</span>
-              <span class="fine mono">live preview</span>
-            </div>
-            <div class="panel-body">
-              <div class="app-window" aria-label="FixMySpine menu bar window preview">
-                <div class="aw-head">
-                  <img src="assets/img/icon-64.png" alt="FixMySpine app icon" width="27" height="27" />
-                  <div>
-                    <div class="aw-title">FixMySpine</div>
-                    <div class="aw-sub">Realign. Redefine.</div>
-                  </div>
-                  <span class="aw-live">tracking</span>
+          <!-- Tab 1: Live Posture Gauge -->
+          <div class="pop-tab is-active" data-tab-content="live">
+            <div class="spine-stage">
+              <svg id="popSpineSvg" viewBox="0 0 160 220" preserveAspectRatio="xMidYMid meet">
+                <!-- Dynamic vertebrae rendered via JS -->
+              </svg>
+              <div class="spine-telemetry">
+                <div class="tel-item">
+                  <span class="tel-label">Pitch</span>
+                  <span class="tel-val" id="popPitchReadout">2.0°</span>
                 </div>
-
-                <div class="aw-gauge">
-                  <div class="aw-halo" aria-hidden="true"></div>
-                  <div class="aw-ring" id="aw-ring" aria-hidden="true"></div>
-                  <div class="aw-angle" id="aw-angle" aria-live="off">0.0°</div>
-                  <div class="aw-status" id="aw-status">AirPods Pro — aligned</div>
+                <div class="tel-item">
+                  <span class="tel-label">Lateral Lean</span>
+                  <span class="tel-val" id="popRollReadout">1.2°</span>
                 </div>
+              </div>
+            </div>
 
-                <div class="aw-pills">
-                  <div class="aw-pill"><span class="k">↕ pitch</span><span class="v" id="aw-pitch">0.0° fwd</span></div>
-                  <div class="aw-pill"><span class="k">↔ roll</span><span class="v" id="aw-roll">0.0°</span></div>
+            <!-- Interactive Angle Slider -->
+            <div class="card slider-card">
+              <div class="row between">
+                <span class="sm muted">Simulate Head Tilt</span>
+                <span class="mono sm accent" id="sliderValueText">2.0°</span>
+              </div>
+              <input type="range" id="angleSlider" min="-5" max="25" step="0.5" value="2" aria-label="Head angle simulation slider" />
+              <div class="slider-ticks">
+                <span>0° Good</span>
+                <span>8° Balanced</span>
+                <span>20° Slouch</span>
+              </div>
+            </div>
+
+            <!-- Recalibrate Action -->
+            <div class="row between pt-1">
+              <button class="btn-cal" id="btnCalibrateAction">
+                <svg class="ic xs"><use href="#i-reset"/></svg>
+                <span id="calBtnText">Recalibrate Baseline</span>
+              </button>
+              <span class="xs muted">Locks current pose as 0°</span>
+            </div>
+          </div>
+
+          <!-- Tab 2: Sensitivity & Grace Period -->
+          <div class="pop-tab" data-tab-content="sensitivity" hidden>
+            <div class="sect-head">Posture Sensitivity</div>
+            <div class="card">
+              <div class="segmented-control" id="segSensitivity" role="radiogroup" aria-label="Sensitivity preset">
+                <button class="sc-btn" data-val="strict" role="radio" aria-checked="false">Strict (8°)</button>
+                <button class="sc-btn is-active" data-val="balanced" role="radio" aria-checked="true">Balanced (12°)</button>
+                <button class="sc-btn" data-val="gentle" role="radio" aria-checked="false">Gentle (15°)</button>
+              </div>
+              <p class="xs muted pt-1" id="sensExplainer">Alert triggers when forward head tilt exceeds 12° continuously.</p>
+            </div>
+
+            <div class="sect-head pt-2">Alert Grace Period</div>
+            <div class="card">
+              <div class="segmented-control" id="segGrace" role="radiogroup" aria-label="Grace period">
+                <button class="sc-btn" data-val="5">5s</button>
+                <button class="sc-btn is-active" data-val="10">10s</button>
+                <button class="sc-btn" data-val="20">20s</button>
+                <button class="sc-btn" data-val="30">30s</button>
+              </div>
+              <p class="xs muted pt-1">Gives you time to lean down for coffee before notifying.</p>
+            </div>
+          </div>
+
+          <!-- Tab 3: Weekly Analytics -->
+          <div class="pop-tab" data-tab-content="analytics" hidden>
+            <div class="sect-head">This Week's Alignment</div>
+            <div class="card">
+              <div class="chart-summary">
+                <div class="cs-item">
+                  <span class="cs-label">Average Score</span>
+                  <span class="cs-val accent" id="chartAvgScore">91%</span>
                 </div>
+                <div class="cs-item">
+                  <span class="cs-label">Slouch Time</span>
+                  <span class="cs-val" id="chartSlouchTime">18 min/day</span>
+                </div>
+              </div>
+              
+              <!-- Mini Bar Chart -->
+              <div class="mini-chart" id="miniChart">
+                <!-- Rendered dynamically -->
+              </div>
+              <div class="row between pt-1">
+                <span class="xs muted">Selected: <b id="chartSelectedDay">Wednesday</b></span>
+                <span class="xs accent" id="chartSelectedScore">94% Aligned</span>
+              </div>
+            </div>
+          </div>
 
-                <button class="aw-cal" id="aw-calibrate" type="button" aria-label="Recalibrate posture baseline">
-                  <span class="t">Recalibrate posture</span>
-                  <span class="s">Sit naturally and look forward</span>
-                </button>
-
+          <!-- Tab 4: Audio & Nudges -->
+          <div class="pop-tab" data-tab-content="nudges" hidden>
+            <div class="sect-head">Feedback &amp; Nudges</div>
+            <div class="card">
+              <div class="row between">
                 <div>
-                  <div class="aw-seg-label" style="margin-bottom:0.35rem">Sensitivity</div>
-                  <div class="aw-seg" role="group" aria-label="Sensitivity preset preview">
-                    <button type="button" data-sens="Relaxed" aria-pressed="false">Relaxed</button>
-                    <button type="button" data-sens="Balanced" class="active" aria-pressed="true">Balanced</button>
-                    <button type="button" data-sens="Strict" aria-pressed="false">Strict</button>
-                    <button type="button" data-sens="Expert" aria-pressed="false">Expert</button>
-                  </div>
+                  <div class="sm font-medium">Haptic Spatial Chime</div>
+                  <div class="xs muted">Soft binaural sound cue through AirPods</div>
                 </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleSound" checked />
+                  <span class="track"></span>
+                </label>
+              </div>
+              
+              <div class="divider"></div>
 
+              <div class="row between">
                 <div>
-                  <div class="aw-seg-label" style="margin-bottom:0.35rem">Alert after</div>
-                  <div class="aw-seg small" role="group" aria-label="Alert timing preview">
-                    <button type="button" aria-pressed="false">Instant</button>
-                    <button type="button" class="active" aria-pressed="true">10 sec</button>
-                    <button type="button" aria-pressed="false">30 sec</button>
+                  <div class="sm font-medium">Screen Dimmer</div>
+                  <div class="xs muted">Subtle display dim until neck is realigned</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="toggleScreenDim" />
+                  <span class="track"></span>
+                </label>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="row between">
+                <button class="bordered-btn" id="btnTestChime">
+                  <svg class="ic xs"><use href="#i-sound"/></svg>
+                  <span>Preview Audio Cue</span>
+                </button>
+                <span class="xs muted" id="chimeStatusText">Web Audio ready</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 5: Themes -->
+          <div class="pop-tab" data-tab-content="themes" hidden>
+            <div class="sect-head">Accent Color</div>
+            <div class="card">
+              <div class="theme-chips-grid">
+                <button class="t-chip is-active" data-theme="green" title="Signature Green" style="--chip:#00d053"></button>
+                <button class="t-chip" data-theme="blue" title="Electric Blue" style="--chip:#0A84FF"></button>
+                <button class="t-chip" data-theme="cyan" title="Cyan Frost" style="--chip:#00e5ff"></button>
+                <button class="t-chip" data-theme="purple" title="Royal Purple" style="--chip:#af52de"></button>
+                <button class="t-chip" data-theme="orange" title="Amber Orange" style="--chip:#ff9f0a"></button>
+              </div>
+              <p class="xs muted pt-1" id="themeSelectedName">Signature Green (Default)</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Popover Footer -->
+        <div class="pop-footer">
+          <button class="pf-link" id="btnOpenMainWindow">
+            <svg class="ic xs"><use href="#i-gear"/></svg>
+            <span>Open Settings Window</span>
+          </button>
+          <span class="xs muted">macOS 14+ · v5.0.4</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DRAGGABLE SETTINGS WINDOW ================= -->
+    <section class="window" id="winSettings" role="dialog" aria-modal="false" aria-labelledby="winTitle" hidden style="--x:180px; --y:85px; --w:820px; --h:540px;">
+      <!-- Title Bar -->
+      <div class="win-titlebar" data-drag>
+        <div class="traffic-lights">
+          <button class="tl tl-close" id="tlClose" title="Close window" aria-label="Close"></button>
+          <button class="tl tl-min" id="tlMin" title="Minimize window" aria-label="Minimize"></button>
+          <button class="tl tl-zoom" id="tlZoom" title="Zoom window" aria-label="Zoom"></button>
+        </div>
+        <div class="win-title" id="winTitle">FixMySpine — Settings &amp; Diagnostics</div>
+        <div class="win-spacer"></div>
+      </div>
+
+      <!-- Window Body with Sidebar -->
+      <div class="win-body">
+        
+        <!-- Window Sidebar -->
+        <aside class="win-sidebar">
+          <div class="sidebar-search">
+            <svg class="ic xs"><use href="#i-search"/></svg>
+            <input type="search" id="winSearch" placeholder="Search" aria-label="Search settings" />
+          </div>
+
+          <nav class="sidebar-nav" id="winSidebarNav">
+            <div class="sb-group-title">General</div>
+            <button class="sb-item is-active" data-win-pane="overview">
+              <svg class="ic sm"><use href="#i-spine"/></svg>
+              <span>Overview</span>
+            </button>
+            <button class="sb-item" data-win-pane="telemetry">
+              <svg class="ic sm"><use href="#i-sliders"/></svg>
+              <span>Sensor Telemetry</span>
+            </button>
+
+            <div class="sb-group-title">Intelligence</div>
+            <button class="sb-item" data-win-pane="science">
+              <svg class="ic sm"><use href="#i-chart"/></svg>
+              <span>Neck Load Science</span>
+            </button>
+            <button class="sb-item" data-win-pane="privacy">
+              <svg class="ic sm"><use href="#i-shield"/></svg>
+              <span>Privacy &amp; Local Engine</span>
+            </button>
+            <button class="sb-item" data-win-pane="hardware">
+              <svg class="ic sm"><use href="#i-airpods"/></svg>
+              <span>Hardware Compatibility</span>
+            </button>
+          </nav>
+        </aside>
+
+        <!-- Window Main Content Pane -->
+        <div class="win-content" id="winContentArea">
+
+          <!-- Pane 1: Overview -->
+          <div class="win-pane is-active" data-pane="overview">
+            <div class="pane-header">
+              <div class="pane-avatar">
+                <img src="assets/img/icon-512.png" alt="App Icon" width="60" height="60" />
+              </div>
+              <div>
+                <h2>FixMySpine for Mac</h2>
+                <p class="muted sm">AirPods Posture Intelligence · Swift 6.0 &amp; SwiftUI</p>
+              </div>
+            </div>
+
+            <div class="grid-2col pt-2">
+              <div class="card">
+                <div class="card-head">Active Sensor Feed</div>
+                <div class="row between">
+                  <div class="pwr-row">
+                    <svg class="ic sm accent"><use href="#i-airpods"/></svg>
+                    <div>
+                      <div class="sm font-medium">AirPods Pro (2nd Gen)</div>
+                      <div class="xs muted">Connected · CoreMotion Active</div>
+                    </div>
+                  </div>
+                  <span class="pressure normal"><span class="pr-dot"></span>50 Hz Stream</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row between">
+                  <span class="xs muted">Current Pitch: <b class="text-hi" id="winPitchSummary">2.0°</b></span>
+                  <span class="xs muted">Baseline: <b class="text-hi">0.0°</b></span>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-head">Engine Status</div>
+                <div class="status-summary-grid">
+                  <div class="ss-item">
+                    <span class="xs muted">Battery</span>
+                    <span class="sm font-medium">94%</span>
+                  </div>
+                  <div class="ss-item">
+                    <span class="xs muted">Latency</span>
+                    <span class="sm font-medium accent">1.8 ms</span>
+                  </div>
+                  <div class="ss-item">
+                    <span class="xs muted">Camera Use</span>
+                    <span class="sm font-medium">0% (Disabled)</span>
+                  </div>
+                  <div class="ss-item">
+                    <span class="xs muted">Memory</span>
+                    <span class="sm font-medium">18 MB</span>
                   </div>
                 </div>
               </div>
-              <p class="fine" style="text-align:center;margin:0 auto 1.4rem;max-width:24rem">Sensitivity presets mirror the app: Relaxed 18° · Balanced 12° · Strict 8° · Expert 5°</p>
+            </div>
+
+            <div class="card mt-2">
+              <div class="card-head">How it Works</div>
+              <p class="sm muted line-relaxed">
+                FixMySpine connects to the built-in accelerometer and gyroscope inside your Apple AirPods via Apple's native CoreMotion framework. As you sit and work, it computes head tilt relative to your calibrated upright baseline. If posture drifts beyond your threshold, it provides a quiet audio or visual reminder to realign.
+              </p>
             </div>
           </div>
+
+          <!-- Pane 2: Sensor Telemetry -->
+          <div class="win-pane" data-pane="telemetry" hidden>
+            <h2>Real-Time CoreMotion Telemetry</h2>
+            <p class="muted sm">Live 50 Hz orientation quaternion stream mapped into Euler angles.</p>
+
+            <div class="grid-3col pt-2">
+              <div class="card tel-card">
+                <div class="xs muted uppercase">Pitch (Forward Tilt)</div>
+                <div class="tel-big-val accent" id="winTelPitch">2.0°</div>
+                <div class="spark-line"><div class="spark-bar" id="sparkPitch" style="width:15%"></div></div>
+              </div>
+              <div class="card tel-card">
+                <div class="xs muted uppercase">Roll (Lateral Lean)</div>
+                <div class="tel-big-val cyan" id="winTelRoll">1.2°</div>
+                <div class="spark-line"><div class="spark-bar cyan" id="sparkRoll" style="width:10%"></div></div>
+              </div>
+              <div class="card tel-card">
+                <div class="xs muted uppercase">Yaw (Head Rotation)</div>
+                <div class="tel-big-val" id="winTelYaw">0.4°</div>
+                <div class="spark-line"><div class="spark-bar purple" id="sparkYaw" style="width:4%"></div></div>
+              </div>
+            </div>
+
+            <div class="card mt-2">
+              <div class="card-head">Quaternion Sensor Matrix</div>
+              <div class="matrix-grid">
+                <div><span>qw</span><b id="quatW">0.998</b></div>
+                <div><span>qx</span><b id="quatX">0.017</b></div>
+                <div><span>qy</span><b id="quatY">0.010</b></div>
+                <div><span>qz</span><b id="quatZ">0.003</b></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 3: Neck Load Science -->
+          <div class="win-pane" data-pane="science" hidden>
+            <h2>Cervical Spine Biomechanics</h2>
+            <p class="muted sm">How head angle exponentially increases effective neck gravitational load.</p>
+
+            <div class="load-table-card mt-2">
+              <div class="load-row">
+                <span class="load-angle">0° (Neutral)</span>
+                <div class="load-bar-wrap"><div class="load-bar lvl-0" style="width:16%"></div></div>
+                <span class="load-weight">10–12 lbs</span>
+              </div>
+              <div class="load-row">
+                <span class="load-angle">15° Forward</span>
+                <div class="load-bar-wrap"><div class="load-bar lvl-1" style="width:45%"></div></div>
+                <span class="load-weight">27 lbs</span>
+              </div>
+              <div class="load-row">
+                <span class="load-angle">30° Forward</span>
+                <div class="load-bar-wrap"><div class="load-bar lvl-2" style="width:66%"></div></div>
+                <span class="load-weight">40 lbs</span>
+              </div>
+              <div class="load-row">
+                <span class="load-angle">60° (Text Neck)</span>
+                <div class="load-bar-wrap"><div class="load-bar lvl-3" style="width:100%"></div></div>
+                <span class="load-weight">60 lbs</span>
+              </div>
+            </div>
+
+            <p class="xs muted pt-2 line-relaxed">
+              *Data sourced from Dr. Kenneth Hansraj's spine biomechanics research. Maintaining neutral head angle prevents chronic trapezius strain and cervical disc herniation.
+            </p>
+          </div>
+
+          <!-- Pane 4: Privacy & Local Engine -->
+          <div class="win-pane" data-pane="privacy" hidden>
+            <h2>Privacy &amp; Local Execution</h2>
+            <p class="muted sm">Zero camera. Zero cloud. Zero tracking.</p>
+
+            <div class="privacy-list mt-2">
+              <div class="priv-item">
+                <div class="priv-icon green"><svg class="ic sm"><use href="#i-check"/></svg></div>
+                <div>
+                  <div class="sm font-medium">100% On-Device Processing</div>
+                  <div class="xs muted">CoreMotion quaternions are processed purely in Mac memory and discarded immediately.</div>
+                </div>
+              </div>
+
+              <div class="priv-item">
+                <div class="priv-icon green"><svg class="ic sm"><use href="#i-check"/></svg></div>
+                <div>
+                  <div class="sm font-medium">Zero Camera Permissions Needed</div>
+                  <div class="xs muted">Unlike camera-based posture apps, FixMySpine uses earbud inertial sensors. It works in the dark with zero battery drain on your Mac's webcam.</div>
+                </div>
+              </div>
+
+              <div class="priv-item">
+                <div class="priv-icon green"><svg class="ic sm"><use href="#i-check"/></svg></div>
+                <div>
+                  <div class="sm font-medium">Open Source &amp; Auditable</div>
+                  <div class="xs muted">All Swift code is publicly verifiable on GitHub with cryptographic signatures.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 5: Hardware Compatibility -->
+          <div class="win-pane" data-pane="hardware" hidden>
+            <h2>Supported Hardware</h2>
+            <p class="muted sm">Compatible with all Apple spatial motion tracking devices on macOS 14+.</p>
+
+            <div class="hw-grid mt-2">
+              <div class="hw-card is-supported">
+                <svg class="ic"><use href="#i-airpods"/></svg>
+                <div class="hw-name">AirPods Pro</div>
+                <div class="xs accent">1st &amp; 2nd Generation</div>
+              </div>
+              <div class="hw-card is-supported">
+                <svg class="ic"><use href="#i-airpods"/></svg>
+                <div class="hw-name">AirPods Max</div>
+                <div class="xs accent">Lightning &amp; USB-C</div>
+              </div>
+              <div class="hw-card is-supported">
+                <svg class="ic"><use href="#i-airpods"/></svg>
+                <div class="hw-name">AirPods (3rd &amp; 4th Gen)</div>
+                <div class="xs accent">With Spatial Audio</div>
+              </div>
+              <div class="hw-card is-supported">
+                <svg class="ic"><use href="#i-airpods"/></svg>
+                <div class="hw-name">Beats Fit Pro</div>
+                <div class="xs accent">Apple H1 Chip</div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
       </div>
+
+      <!-- Window Resize Handle -->
+      <div class="win-resize" data-resize title="Resize window"></div>
     </section>
 
-    <!-- ================= Setup steps ================= -->
-    <section class="section" id="setup" aria-labelledby="setup-title">
-      <div class="container">
-        <div class="section-head center" data-reveal>
-          <p class="eyebrow">Get started</p>
-          <h2 class="h2" id="setup-title">Three steps to a better&nbsp;spine.</h2>
-          <p class="lead">No accounts. No calibration charts taped to your monitor. Just your AirPods and one click.</p>
-        </div>
-
-        <div class="steps">
-          <article class="step-card" data-reveal>
-            <span class="step-num">STEP 01</span>
-            <div class="step-visual" aria-hidden="true">
-              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Precision AirPods Pro Earbud & Stem -->
-                <path d="M30 20 C30 13, 36 8, 43 8 C48 8, 52 12, 52 17 C52 22, 48 25, 44 26 L44 46 C44 48.5, 42 50, 40 50 C38 50, 36 48.5, 36 46 L36 30 C32 28, 30 24, 30 20 Z" fill="rgba(0,0,0,0.03)" stroke="currentColor" stroke-width="2"/>
-                <ellipse cx="42" cy="16" rx="3.5" ry="5.5" fill="currentColor" opacity="0.18" stroke="none"/>
-                <path d="M40 38 L40 46" stroke="var(--accent)" stroke-width="2.5" opacity="0.85"/>
-                <!-- Spatial Motion Waves -->
-                <path d="M59 18 C65 22, 65 34, 59 38" stroke="var(--accent)" stroke-width="2.2" opacity="0.85"/>
-                <path d="M67 12 C76 18, 76 38, 67 44" stroke="currentColor" stroke-width="1.8" opacity="0.35"/>
-                <path d="M75 6 C87 14, 87 46, 75 54" stroke="currentColor" stroke-width="1.4" opacity="0.2" stroke-dasharray="2 3"/>
-              </svg>
-            </div>
-            <h3>Wear your AirPods</h3>
-            <p>Put them in and start FixMySpine. Tracking begins the moment they connect — any head-tracking model works.</p>
-            <span class="step-hint">AirPods Pro · Max · 3rd &amp; 4th gen · Beats Fit Pro</span>
-          </article>
-
-          <article class="step-card" data-reveal>
-            <span class="step-num">STEP 02</span>
-            <div class="step-visual" aria-hidden="true">
-              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="48" cy="32" r="17"/>
-                <circle cx="48" cy="32" r="3" fill="currentColor" stroke="none"/>
-                <path d="M48 8v7M48 49v7M24 32h7M65 32h7" opacity="0.55"/>
-                <path d="M48 21v-4a5 5 0 0 1 5-5h3" stroke-width="2.4" opacity="0.9"/>
-              </svg>
-            </div>
-            <h3>Calibrate once</h3>
-            <p>Sit naturally the way you actually work, then click Calibrate. That posture becomes your personal neutral baseline.</p>
-            <span class="step-hint">Takes seconds · re-calibrate anytime</span>
-          </article>
-
-          <article class="step-card" data-reveal>
-            <span class="step-num">STEP 03</span>
-            <div class="step-visual" aria-hidden="true">
-              <svg viewBox="0 0 96 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <!-- macOS Menu Bar Preview -->
-                <rect x="14" y="14" width="68" height="36" rx="10" fill="rgba(0,0,0,0.03)" stroke="currentColor" stroke-width="2"/>
-                <path d="M14 26 h68" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                <circle cx="24" cy="20" r="2" fill="currentColor" opacity="0.4" stroke="none"/>
-                <path d="M62 20 h10" stroke="currentColor" stroke-width="1.8" opacity="0.35" stroke-linecap="round"/>
-                <!-- Centered alignment indicator -->
-                <circle cx="48" cy="38" r="4" fill="var(--accent)" stroke="none"/>
-                <path d="M48 31 v-3 M48 45 v3" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
-                <path d="M37 38 C37 32, 42 27, 48 27" stroke="currentColor" stroke-width="1.6" opacity="0.35" stroke-linecap="round"/>
-                <path d="M59 38 C59 32, 54 27, 48 27" stroke="currentColor" stroke-width="1.6" opacity="0.35" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <h3>Work, undisturbed</h3>
-            <p>FixMySpine watches quietly from your menu bar. You'll forget it's there — until it gently reminds you to realign.</p>
-            <span class="step-hint">Voice cues · notifications · watch taps</span>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= Features bento ================= -->
-    <section class="section" id="features" aria-labelledby="features-title">
-      <div class="container">
-        <div class="section-head" data-reveal>
-          <p class="eyebrow">Everything it does</p>
-          <h2 class="h2" id="features-title">Small menu. Serious&nbsp;ergonomics.</h2>
-          <p class="lead">Every control you need, exactly where the pros put it — one click away in the menu bar, zero windows stealing your focus.</p>
-        </div>
-
-        <div class="bento">
-          <!-- Calibration -->
-          <article class="bento-card span-7" data-reveal>
-            <span class="card-kicker">Calibration</span>
-            <h3>Your baseline, captured in one tap</h3>
-            <p>Everyone&rsquo;s desk, display distance, and spine are different. FixMySpine never judges you against a generic angle — calibrate your natural working posture and every measurement after that is relative to you.</p>
-            <div class="cal-visual" aria-hidden="true">
-              <div class="cal-figure">
-                <svg width="72" height="96" viewBox="0 0 72 96" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <!-- Head node -->
-                  <circle cx="36" cy="12" r="7.5" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2.2"/>
-                  <circle cx="36" cy="12" r="2.5" fill="var(--accent)" stroke="none"/>
-                  <!-- Vertebral line -->
-                  <path d="M36 20 V76" stroke="var(--accent)" stroke-width="2" stroke-dasharray="2 3"/>
-                  <!-- Vertebrae segments -->
-                  <rect x="29" y="24" width="14" height="4" rx="2" fill="currentColor" opacity="0.85"/>
-                  <rect x="28" y="34" width="16" height="4.5" rx="2.25" fill="currentColor" opacity="0.85"/>
-                  <rect x="27" y="45" width="18" height="5" rx="2.5" fill="currentColor" opacity="0.85"/>
-                  <rect x="26" y="56" width="20" height="5.5" rx="2.75" fill="currentColor" opacity="0.85"/>
-                  <rect x="25" y="68" width="22" height="6" rx="3" fill="currentColor" opacity="0.85"/>
-                  <!-- Baseline anchor -->
-                  <path d="M22 84 h28" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
-                  <circle cx="36" cy="84" r="2.5" fill="var(--accent)" stroke="none"/>
-                  <!-- Target crosshair hints -->
-                  <path d="M14 12 h6 M52 12 h6" stroke="currentColor" opacity="0.35" stroke-width="1.5"/>
-                </svg>
-              </div>
-              <div class="cal-rows">
-                <div class="cal-row"><span class="tag">your baseline</span><span class="bar"><i style="--w:38%"></i></span><span class="mono">0.0°</span></div>
-                <div class="cal-row"><span class="tag">generic ideal</span><span class="bar baseline"><i style="--w:62%"></i></span><span class="mono">—</span></div>
-                <div class="cal-row"><span class="tag">live delta</span><span class="bar"><i style="--w:12%"></i></span><span class="mono" id="cal-live">+0.4°</span></div>
-              </div>
-            </div>
-            <div class="card-foot"><span>Gravity-vector math</span><span>Re-calibrate in one click</span></div>
-          </article>
-
-          <!-- Thresholds -->
-          <article class="bento-card span-5" data-reveal>
-            <span class="card-kicker">Precision</span>
-            <h3>Tuned to your threshold</h3>
-            <p>Choose exactly how much drift is allowed — and how long it must persist — before you&rsquo;re nudged. Natural movements never ring the bell.</p>
-            <div>
-              <div class="aw-seg-label" style="margin-bottom:0.4rem">Sensitivity</div>
-              <div class="aw-seg" role="group" aria-label="Sensitivity presets" id="feat-sens">
-                <button type="button" data-name="Relaxed" data-desc="Comfortable 18° allowance — best for casual browsing." aria-pressed="false">Relaxed</button>
-                <button type="button" class="active" data-name="Balanced" data-desc="A 12° threshold — the sweet spot for all-day focus." aria-pressed="true">Balanced</button>
-                <button type="button" data-name="Strict" data-desc="An 8° limit — nudges the moment you start to slump." aria-pressed="false">Strict</button>
-                <button type="button" data-name="Expert" data-desc="A 5° threshold — maximum spine discipline." aria-pressed="false">Expert</button>
-              </div>
-            </div>
-            <div>
-              <div class="aw-seg-label" style="margin-bottom:0.4rem">Alert after</div>
-              <div class="aw-seg small" role="group" aria-label="Alert timing presets" id="feat-grace">
-                <button type="button" data-name="Instant (3 s)" aria-pressed="false">Instant</button>
-                <button type="button" class="active" data-name="10 seconds" aria-pressed="true">10 sec</button>
-                <button type="button" data-name="30 seconds" aria-pressed="false">30 sec</button>
-              </div>
-            </div>
-            <div class="card-foot"><span id="feat-sens-readout">Balanced — 12° threshold</span><span id="feat-grace-readout">Alert after 10 seconds</span><span>hysteresis ±1 buffer</span></div>
-          </article>
-
-          <!-- Voice -->
-          <article class="bento-card span-5" data-reveal>
-            <span class="card-kicker">Voice cues</span>
-            <h3>Nudged, not startled</h3>
-            <p>When slouching persists past your grace period, a calm spoken cue from your Mac resets your shoulders — or a silent notification, if you prefer.</p>
-            <div style="display:grid;gap:0.5rem">
-              <div class="voice-row" data-phrase="Time to reset your posture.">
-                <span>&ldquo;Time to reset your posture.&rdquo;</span>
-                <button class="voice-play" type="button" aria-label="Play voice cue: Time to reset your posture">
-                  <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 21 12 6 21 6 3"/></svg>
-                  <svg class="icon-stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
-                </button>
-              </div>
-              <div class="voice-row" data-phrase="Roll your shoulders back and lengthen your spine.">
-                <span>&ldquo;Roll your shoulders back&hellip;&rdquo;</span>
-                <button class="voice-play" type="button" aria-label="Play voice cue: Roll your shoulders back and lengthen your spine">
-                  <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 21 12 6 21 6 3"/></svg>
-                  <svg class="icon-stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
-                </button>
-              </div>
-              <div class="voice-row" data-phrase="Lift your chin slightly and align your neck.">
-                <span>&ldquo;Lift your chin slightly&hellip;&rdquo;</span>
-                <button class="voice-play" type="button" aria-label="Play voice cue: Lift your chin slightly and align your neck">
-                  <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 3 21 12 6 21 6 3"/></svg>
-                  <svg class="icon-stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
-                </button>
-              </div>
-            </div>
-            <div class="card-foot"><span>macOS voice synthesis</span><span>System notifications too</span></div>
-          </article>
-
-          <!-- Watch -->
-          <article class="bento-card span-4" data-reveal>
-            <span class="card-kicker">Smartwatch Sync</span>
-            <h3>A tap only you can feel</h3>
-            <p>Pair any Bluetooth LE smartwatch or fitness wearable (Apple Watch, Garmin, Wear OS, and BLE heart rate monitors). Feel a gentle wrist vibration when posture slips — silent in meetings, invisible in open offices.</p>
-            <div style="display:flex;align-items:center;gap:0.9rem;padding-top:0.3rem" aria-hidden="true">
-              <svg width="46" height="66" viewBox="0 0 46 66" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-                <rect x="8" y="12" width="30" height="42" rx="10" fill="rgba(0,0,0,0.02)"/>
-                <path d="M14 12V4h18v8M14 54v8h18v-8" opacity="0.6"/>
-                <path d="M16 33h4l2.5-6 3 12 2.5-6h4" stroke="var(--accent)" stroke-width="2.2"/>
-              </svg>
-              <div class="mono fine" style="line-height:1.7">
-                haptic tap on slouch<br/>
-                universal BLE 0x180D<br/>
-                Apple Watch &amp; Garmin
-              </div>
-            </div>
-            <div class="card-foot"><span>Bluetooth LE Standard</span><span>Universal Compatibility</span></div>
-          </article>
-
-          <!-- History -->
-          <article class="bento-card span-4 history-card" data-reveal>
-            <span class="card-kicker">Weekly Telemetry</span>
-            <h3>Track your spine discipline</h3>
-            <p>Daily posture scores, average tilt, streaks, and tracked hours — your week at a glance.</p>
-            <div class="history-kpis" aria-label="Weekly posture statistics">
-              <div class="kpi-box">
-                <span class="kpi-num">91%</span>
-                <span class="kpi-lbl">Weekly Avg</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-num">6 Days</span>
-                <span class="kpi-lbl">Best Streak</span>
-              </div>
-              <div class="kpi-box">
-                <span class="kpi-num">&lt;14m</span>
-                <span class="kpi-lbl">Slouch/Day</span>
-              </div>
-            </div>
-            <div class="mini-chart" id="mini-chart" aria-label="Sample weekly posture scores bar chart"></div>
-            <div class="chart-readout">
-              <span id="chart-day" class="chart-day-badge">Sunday · today</span>
-              <span class="chart-metric">score <b id="chart-score">95%</b></span>
-              <span class="chart-metric">tilt <b id="chart-tilt">2.5°</b></span>
-            </div>
-            <div class="card-foot"><span>100% Local Processing</span><span>Stored in UserDefaults</span></div>
-          </article>
-
-          <!-- Themes -->
-          <article class="bento-card span-4" data-reveal>
-            <span class="card-kicker">Appearance</span>
-            <h3>Dressed to match your Mac</h3>
-            <p>Pick a native accent — green, blue, purple, orange, pink, or any color your heart desires. Try one: it restyles this whole page.</p>
-            <div class="theme-row" role="group" aria-label="Preview accent themes" id="theme-row">
-              <button class="theme-chip" type="button" data-theme="" style="background:#00d053;color:#00d053" aria-pressed="true" aria-label="Green accent"></button>
-              <button class="theme-chip" type="button" data-theme="blue" style="background:#2196fa;color:#2196fa" aria-pressed="false" aria-label="Blue accent"></button>
-              <button class="theme-chip" type="button" data-theme="purple" style="background:#a659f2;color:#a659f2" aria-pressed="false" aria-label="Purple accent"></button>
-              <button class="theme-chip" type="button" data-theme="orange" style="background:#ff9f0a;color:#ff9f0a" aria-pressed="false" aria-label="Orange accent"></button>
-              <button class="theme-chip" type="button" data-theme="pink" style="background:#ff408c;color:#ff408c" aria-pressed="false" aria-label="Pink accent"></button>
-            </div>
-            <div class="card-foot"><span>macOS color picker built in</span><span id="theme-readout">Accent — Green</span></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= Privacy ================= -->
-    <section class="section privacy-section" id="privacy" aria-labelledby="privacy-title">
-      <div class="container">
-        <p class="eyebrow" data-reveal>Private by architecture</p>
-        <h2 class="privacy-statement" id="privacy-title" data-reveal>Your posture is nobody&rsquo;s&nbsp;business.</h2>
-        <p class="lead" style="max-width:36rem" data-reveal>
-          FixMySpine makes zero network calls. The motion math happens in local memory, your history
-          lives in UserDefaults, and the microphone is never touched.
-        </p>
-
-        <div class="privacy-facts">
-          <div data-reveal>
-            <span class="fact-num">0</span>
-            <h3>Network calls</h3>
-            <p>No tracking servers, no telemetry, no accounts. The app has nothing to phone home to.</p>
-          </div>
-          <div data-reveal>
-            <span class="fact-num">No mic</span>
-            <h3>Audio is never accessed</h3>
-            <p>CoreMotion reads spatial motion only — never sound. Your conversations stay yours.</p>
-          </div>
-          <div data-reveal>
-            <span class="fact-num">Ed25519</span>
-            <h3>Signed auto-updates</h3>
-            <p>Every update ships through Sparkle 2 with cryptographic signature verification.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= Requirements ================= -->
-    <section class="section" id="requirements" aria-labelledby="req-title">
-      <div class="container">
-        <div class="req-grid">
-          <div class="section-head" style="margin-bottom:0" data-reveal>
-            <p class="eyebrow">Compatibility</p>
-            <h2 class="h2" id="req-title">Check your setup.</h2>
-            <p class="lead">If your Mac or iPhone is up to date and your earbuds do spatial audio, you&rsquo;re ready. No dongles, no extra sensors.</p>
-          </div>
-
-          <div class="req-notes" data-reveal>
-            <div class="req-list" role="list" aria-label="Compatibility list">
-
-              <div class="req-row" role="listitem">
-                <span class="ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-                macOS 14.0 Sonoma or later
-                <span class="req-note">menu bar app</span>
-              </div>
-              <div class="req-row" role="listitem">
-                <span class="ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-                iOS 17.0 or later
-                <span class="req-note">companion app</span>
-              </div>
-              <div class="req-row" role="listitem">
-                <span class="ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-                AirPods Pro (1st &amp; 2nd gen)
-                <span class="req-note">head tracking</span>
-              </div>
-              <div class="req-row" role="listitem">
-                <span class="ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-                AirPods Max
-                <span class="req-note">head tracking</span>
-              </div>
-              <div class="req-row" role="listitem">
-                <span class="ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-                AirPods (3rd &amp; 4th generation)
-                <span class="req-note">head tracking</span>
-              </div>
-              <div class="req-row" role="listitem">
-                <span class="ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-                Beats Fit Pro
-                <span class="req-note">head tracking</span>
-              </div>
-            </div>
-
-            <div class="req-note-card">
-              <h3>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                One thing to know
-              </h3>
-              <p>Your head-tracking device must be connected and active — playing audio or in ANC / transparency mode — for macOS to stream its motion data.</p>
-            </div>
-
-            <div class="req-note-card">
-              <h3>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-                Always up to date
-              </h3>
-              <p>Automatic updates arrive through Sparkle 2, verified against a cryptographic Ed25519 public key before installing.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= Final CTA ================= -->
-    <section class="section final-cta" id="download" aria-labelledby="cta-title">
-      <div class="cta-halo" aria-hidden="true"></div>
-      <div class="container">
-        <div class="cta-icon-container" data-reveal>
-          <img class="cta-icon" src="assets/img/icon-512.png" alt="FixMySpine app icon" width="90" height="90" />
-        </div>
-        <h2 class="h2" id="cta-title" data-reveal>Realign.<br/>Effortlessly.</h2>
-        <p class="lead" data-reveal>Your AirPods are already on your head. Put them to work protecting your neck.</p>
-        <div class="hero-ctas" data-reveal>
-          <a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg" download class="btn btn-primary btn-glow btn-arrow">
-            Download FixMySpine (.DMG)
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
-          </a>
-          <a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener" class="bmac-btn">☕ Buy Me a Coffee</a>
-        </div>
-        <div class="cta-status" data-reveal style="margin-top:1.25rem">
-          <span class="status-badge" role="status">
-            <span class="status-dot" aria-hidden="true"></span>
-            macOS 14+ · 100% Free &amp; Open Source
+    <!-- ================= NATIVE MACOS DOCK ================= -->
+    <nav class="dock" id="dock" aria-label="macOS Dock">
+      <div class="dock-inner">
+        <button class="dock-item" id="dockAppSettings" data-action="open-window" data-window="settings" data-tip="FixMySpine Settings">
+          <span class="dock-icon-tile">
+            <img src="assets/img/icon-512.png" alt="FixMySpine app" width="44" height="44" />
           </span>
+          <span class="dock-running-dot" id="dockSettingsDot"></span>
+        </button>
+
+        <button class="dock-item" id="dockCalibrate" data-action="calibrate" data-tip="Calibrate Baseline (0°)">
+          <span class="dock-icon-tile di-cal">
+            <svg class="ic"><use href="#i-reset"/></svg>
+          </span>
+        </button>
+
+        <button class="dock-item" id="dockDownload" data-action="open-download" data-tip="Download macOS App">
+          <span class="dock-icon-tile di-down">
+            <svg class="ic"><use href="#i-download"/></svg>
+          </span>
+        </button>
+
+        <span class="dock-sep"></span>
+
+        <a class="dock-item" href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener" data-tip="GitHub Repository">
+          <span class="dock-icon-tile di-gh">
+            <svg viewBox="0 0 24 24" class="ic"><path fill="currentColor" d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.21 3.44 9.63 8.21 11.19.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.6-4.04-1.6-.55-1.38-1.34-1.75-1.34-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.22 1.84 1.22 1.07 1.8 2.81 1.28 3.5.98.11-.77.42-1.28.76-1.58-2.67-.3-5.47-1.31-5.47-5.84 0-1.29.47-2.34 1.24-3.17-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.21a11.6 11.6 0 0 1 6 0c2.29-1.53 3.3-1.21 3.3-1.21.65 1.66.24 2.88.12 3.18.77.83 1.23 1.88 1.23 3.17 0 4.54-2.81 5.54-5.49 5.83.43.36.81 1.08.81 2.18v3.23c0 .32.22.7.83.58A12.01 12.01 0 0 0 24 12.29C24 5.78 18.63.5 12 .5z"/></svg>
+          </span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Download Modal / Toast -->
+    <div class="modal-dialog" id="downloadModal" hidden>
+      <div class="modal-card">
+        <img src="assets/img/icon-512.png" alt="FixMySpine App" width="64" height="64" />
+        <h3>FixMySpine for macOS</h3>
+        <p class="sm muted">Native Swift 6.0 app for macOS 14.0+ (Apple Silicon &amp; Intel with AirPods).</p>
+        <div class="status-badge" role="status">
+          <span class="status-dot"></span>
+          macOS App · Coming Soon
         </div>
-        <div class="cta-fine" data-reveal>
-          <span>Free &amp; open source · 100% on-device</span>
-          <span>macOS 14.0+ · Apple AirPods</span>
-          <span>AirPods Pro, Max, 3rd gen &amp; Beats Fit Pro</span>
+        <div class="modal-actions pt-2">
+          <a href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener" class="btn btn-primary">Star on GitHub</a>
+          <button class="btn btn-ghost" id="btnCloseModal">Close</button>
         </div>
       </div>
-    </section>
+    </div>
+
   </main>
 
-  <!-- ================= Footer ================= -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a class="brand" href="#top" aria-label="FixMySpine home">
-            <span>FixMySpine</span>
-          </a>
-          <p>AirPods posture intelligence for macOS. Built with Swift &amp; SwiftUI by Om Bichave.</p>
-          <p class="footer-authority">Swift 6.0 · SwiftUI · CoreMotion · Ed25519 Signed</p>
-        </div>
-
-        <div class="footer-col">
-          <h3>Explore</h3>
-          <ul>
-            <li><a href="#how-it-works">How it works</a></li>
-            <li><a href="#demo">Live demo</a></li>
-            <li><a href="#setup">Get started</a></li>
-            <li><a href="#features">Features</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h3>Community &amp; Code</h3>
-          <ul>
-            <li><a href="https://github.com/ombichave999/FixMySpine" target="_blank" rel="noopener">GitHub Repo</a></li>
-            <li><a href="https://buymeacoffee.com/fixmyspine" target="_blank" rel="noopener">Buy Me a Coffee</a></li>
-            <li><a href="https://github.com/ombichave999/FixMySpine/releases" target="_blank" rel="noopener">Releases &amp; DMG</a></li>
-            <li><a href="#privacy">Privacy Policy</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <span>© <span id="year">2026</span> FixMySpine. All rights reserved.</span>
-        <span class="tm">AirPods, AirPods Pro, AirPods Max and Beats are trademarks of Apple Inc., registered in the U.S. and other countries. FixMySpine is an independent product and is not affiliated with Apple.</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="assets/js/main.js?v=9" defer></script>
+  <script src="assets/js/main.js?v=20260907-1"></script>
 </body>
 </html>
