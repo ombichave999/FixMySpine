@@ -1,122 +1,77 @@
-<div align="center">
+<p align="center">
+  <img src="website/frontend/assets/img/icon-512.png" width="120" alt="FixMySpine logo">
+</p>
 
-# FixMySpine 🧘‍♂️
-### 100% Free & Open-Source AirPods Posture Intelligence for macOS
+<h1 align="center">FixMySpine</h1>
 
-[![Version](https://img.shields.io/badge/version-5.0.4-00D053.svg)](https://github.com/ombichave999/FixMySpine/releases)
-[![macOS](https://img.shields.io/badge/macOS-14.0%2B-black.svg?logo=apple)](https://developer.apple.com/macos/)
-[![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg?logo=swift)](https://swift.org)
-[![Privacy](https://img.shields.io/badge/privacy-100%25%20Offline-00D053.svg)](#-privacy--zero-data-leakage)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20Project-FFDD00.svg?logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/fixmyspine)
+<p align="center">
+  AirPods posture intelligence for macOS.<br>
+  Free, open source, and everything runs 100% locally on your Mac.
+</p>
 
-<br/>
+<p align="center">
+  <a href="https://github.com/ombichave999/FixMySpine">GitHub</a> ·
+  <a href="#install">Install</a> ·
+  <a href="#everything-it-does">Features</a> ·
+  <a href="#how-it-works">How It Works</a> ·
+  <a href="#private-by-default">Privacy</a> ·
+  <a href="#supported-hardware">Hardware</a> ·
+  <a href="https://buymeacoffee.com/fixmyspine">Buy Me a Coffee</a>
+</p>
 
-<img src="website/bmac_cover.png" width="100%" alt="FixMySpine Banner" />
+<p align="center">
+  <a href="https://github.com/ombichave999/FixMySpine/releases/latest"><img src="https://img.shields.io/github/v/release/ombichave999/FixMySpine?label=release&color=00D053" alt="Latest release"></a>
+  <a href="https://github.com/ombichave999/FixMySpine/releases"><img src="https://img.shields.io/badge/downloads-100%25%20FOSS-00D053" alt="Downloads"></a>
+  <a href="https://github.com/ombichave999/FixMySpine/actions/workflows/ci.yml"><img src="https://github.com/ombichave999/FixMySpine/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
+  <a href="#what-you-need"><img src="https://img.shields.io/badge/macOS-14%2B%20Sonoma%20%26%20Sequoia-black?logo=apple" alt="macOS 14 and newer"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License MIT"></a>
+  <a href="https://buymeacoffee.com/fixmyspine"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
+</p>
 
-<br/>
+<p align="center">
+  <a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg">
+    <img src="https://img.shields.io/badge/Download_FixMySpine_v5.0.4-.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download .DMG" height="38">
+  </a>
+  &nbsp;
+  <a href="https://buymeacoffee.com/fixmyspine">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_FOSS-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee" height="38">
+  </a>
+</p>
 
-<br/>
+<p align="center">
+  <img src=".github/screenshots/1-airpods-already-know.png" width="190" alt="Your AirPods already know">
+  <img src=".github/screenshots/2-so-i-built-something.png" width="190" alt="So I built something">
+  <img src=".github/screenshots/3-it-knows-difference.png" width="190" alt="It knows the difference">
+  <img src=".github/screenshots/4-and-it-remembers.png" width="190" alt="And it remembers">
+</p>
 
-<a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg">
-  <img src="https://img.shields.io/badge/Download_FixMySpine_v5.0.4-.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download .DMG" height="38" />
-</a>
-&nbsp;&nbsp;
-<a href="https://buymeacoffee.com/fixmyspine">
-  <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_FOSS-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee" height="38" />
-</a>
+Real-time 60Hz AirPods motion tracking, subtle in-ear alerts, intelligent slouch hysteresis, Apple Watch haptic taps, daily posture scoring, and native SwiftUI custom accents. The posture intelligence tools Mac users need during deep focus work, behind a featherlight menu bar icon with no camera access, no account, no telemetry, and no subscription.
 
-<br/><br/>
+## Everything it does
 
-[Product Tour](#-product-tour) •
-[Download Latest .DMG](https://github.com/ombichave999/FixMySpine/releases) •
-[Features](#-features) •
-[Supported Hardware](#-supported-hardware) •
-[How It Works](#-how-it-works) •
-[Building Locally](#-building-locally) •
-[Sponsor](#-support--sponsor)
+### Posture Intelligence & Kinematics
 
-</div>
+- **AirPods 60Hz motion stream.** Directly reads 3-axis angular velocity and head tilt via Apple's `CMHeadphoneMotionManager` API over Bluetooth Low Energy.
+- **Intelligent slouch hysteresis.** Uses compound vector mathematics ($\sqrt{\text{pitch}^2 + 0.49 \times \text{roll}^2}$) to accurately isolate cervical slouching without false alarms when sipping water, stretching, or turning your head.
+- **One-tap neutral baseline.** Calibrate your unique natural working posture — desk height, screen angle, and body anatomy. Every measurement is relative to you.
+- **Sensitivity presets.** Choose between Relaxed (18°), Balanced (12°), Strict (8°), and Expert (5°) depending on your ergonomics goals.
 
----
+### Alerts & Ambient Feedback
 
-## 📸 Product Tour
+- **Discreet spoken cues.** Soft, calm audio cues like *"Time to reset your posture"* or *"Lift your chin slightly"* reset your shoulders without breaking focus.
+- **Ambient in-ear chimes.** Gentle spatial audio tones sound only when slouching persists past your grace window.
+- **Customizable grace window.** Adjust how long slouching must persist before you are nudged (Instant 3s, 10s, 30s). Glancing down or reaching for a notepad never rings the bell.
 
-<div align="center">
-<table>
-  <tr>
-    <td width="50%" align="center">
-      <a href=".github/screenshots/1-airpods-already-know.png">
-        <img src=".github/screenshots/1-airpods-already-know.png" width="100%" alt="Your AirPods already know." />
-      </a>
-      <br/>
-      <b>1. Your AirPods already know.</b>
-      <br/>
-      <sub>60Hz CoreMotion head-tracking reads pitch &amp; roll directly.</sub>
-    </td>
-    <td width="50%" align="center">
-      <a href=".github/screenshots/2-so-i-built-something.png">
-        <img src=".github/screenshots/2-so-i-built-something.png" width="100%" alt="So I built something." />
-      </a>
-      <br/>
-      <b>2. So I built something.</b>
-      <br/>
-      <sub>A featherlight menu bar companion crafted in native SwiftUI.</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center">
-      <a href=".github/screenshots/3-it-knows-difference.png">
-        <img src=".github/screenshots/3-it-knows-difference.png" width="100%" alt="It knows the difference." />
-      </a>
-      <br/>
-      <b>3. It knows the difference.</b>
-      <br/>
-      <sub>Hysteresis grace window ignores head turns, water sips, and natural movement.</sub>
-    </td>
-    <td width="50%" align="center">
-      <a href=".github/screenshots/4-and-it-remembers.png">
-        <img src=".github/screenshots/4-and-it-remembers.png" width="100%" alt="And it remembers." />
-      </a>
-      <br/>
-      <b>4. And it remembers.</b>
-      <br/>
-      <sub>Local weekly spine telemetry and posture streaks stored on-device.</sub>
-    </td>
-  </tr>
-</table>
-</div>
+### Hardware & Telemetry
 
----
+- **Apple Watch & BLE haptics.** Pair any Bluetooth LE smartwatch (Apple Watch, Garmin, Wear OS) for silent wrist taps during meetings or open-office focus sessions.
+- **Weekly posture analytics.** Track daily posture scores, average tilt, daily slouch time, and discipline streaks — stored 100% locally in `UserDefaults`.
+- **Liquid glass appearance.** Dressed to match macOS with dark glassmorphism styling and custom accent colors (Apple Green, Electric Blue, Purple, Orange, Pink).
+- **Sparkle 2 auto-updates.** Native in-app updates verified against cryptographic Ed25519 signatures.
 
-## ✨ Features
+## How it works
 
-- 🎧 **AirPods 60Hz Motion Stream**: Directly reads 3-axis angular velocity and head tilt via Apple's `CMHeadphoneMotionManager` API over Bluetooth Low Energy.
-- 📐 **Compound Biometric Angle Vector**: Uses verified compound tilt mathematics ($\sqrt{\text{pitch}^2 + 0.49 \times \text{roll}^2}$) to accurately isolate cervical slouching without false alarms when sipping water or turning your head.
-- 🎯 **One-Click Instant Calibration**: Zero your neutral baseline with a single click.
-- 🗣️ **Discreet Ambient Audio Reminders**: Spoken reminders and gentle chimes only when continuous slouching exceeds your customizable grace window (default: 10s).
-- 🔒 **100% Local Processing & Total Privacy**: 0% Camera access, 0% cloud telemetry, 0% analytics. Operates completely in an on-device AppKit/SwiftUI sandbox.
-- ⚡ **Near-Zero Resource Draw**: Native Swift 6 Universal Binary consumes $<0.1\%$ CPU and $<25\text{MB}$ RAM.
-- 🔄 **Sparkle 2 Auto-Updates**: Native in-app updates secured with Ed25519 cryptographic signatures.
-
----
-
-## 🎧 Supported Hardware
-
-FixMySpine works seamlessly with all Apple audio hardware supporting spatial head-tracking on macOS 14.0+ (Sonoma & Sequoia):
-
-| Device | CoreMotion Head-Tracking | Status |
-| :--- | :---: | :---: |
-| **AirPods Pro (2nd Generation)** | 60Hz 3-Axis IMU | ✅ Fully Supported |
-| **AirPods Pro (1st Generation)** | 60Hz 3-Axis IMU | ✅ Fully Supported |
-| **AirPods Max** | 60Hz 3-Axis IMU | ✅ Fully Supported |
-| **AirPods (3rd Generation)** | 60Hz 3-Axis IMU | ✅ Fully Supported |
-| **Beats Fit Pro** | 60Hz 3-Axis IMU | ✅ Fully Supported |
-| **Beats Solo 4** | 60Hz 3-Axis IMU | ✅ Fully Supported |
-
----
-
-## 🔬 How It Works
+Every head-tracking AirPod carries an Inertial Measurement Unit (IMU) built for spatial audio. FixMySpine streams that signal at 60Hz through Apple's CoreMotion framework:
 
 ```mermaid
 flowchart LR
@@ -127,60 +82,90 @@ flowchart LR
     D -->|Slouching (>8° for 10s)| F["Ambient In-Ear Chime / Voice Reset"]
 ```
 
----
+## Install
 
-## 🏗️ Building Locally
+Grab the disk image from the [releases page](https://github.com/ombichave999/FixMySpine/releases) and drag FixMySpine into Applications:
 
-### Prerequisites
-- macOS 14.0 (Sonoma) or newer
-- Swift 6.0 toolchain (`swiftc`)
+<p align="center">
+  <a href="https://github.com/ombichave999/FixMySpine/releases/latest/download/FixMySpine.dmg">
+    <img src="https://img.shields.io/badge/Download_FixMySpine_v5.0.4-.DMG-00D053?style=for-the-badge&logo=apple&logoColor=white" alt="Download .DMG" height="42">
+  </a>
+</p>
 
-### Build & Run Commands
+Builds are signed and hardened for macOS Sonoma and Sequoia compatibility.
+
+## Private by default
+
+FixMySpine is built with privacy as an absolute foundational constraint:
+
+<p align="center">
+  <img src="website/bmac_cover.png" width="720" alt="FixMySpine Privacy & Architecture">
+</p>
+
+| Permission / Sensor | Status | Why |
+| :--- | :---: | :--- |
+| **Camera** | ❌ Never Used | 0% camera access. We never touch or request your webcam. |
+| **Microphone** | ❌ Never Used | CoreMotion reads spatial motion sensors only, never audio. |
+| **Network & Cloud** | ❌ Zero Calls | No accounts, no servers, no analytics. All math runs in local CPU memory. |
+| **Bluetooth LE** | ✅ Local Only | Reads standard Apple AirPods motion telemetry. |
+| **Notifications** | ⚡ Optional | Delivers posture alerts if voice cues are muted. |
+
+## Supported hardware
+
+FixMySpine works with any Apple audio device equipped with head-tracking IMUs running on macOS 14.0+:
+
+| Device | Head-Tracking IMU | Status |
+| :--- | :---: | :---: |
+| **AirPods Pro (2nd Generation)** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
+| **AirPods Pro (1st Generation)** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
+| **AirPods Max** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
+| **AirPods (3rd & 4th Generation)** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
+| **Beats Fit Pro** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
+| **Beats Solo 4** | 60Hz 3-Axis Gyroscope | ✅ Fully Supported |
+
+*Note: AirPods must be connected and actively worn (playing audio or in ANC/transparency mode) for macOS CoreMotion headphone telemetry to stream.*
+
+## What you need
+
+- A Mac (Apple Silicon or Intel)
+- macOS 14.0 Sonoma or newer
+
+### Build it yourself
 
 ```bash
-# 1. Clone the repository
+# Clone the repository
 git clone https://github.com/ombichave999/FixMySpine.git
 cd FixMySpine
 
-# 2. Compile the native macOS application bundle
+# Compile native macOS application bundle (Swift 6)
 bash build.sh 5.0.4 release
 
-# 3. Launch FixMySpine
+# Launch FixMySpine
 open build/FixMySpine.app
 
-# 4. Package standalone release DMG
+# Package standalone release DMG
 bash make_dmg.sh 5.0.4 release
 ```
 
----
+## Community & Support
 
-## 🔒 Privacy & Zero Data Leakage
+FixMySpine is **100% Free and Open-Source**. If it helps protect your neck and posture during long coding sessions, consider supporting development:
 
-FixMySpine is built on the principle of **Zero Privacy Leakage**:
-- **No Camera Permissions**: We never request or access your Mac's webcam.
-- **No Cloud Servers**: There is no login, no database, and no cloud analytics.
-- **Offline Processing**: All angle calculations execute locally on your Mac's CPU/Apple Silicon Neural Engine.
+<p align="center">
+  <a href="https://buymeacoffee.com/fixmyspine">
+    <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=fixmyspine&button_colour=00D053&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me A Coffee">
+  </a>
+</p>
 
----
+<p align="center">
+  <a href="https://github.com/sponsors/ombichave999">
+    <img src="https://img.shields.io/badge/Sponsor%20on%20GitHub-EA4AAA?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors">
+  </a>
+</p>
 
-## ☕ Support & Sponsor
+For private feedback or questions, contact [ombichave639@gmail.com](mailto:ombichave639@gmail.com).
 
-FixMySpine is **100% Free and Open-Source**. If this app helps protect your spine and posture during long work sessions, consider supporting development:
+## License
 
-<div align="center">
+Distributed under the [MIT License](LICENSE).
 
-<a href="https://buymeacoffee.com/fixmyspine">
-  <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=fixmyspine&button_colour=00D053&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me A Coffee" />
-</a>
-
-<br/><br/>
-
-[![GitHub Sponsors](https://img.shields.io/badge/Sponsor%20on%20GitHub-EA4AAA?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/ombichave999)
-
-</div>
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
