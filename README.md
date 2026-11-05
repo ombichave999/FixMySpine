@@ -58,6 +58,27 @@
 
 Real-time 60Hz AirPods motion tracking, subtle in-ear alerts, intelligent slouch hysteresis, Apple Watch haptic taps, daily posture scoring, and native SwiftUI custom accents. The posture intelligence tools Mac users need during deep focus work, behind a featherlight menu bar icon with no camera access, no account, no telemetry, and no subscription.
 
+## The app
+
+Real UI, captured on the developer's Mac. Main popover views are from the current v5.x interface; the settings screen was captured on v4.3.7.
+
+<table align="center">
+  <tr>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/ui/1-connected-good-posture.png" width="100%" alt="Live tracking: AirPods connected, good posture at 3 degrees">
+    </td>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/ui/2-slouch-alert.png" width="100%" alt="Slouching alert at 39 degrees with recalibrate action">
+    </td>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/ui/3-settings.png" width="100%" alt="Settings and customization (captured on v4.3.7)">
+    </td>
+    <td width="25%" align="center">
+      <img src=".github/screenshots/ui/4-watch-sync.png" width="100%" alt="Apple Watch and smartwatch sync screen">
+    </td>
+  </tr>
+</table>
+
 ## Everything it does
 
 ### Posture Intelligence & Kinematics
