@@ -60,7 +60,7 @@ Real-time 60Hz AirPods motion tracking, subtle in-ear alerts, intelligent slouch
 
 ## The app
 
-Real UI, captured on the developer's Mac. Main popover views are from the current v5.x interface; the settings screen was captured on v4.3.7.
+Real UI, captured on the developer's Mac. The settings screen shows v4.3.7; appearance may vary by app version.
 
 <table align="center">
   <tr>
